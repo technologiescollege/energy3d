@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuration Launch4j pour Energy3D.exe
+     Nécessite Launch4j : https://launch4j.sourceforge.net/
+     Génère un .exe qui lance energy3d.jar (Java requis sur la machine ou JRE dans runtime/).
+     Lancer depuis la racine du projet energy3d : ant exe (après ant deploy). -->
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>energy3d.jar</jar>
+  <!-- Chemin relatif au fichier config (package/windows/) -->
+  <outfile>../../dist/Energy3D_portable/Energy3D.exe</outfile>
+  <errTitle>Energy3D</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>https://www.java.com/download/</downloadUrl>
+  <supportUrl>https://energy.concord.org/energy3d/</supportUrl>
+  <stayAlive>false</stayAlive>
+  <icon>Energy3D.ico</icon>
+  <jre>
+    <path>runtime</path>
+    <minVersion>1.8</minVersion>
+    <maxVersion></maxVersion>
+    <initialHeapSize>128</initialHeapSize>
+    <maxHeapSize>512</maxHeapSize>
+    <opt>-Djava.library.path=lib/jogl/native/windows-64</opt>
+    <opt>-Xmx512m</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>8.0.0.0</fileVersion>
+    <txtFileVersion>8.0</txtFileVersion>
+    <fileDescription>Energy3D - Solar Energy Design</fileDescription>
+    <copyright>Concord Consortium</copyright>
+    <productVersion>8.0.0.0</productVersion>
+    <txtProductVersion>8.0</txtProductVersion>
+    <productName>Energy3D</productName>
+    <companyName>Concord Consortium Inc.</companyName>
+    <internalName>Energy3D</internalName>
+    <originalFilename>Energy3D.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

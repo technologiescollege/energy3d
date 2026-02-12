@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Classpath explicite avec %EXEDIR% pour eviter NoClassDefFoundError (manifest -jar mal resolu par l'exe). -->
+<launch4jConfig>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>app/energy3d.jar</jar>
+  <outfile>Energy3D.exe</outfile>
+  <errTitle>Energy3D</errTitle>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>https://www.java.com/download/</downloadUrl>
+  <supportUrl>https://energy.concord.org/energy3d/</supportUrl>
+  <stayAlive>false</stayAlive>
+  <icon>Energy3D.ico</icon>
+  <classPath>
+    <mainClass>org.concord.energy3d.MainApplication</mainClass>
+    <cp>%EXEDIR%\app\energy3d.jar</cp>
+    <cp>%EXEDIR%\app\lib\*.jar</cp>
+    <cp>%EXEDIR%\app\lib\ardor3d\*.jar</cp>
+    <cp>%EXEDIR%\app\lib\freetts\*.jar</cp>
+    <cp>%EXEDIR%\app\lib\jogl\*.jar</cp>
+    <cp>%EXEDIR%\app\lib\poly2tri\*.jar</cp>
+  </classPath>
+  <jre>
+    <path>runtime</path>
+    <requiresJdk>false</requiresJdk>
+    <minVersion>1.8</minVersion>
+    <initialHeapSize>128</initialHeapSize>
+    <maxHeapSize>512</maxHeapSize>
+    <opt>-Dapp=true</opt>
+    <opt>-Djava.util.prefs.userRoot=%EXEDIR%\app\.prefs</opt>
+    <opt>-Djava.util.prefs.systemRoot=%EXEDIR%\app\.prefs</opt>
+    <opt>-Djava.library.path=%EXEDIR%\app\lib\jogl\native\windows-64</opt>
+    <opt>-Xmx512m</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>8.0.0.0</fileVersion>
+    <txtFileVersion>8.0</txtFileVersion>
+    <fileDescription>Energy3D - Solar Energy Design</fileDescription>
+    <copyright>Concord Consortium</copyright>
+    <productVersion>8.0.0.0</productVersion>
+    <txtProductVersion>8.0</txtProductVersion>
+    <productName>Energy3D</productName>
+    <companyName>Concord Consortium Inc.</companyName>
+    <internalName>Energy3D</internalName>
+    <originalFilename>Energy3D.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

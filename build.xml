@@ -7,7 +7,16 @@
 	<property name="build.classes.dir" value="classes" />
 	<property name="build.dist.dir" value="${basedir}${file.separator}dist" />
 	<property name="jdk" value="jdk1.8.0_202" />
-	<property name="bit64" value="false" />
+	<!-- Détection 64 bits : JOGL (windows-64 vs windows-32) et JRE embarqué doivent correspondre. Override : -Dbit64=true/false -->
+	<condition property="bit64" value="true">
+		<and>
+			<not><isset property="bit64"/></not>
+			<or><os arch="amd64"/><os arch="x86_64"/></or>
+		</and>
+	</condition>
+	<condition property="bit64" value="false">
+		<not><isset property="bit64"/></not>
+	</condition>
 	
 	<condition property="JAVA_HOME" value="C:\Program Files (x86)\Java\${jdk}\">
 		<and>
@@ -38,7 +47,8 @@
 		<os family="unix"/>
 	</condition>
 	
-	<condition property="bundle_type" value="exe">
+	<!-- Windows : "image" = dossier exe+app+runtime (energy3D_win). "exe" = installeur Inno Setup (nécessite iscc.exe). -->
+	<condition property="bundle_type" value="image">
 		<os family="windows" />
 	</condition>
 	<condition property="bundle_type" value="dmg">
@@ -92,12 +102,120 @@
 		<pathelement path="${build.classes.dir}" />
 	</path>
 
-	<target name="default" depends="clean,compile,jar,deploy">
+	<!-- Par défaut : portable (exe/energy3d.jar). Pour l'installateur natif (.exe/.dmg) : ant deploy (nécessite JDK 8 + ant-javafx.jar) -->
+	<target name="default" depends="clean,compile,jar">
 	</target>
 
-	<target name="deploy">
-		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath=".:${JAVA_HOME}/lib/ant-javafx.jar" />
-		<fx:deploy outdir="${build.dist.dir}" outfile="energy3d" nativeBundles="${bundle_type}" verbose="false">
+	<!-- Chemin Launch4j (override avec -Dlaunch4j.exe=... si besoin). Windows uniquement pour exe. -->
+	<property name="launch4j.exe" value="C:\Program Files (x86)\Launch4j\launch4jc.exe" />
+
+	<!-- Déploie la version portable (structure comme energy3D_win / energy3D_portable : exe+ico à la racine, app/ avec jar+lib, optionnel runtime/). -->
+	<target name="deploy" depends="jar">
+		<mkdir dir="${build.dist.dir}" />
+		<property name="deploy.portable.dir" value="${build.dist.dir}/Energy3D_portable" />
+		<delete dir="${deploy.portable.dir}" failonerror="false" />
+		<mkdir dir="${deploy.portable.dir}" />
+		<mkdir dir="${deploy.portable.dir}/app" />
+		<copy todir="${deploy.portable.dir}/app">
+			<fileset dir="exe">
+				<include name="energy3d.jar" />
+				<include name="getdown.txt" />
+				<include name="digest.txt" />
+				<include name="readme.txt" />
+				<include name="lib/**" />
+			</fileset>
+		</copy>
+		<echo message="Distribution : ${deploy.portable.dir} (app/ + ant exe pour Energy3D.exe)" />
+	</target>
+
+	<!-- Tout-en-un : exécutable Windows comme energy3D_win. Commande : ant deploy-win
+	    Avec JRE : ant deploy-win -Djre.source=../energy3D_win/runtime -->
+	<target name="deploy-win" depends="deploy,exe">
+		<property name="jre.source" value="${basedir}/../energy3D_win/runtime" />
+		<antcall target="deploy-copy-runtime-optional" />
+	</target>
+	<target name="deploy-copy-runtime-optional">
+		<available file="${jre.source}" type="dir" property="jre.source.available" />
+		<antcall target="deploy-copy-runtime-do" />
+		<antcall target="deploy-copy-runtime-skip" />
+	</target>
+	<target name="deploy-copy-runtime-do" if="jre.source.available">
+		<copy todir="${build.dist.dir}/Energy3D_portable/runtime" failonerror="true">
+			<fileset dir="${jre.source}" includes="**" />
+		</copy>
+		<echo message="JRE copié : ${jre.source} → dist/Energy3D_portable/runtime/" />
+	</target>
+	<target name="deploy-copy-runtime-skip" unless="jre.source.available">
+		<echo message="Pas de JRE à ${jre.source}. Pour un bundle comme energy3D_win : ant deploy-copy-runtime -Djre.source=../energy3D_win/runtime" />
+	</target>
+
+	<!-- Copie un JRE dans runtime/ pour que le résultat ressemble à energy3D_win (exe sans Java installé).
+	    Exemple : ant deploy exe deploy-copy-runtime -Djre.source=../energy3D_win/runtime -->
+	<target name="deploy-copy-runtime" depends="deploy">
+		<property name="deploy.portable.dir" value="${build.dist.dir}/Energy3D_portable" />
+		<condition property="jre.source.set" value="true">
+			<and>
+				<isset property="jre.source" />
+				<available file="${jre.source}" type="dir" />
+			</and>
+		</condition>
+		<fail message="Définir le chemin du JRE : ant deploy-copy-runtime -Djre.source=chemin/vers/runtime (ex: ../energy3D_win/runtime)" unless="jre.source.set" />
+		<copy todir="${deploy.portable.dir}/runtime" failonerror="true">
+			<fileset dir="${jre.source}" includes="**" />
+		</copy>
+		<echo message="JRE copié de ${jre.source} vers ${deploy.portable.dir}/runtime/" />
+	</target>
+
+	<!-- Génère Energy3D.exe avec Launch4j (Windows). Nécessite Launch4j installé ; ant deploy est fait avant. -->
+	<target name="exe" depends="deploy">
+		<property name="deploy.portable.dir" value="${build.dist.dir}/Energy3D_portable" />
+		<copy file="package/windows/Energy3D.ico" todir="${deploy.portable.dir}" flatten="true" />
+		<copy file="package/windows/Energy3D-launch4j-portable.xml" tofile="${deploy.portable.dir}/Energy3D-launch4j.xml" />
+		<available file="${launch4j.exe}" property="launch4j.available" />
+		<fail message="Launch4j non trouvé à ${launch4j.exe}. Installez https://launch4j.sourceforge.net/ ou lancez ant avec -Dlaunch4j.exe=chemin/launch4jc.exe" unless="launch4j.available" />
+		<exec executable="${launch4j.exe}" failonerror="true" dir="${deploy.portable.dir}">
+			<arg value="Energy3D-launch4j.xml" />
+		</exec>
+		<echo message="Energy3D.exe créé dans ${deploy.portable.dir}/" />
+	</target>
+
+	<!-- Bundle portable qui fonctionne : Launch4j + JRE copié depuis JAVA_HOME (runtime/bin/java.exe). Pas de Java requis sur la machine. -->
+	<target name="deploy-copy-jre-from-java-home" depends="deploy">
+		<property name="deploy.portable.dir" value="${build.dist.dir}/Energy3D_portable" />
+		<fail message="JAVA_HOME requis. Lancer : ant -DJAVA_HOME=chemin/jdk1.8.0_xxx deploy-portable" unless="JAVA_HOME"/>
+		<available file="${JAVA_HOME}/jre/bin/java.exe" property="jre.under.jre" />
+		<available file="${JAVA_HOME}/bin/java.exe" property="jre.under.bin" />
+		<condition property="jre.source.dir" value="${JAVA_HOME}/jre">
+			<isset property="jre.under.jre"/>
+		</condition>
+		<condition property="jre.source.dir" value="${JAVA_HOME}">
+			<and><isset property="jre.under.bin"/><not><isset property="jre.under.jre"/></not></and>
+		</condition>
+		<fail message="java.exe introuvable dans JAVA_HOME (ni jre/bin ni bin). Vérifiez JAVA_HOME." unless="jre.source.dir"/>
+		<copy todir="${deploy.portable.dir}/runtime" failonerror="true">
+			<fileset dir="${jre.source.dir}" includes="**" />
+		</copy>
+		<echo message="JRE copié de ${jre.source.dir} vers ${deploy.portable.dir}/runtime/ (Launch4j gui utilise javaw.exe, pas de fenêtre console)" />
+	</target>
+
+	<!-- Bundle Windows portable : deploy + JRE embarqué (depuis JAVA_HOME) + Launch4j. Résultat dans dist/Energy3D_portable/. -->
+	<target name="deploy-portable" depends="deploy-copy-jre-from-java-home,exe" description="Bundle portable : exe + app/ + runtime/ (JRE inclus), double-clic sur Energy3D.exe sans Java installé">
+		<echo message="Bundle portable prêt : ${build.dist.dir}/Energy3D_portable/ (Energy3D.exe + app/ + runtime/). Double-clic sur Energy3D.exe." />
+	</target>
+
+	<!-- Exécutable Windows autonome (comme energy3D_win) : JRE inclus, pas de "Java requis".
+	    C'est la seule méthode prévue par le code Energy3D : JavaFX ant fx:deploy (JDK 8 avec JavaFX).
+	    Commande : ant jar deploy-native   avec JAVA_HOME pointant vers JDK 8 (avant 8u451, JavaFX inclus).
+	    Ou : ant -DJAVA_HOME="C:\Program Files\Java\jdk1.8.0_202" jar deploy-native -->
+	<target name="deploy-native" depends="jar">
+		<property name="javafx.ant.jar" value="${JAVA_HOME}/lib/ant-javafx.jar" />
+		<available file="${javafx.ant.jar}" type="file" property="javafx.ant.available" />
+		<fail message="ant-javafx.jar introuvable. JAVA_HOME doit pointer vers un JDK 8 avec JavaFX (ex. jdk1.8.0_202). Lancer : ant -DJAVA_HOME=chemin/jdk1.8.0_xxx deploy-native. Voir BUILD_WIN.md." unless="javafx.ant.available" />
+		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath=".:${javafx.ant.jar}" />
+		<!-- Construire dans un dossier temporaire pour éviter "Accès refusé" (exe ou dossier dist/bundles verrouillé) -->
+		<property name="deploy-native.tmpdir" value="${build.dist.dir}/build-native" />
+		<delete dir="${deploy-native.tmpdir}" failonerror="false" />
+		<fx:deploy outdir="${deploy-native.tmpdir}" outfile="energy3d" nativeBundles="${bundle_type}" verbose="true">
 			<fx:application name="${app.name}" mainClass="org.concord.energy3d.MainApplication" version="${app.version}" />
 			<fx:preferences shortcut="true" menu="true" />
 			<fx:bundleArgument arg="win.menuGroup" value="${app.name}" />
@@ -122,10 +240,160 @@
 					<patternset refid="jars.no.source" />
 					<include name="getdown.txt" />
 					<include name="digest.txt" />
-					<include name="lib/jogl/native/${os}/*.*" />					
+					<include name="lib/jogl/native/${os}/*.*" />
 				</fx:fileset>
 			</fx:resources>
 		</fx:deploy>
+		<!-- Convertir le .cfg au format INI avec sections (comme energy3D_win) : le launcher JavaFX nécessite ce format INI avec slashes dans app.mainclass -->
+		<property name="cfg.file" value="${deploy-native.tmpdir}/bundles/${app.name}/app/${app.name}.cfg" />
+		<property name="cfg.convert.script" value="${build.dist.dir}/build-native/convert-cfg-to-ini.ps1" />
+		<mkdir dir="${build.dist.dir}/build-native" />
+		<pathconvert property="cfg.file.abs" targetos="windows">
+			<path path="${cfg.file}"/>
+		</pathconvert>
+		<echo file="${cfg.convert.script}" append="false">$cfgFile = '${cfg.file.abs}'
+$appName = '${app.name}'
+
+# Lire le .cfg existant
+$props = @{}
+$jvmargs = @()
+$lines = Get-Content $cfgFile
+foreach ($line in $lines) {
+  if ($line -match '^([^=]+)=(.*)$') {
+    $key = $matches[1].Trim()
+    $value = $matches[2].Trim()
+    if ($key -match '^jvmarg\.') {
+      $jvmargs += $value
+    } else {
+      $props[$key] = $value
+    }
+  }
+}
+
+# Convertir classpath : espaces -&gt; point-virgules
+if ($props.ContainsKey('app.classpath')) {
+  $props['app.classpath'] = $props['app.classpath'] -replace ' ', ';'
+}
+
+# Convertir mainclass : points -&gt; slashes (format INI nécessite slashes comme energy3D_win)
+if ($props.ContainsKey('app.mainclass')) {
+  $props['app.mainclass'] = $props['app.mainclass'] -replace '\.', '/'
+}
+
+# Réécrire au format INI
+$content = @"
+[Application]
+app.name=$appName
+"@
+if ($props.ContainsKey('app.mainjar')) { $content += "`napp.mainjar=$($props['app.mainjar'])" }
+if ($props.ContainsKey('app.version')) { $content += "`napp.version=$($props['app.version'])" }
+if ($props.ContainsKey('app.preferences.id')) { $content += "`napp.preferences.id=$($props['app.preferences.id'])" }
+if ($props.ContainsKey('app.mainclass')) { $content += "`napp.mainclass=$($props['app.mainclass'])" }
+if ($props.ContainsKey('app.classpath')) { $content += "`napp.classpath=$($props['app.classpath'])" }
+if ($props.ContainsKey('app.runtime')) { $content += "`napp.runtime=$($props['app.runtime'])" }
+if ($props.ContainsKey('app.id')) { $content += "`napp.identifier=$($props['app.id'])" }
+$content += @"
+
+[JVMOptions]
+"@
+foreach ($arg in $jvmargs) {
+  $content += "`n$arg"
+}
+$content += @"
+
+[JVMUserOptions]
+
+[ArgOptions]
+"@
+Set-Content -Path $cfgFile -Value $content -Encoding UTF8
+</echo>
+		<exec executable="powershell" osfamily="windows" failonerror="true">
+			<arg value="-NoProfile"/>
+			<arg value="-ExecutionPolicy"/>
+			<arg value="Bypass"/>
+			<arg value="-File"/>
+			<arg value="${cfg.convert.script}"/>
+		</exec>
+		<delete file="${cfg.convert.script}" failonerror="false"/>
+		<!-- Script de lancement : /D force le répertoire de travail pour l'exe (évite "Class not found" / "Failed to launch JVM") -->
+		<echo file="${deploy-native.tmpdir}/bundles/${app.name}/Lancer Energy3D.bat" append="false">@echo off
+start "" /D "%~dp0" "${app.name}.exe"</echo>
+		<!-- Debug : lance l'exe dans la même console (sans start) pour voir les messages d'erreur éventuels -->
+		<echo file="${deploy-native.tmpdir}/bundles/${app.name}/Lancer Energy3D (debug).bat" append="false">@echo off
+cd /d "%~dp0"
+echo Repertoire: %CD%
+echo Lancement de ${app.name}.exe (attendre un message ci-dessous ou fermer la fenetre)...
+"${app.name}.exe"
+echo.
+echo Code de sortie: %ERRORLEVEL%
+pause</echo>
+		<!-- Lanceur de secours avec Java système (si l'exe affiche "Class ... not found") -->
+		<echo file="${deploy-native.tmpdir}/bundles/${app.name}/Lancer Energy3D (Java système).bat" append="false">@echo off
+setlocal enabledelayedexpansion
+set "APP_HOME=%~dp0"
+cd /d "%APP_HOME%"
+set "CP=app\energy3d.jar"
+for /r "app\lib" %%a in (*.jar) do set "CP=!CP!;%%a"
+java -Djava.library.path=app\lib\jogl\native\windows-64 -Xmx512m -cp "!CP!" org.concord.energy3d.MainApplication
+pause</echo>
+		<!-- Pas de déplacement vers dist/bundles : évite les échecs sur exe lecture seule ou verrouillé. Le bundle reste dans build-native. -->
+		<echo message="Bundle natif créé dans ${deploy-native.tmpdir}/bundles/${app.name}/ (exe + runtime). Double-cliquez sur Lancer Energy3D.bat ou sur ${app.name}.exe" />
+	</target>
+
+	<!-- Optionnel : copie à la racine du bundle les DLL Windows/VC++ comme dans energy3D_win (api-ms-win-*, ucrtbase, vcruntime140, msvcp140). Pas les DLL JRE (java.dll, jli, etc.). -->
+	<target name="copy-runtime-dlls-to-bundle-root" description="Copie api-ms-win-*, ucrtbase, vcruntime140, msvcp140 de runtime/bin vers la racine (comme energy3D_win)">
+		<property name="bundle.root" value="${build.dist.dir}/build-native/bundles/${app.name}" />
+		<copy todir="${bundle.root}" flatten="true">
+			<fileset dir="${bundle.root}/runtime/bin" includes="api-ms-win-*.dll,ucrtbase.dll,vcruntime140.dll,msvcp140.dll" />
+		</copy>
+		<echo message="DLL Windows/VC++ (api-ms-win-*, ucrtbase, vcruntime140, msvcp140) copiées vers ${bundle.root} si présentes dans runtime/bin (JDK 8u45 n'en a pas ; JDK 8 plus récent peut en avoir)" />
+	</target>
+
+	<!-- Copie depuis le dossier de référence energy3D_win (à la racine du workspace) les DLL qui sont à sa racine vers le bundle. À lancer après deploy-native. -->
+	<target name="copy-dlls-from-energy3d-win" description="Copie les DLL de energy3D_win (référence) vers la racine du bundle">
+		<property name="bundle.root" value="${build.dist.dir}/build-native/bundles/${app.name}" />
+		<property name="energy3d_win.ref" value="${basedir}/../energy3D_win" />
+		<copy todir="${bundle.root}" flatten="true">
+			<fileset dir="${energy3d_win.ref}" includes="api-ms-win-*.dll,ucrtbase.dll,vcruntime140.dll,msvcp140.dll" />
+		</copy>
+		<echo message="DLL copiées de ${energy3d_win.ref} vers ${bundle.root}" />
+	</target>
+
+	<!-- Force la main class en notation point dans le .cfg du bundle (évite "Class org/concord/energy3d/MainApplication not found"). À lancer après deploy-native ou après copie de fichiers depuis energy3D_win. -->
+	<target name="fix-cfg-mainclass-in-bundle" description="Corrige app.mainclass dans le .cfg du bundle (points au lieu de slashes)">
+		<property name="bundle.cfg" value="${build.dist.dir}/build-native/bundles/${app.name}/app/${app.name}.cfg" />
+		<replace file="${bundle.cfg}" token="app.mainclass=org/concord/energy3d/MainApplication" value="app.mainclass=org.concord.energy3d.MainApplication"/>
+		<echo message="cfg corrigé : ${bundle.cfg}" />
+	</target>
+
+	<!-- Corrige la main class embarquée dans l'exe (le launcher lit parfois la valeur en dur). Remplace org/ par org. dans le binaire. Même longueur, pas de resize. -->
+	<target name="patch-exe-mainclass" description="Patch Energy3D.exe : main class en notation point dans le binaire">
+		<property name="bundle.root" value="${build.dist.dir}/build-native/bundles/${app.name}" />
+		<echo file="${build.dist.dir}/build-native/patch-exe-mainclass.ps1" append="false">Set-Location (Join-Path (Get-Location) 'bundles${file.separator}${app.name}')
+$exe = '${app.name}.exe'
+$bytes = [System.IO.File]::ReadAllBytes($exe)
+$old = [System.Text.Encoding]::ASCII.GetBytes('org/concord/energy3d/MainApplication')
+$new = [System.Text.Encoding]::ASCII.GetBytes('org.concord.energy3d.MainApplication')
+for ($i = 0; $i -le $bytes.Length - $old.Length; $i++) {
+  $match = $true
+  for ($j = 0; $j -lt $old.Length; $j++) { if ($bytes[$i+$j] -ne $old[$j]) { $match = $false; break } }
+  if ($match) {
+    for ($j = 0; $j -lt $new.Length; $j++) { $bytes[$i+$j] = $new[$j] }
+    [System.IO.File]::WriteAllBytes($exe, $bytes)
+    exit 0
+  }
+}
+exit 1
+</echo>
+		<exec executable="powershell" osfamily="windows" failonerror="false" resultproperty="patch.result" dir="${build.dist.dir}/build-native">
+			<arg value="-NoProfile"/>
+			<arg value="-ExecutionPolicy"/>
+			<arg value="Bypass"/>
+			<arg value="-File"/>
+			<arg value="patch-exe-mainclass.ps1"/>
+		</exec>
+		<delete file="${build.dist.dir}/build-native/patch-exe-mainclass.ps1" failonerror="false"/>
+		<echo message="Exe patché (main class) : ${bundle.root}/${app.name}.exe (résultat=${patch.result})" />
 	</target>
 
 	<target name="sign">
@@ -135,29 +403,37 @@
 		</fx:signjar>
 	</target>
 
-	<target name="jar">
-		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath=".:${JAVA_HOME}/lib/ant-javafx.jar" />
-		<fx:jar destfile="exe/energy3d.jar">
-			<fx:application name="${app.name}" mainClass="org.concord.energy3d.MainApplication" version="${app.version}" />
-			<fx:resources>
-				<fx:fileset dir="exe">
-					<patternset refid="jars.no.source" />
-				</fx:fileset>
-			</fx:resources>
-			<fileset dir="${build.classes.dir}" />
+	<target name="jar" depends="compile">
+		<local name="manifest.classpath.jar"/>
+		<path id="jar.classpath">
+			<fileset dir="exe">
+				<include name="lib/*.jar" />
+				<include name="lib/ardor3d/*.jar" />
+				<include name="lib/freetts/*.jar" />
+				<include name="lib/poly2tri/*.jar" />
+				<include name="lib/jogl/jogl-all.jar" />
+				<include name="lib/jogl/gluegen-rt.jar" />
+				<exclude name="**/*-sources*" />
+			</fileset>
+		</path>
+		<manifestclasspath property="manifest.classpath.jar" jarfile="exe/energy3d.jar">
+			<classpath refid="jar.classpath" />
+		</manifestclasspath>
+		<jar destfile="exe/energy3d.jar" basedir="${build.classes.dir}">
 			<manifest>
+				<attribute name="Main-Class" value="org.concord.energy3d.MainApplication" />
+				<attribute name="Class-Path" value="${manifest.classpath.jar}" />
 				<attribute name="Application-Name" value="${app.name}" />
-				<attribute name="Permissions" value="all-permissions" />
-				<attribute name="SplashScreen-Image" value="gui/splash.png" />
 			</manifest>
-		</fx:jar>
+		</jar>
 
 		<taskdef name="digest" classname="com.threerings.getdown.tools.DigesterTask" classpath="exe/lib/getdown.jar;exe/lib/samskivert.jar" />
 		<digest appdir="exe" />
 	</target>
 
 	<target name="compile" depends="clean">
-		<javac includeantruntime="false" srcdir="${build.src.dir}" destdir="${build.classes.dir}" fork="yes" executable="${JAVA_HOME}/bin/javac" debug="on" classpathref="CLASSPATH" encoding="iso-8859-1">
+		<!-- source/target 1.8 : bytecode Java 8 (52) pour exe JRE 8 et "Lancer Energy3D (Java système).bat" -->
+		<javac includeantruntime="false" srcdir="${build.src.dir}" destdir="${build.classes.dir}" fork="false" debug="on" classpathref="CLASSPATH" encoding="iso-8859-1" failonerror="true" source="1.8" target="1.8">
 		</javac>
 
 		<!-- Copy resources to build.classes.dir -->
