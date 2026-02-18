@@ -104,7 +104,7 @@ public class VsgSubmitter {
             scrollPane.setPreferredSize(new Dimension(400, 300));
             panel.add(scrollPane, BorderLayout.NORTH);
 
-            final JTextField nameField = new JTextField(Scene.getInstance().getDesigner() == null ? "User" : Scene.getInstance().getDesigner().getName());
+            final JTextField nameField = new JTextField(Scene.getInstance().getDesigner() == null ? I18n.get("props.user") : Scene.getInstance().getDesigner().getName());
             final JTextField emailField = new JTextField(Scene.getInstance().getDesigner() == null ? "" : Scene.getInstance().getDesigner().getEmail());
             final JTextField organizationField = new JTextField(Scene.getInstance().getDesigner() == null ? "" : Scene.getInstance().getDesigner().getOrganization());
             final JPanel personalInfoPanel = new JPanel(new SpringLayout());

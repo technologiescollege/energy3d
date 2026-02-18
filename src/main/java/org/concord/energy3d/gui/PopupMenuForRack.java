@@ -569,7 +569,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Rack rack = (Rack) selectedPart;
                     final Foundation foundation = rack.getTopContainer();
-                    final String title = "<html>Pole Height (m) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.pole_height_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

@@ -318,8 +318,8 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     gui.add(comboBox, BorderLayout.CENTER);
 
-                    final String title = "<html>Select the ID of the absorber<br>foundation for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The sunlight reflected by this Fresnel reflector will<br>focus on the top of the target, where the absorber<br>tube is located.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.select_absorber_id_for", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.fresnel_sunlight_focus") + "<hr></html>";
                     final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
                     final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.absorber"));

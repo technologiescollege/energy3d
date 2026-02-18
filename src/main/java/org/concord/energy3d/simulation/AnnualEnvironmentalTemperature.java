@@ -233,20 +233,20 @@ public class AnnualEnvironmentalTemperature extends JPanel {
                 g2.setStroke(thick);
                 g2.drawLine(x0 - 7, y0 + 3, x0 + 13, y0 + 3);
                 g2.setColor(Color.BLACK);
-                g2.drawString("Air (average)", x0 + 20, y0 + 8);
+                g2.drawString(I18n.get("chart.air_average"), x0 + 20, y0 + 8);
                 y0 += 14;
             } else {
                 g2.setColor(Color.RED);
                 g2.setStroke(thick);
                 g2.drawLine(x0 - 7, y0 + 3, x0 + 13, y0 + 3);
                 g2.setColor(Color.BLACK);
-                g2.drawString("Air (highest)", x0 + 20, y0 + 8);
+                g2.drawString(I18n.get("chart.air_highest"), x0 + 20, y0 + 8);
                 y0 += 14;
                 g2.setColor(Color.BLUE);
                 g2.setStroke(thick);
                 g2.drawLine(x0 - 7, y0 + 3, x0 + 13, y0 + 3);
                 g2.setColor(Color.BLACK);
-                g2.drawString("Air (lowest)", x0 + 20, y0 + 8);
+                g2.drawString(I18n.get("chart.air_lowest"), x0 + 20, y0 + 8);
                 y0 += 14;
             }
         }
@@ -259,7 +259,7 @@ public class AnnualEnvironmentalTemperature extends JPanel {
                     g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
                     g2.setStroke(thin);
                     drawSymbol(g2, symbol[i], x0, y0);
-                    g2.drawString("Ground (" + depth[i] + "m deep, average)", x0 + 20, y0 + 8);
+                    g2.drawString(I18n.get("chart.ground_m_deep_average", String.valueOf(depth[i])), x0 + 20, y0 + 8);
                     y0 += 14;
                 } else {
                     g2.setColor(Color.RED);
@@ -267,14 +267,14 @@ public class AnnualEnvironmentalTemperature extends JPanel {
                     g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
                     g2.setStroke(thin);
                     drawSymbol(g2, symbol[i], x0, y0);
-                    g2.drawString("Ground (" + depth[i] + "m deep, highest)", x0 + 20, y0 + 8);
+                    g2.drawString(I18n.get("chart.ground_m_deep_highest", String.valueOf(depth[i])), x0 + 20, y0 + 8);
                     y0 += 14;
                     g2.setColor(Color.BLUE);
                     g2.setStroke(stroke[i]);
                     g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
                     g2.setStroke(thin);
                     drawSymbol(g2, symbol[i], x0, y0);
-                    g2.drawString("Ground (" + depth[i] + "m deep, lowest)", x0 + 20, y0 + 8);
+                    g2.drawString(I18n.get("chart.ground_m_deep_lowest", String.valueOf(depth[i])), x0 + 20, y0 + 8);
                     y0 += 14;
                 }
             }
@@ -285,7 +285,7 @@ public class AnnualEnvironmentalTemperature extends JPanel {
             g2.setStroke(dashed);
             g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
             g2.setColor(Color.BLACK);
-            g2.drawString("Ground (" + depth[depth.length - 1] + "m deep)", x0 + 20, y0 + 8);
+            g2.drawString(I18n.get("chart.ground_m_deep", String.valueOf(depth[depth.length - 1])), x0 + 20, y0 + 8);
         }
 
     }

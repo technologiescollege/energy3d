@@ -193,7 +193,7 @@ public class DailyEnvironmentalTemperature extends JPanel {
                 g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
                 g2.setStroke(thin);
                 drawSymbol(g2, symbol[i], x0, y0);
-                g2.drawString(i == 0 ? "Air" : "Ground (" + depth[i] + "m deep)", x0 + 20, y0 + 8);
+                g2.drawString(i == 0 ? I18n.get("chart.air") : I18n.get("chart.ground_m_deep", String.valueOf(depth[i])), x0 + 20, y0 + 8);
                 y0 += 14;
             }
         }
@@ -203,7 +203,7 @@ public class DailyEnvironmentalTemperature extends JPanel {
             g2.setStroke(dashed);
             g2.drawLine(x0 - 7, y0 + 4, x0 + 13, y0 + 4);
             g2.setColor(Color.BLACK);
-            g2.drawString("Ground (" + depth[depth.length - 1] + "m deep)", x0 + 20, y0 + 8);
+            g2.drawString(I18n.get("chart.ground_m_deep", String.valueOf(depth[depth.length - 1])), x0 + 20, y0 + 8);
         }
 
     }

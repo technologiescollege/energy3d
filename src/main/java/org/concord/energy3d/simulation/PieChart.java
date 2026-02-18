@@ -1,5 +1,6 @@
 package org.concord.energy3d.simulation;
 
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import java.awt.BasicStroke;
@@ -78,15 +79,15 @@ public class PieChart extends JComponent {
                         }
                     }
                 }
-                String toolTipText = "<html><h4>Data:</h4><hr>";
+                String toolTipText = "<html><h4>" + I18n.get("chart.data") + "</h4><hr>";
                 double total = 0;
                 for (int i = 0; i < data.length; i++) {
                     toolTipText += legends[i] + ": " + unit + Graph.TWO_DECIMALS.format(data[i]) + "<br>";
                     total += data[i];
                 }
-                toolTipText += "Total: " + unit + Graph.TWO_DECIMALS.format(total) + "<br>";
-                toolTipText += "<hr>Hover mouse over the pie chart to view the numbers.";
-                setToolTipText(toolTipText + (popup ? "" : "<br>Double-click to enlarge this chart.") + "</html>");
+                toolTipText += I18n.get("chart.total") + unit + Graph.TWO_DECIMALS.format(total) + "<br>";
+                toolTipText += "<hr>" + I18n.get("tooltip.pie_chart_hover");
+                setToolTipText(toolTipText + (popup ? "" : "<br>" + I18n.get("tooltip.double_click_enlarge_chart")) + "</html>");
                 repaint();
             }
         });

@@ -23,7 +23,8 @@ class PopupMenuForHuman extends PopupMenuFactory {
     private static JPopupMenu popupMenuForHuman;
 
     private static JRadioButtonMenuItem createMenuItem(final int humanType) {
-        final JRadioButtonMenuItem rbmi = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource("icons/" + Human.getHumanName(humanType).toLowerCase() + ".png")));
+        // Icon path must use internal name (jack.png, jade.png), not translated name
+        final JRadioButtonMenuItem rbmi = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource("icons/" + Human.FIGURES[humanType].getName().toLowerCase() + ".png")));
         rbmi.setText(Human.getHumanName(humanType));
         rbmi.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {

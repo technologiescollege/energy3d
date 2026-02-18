@@ -132,7 +132,8 @@ public class Human extends HousePart {
 
     @Override
     protected String getTextureFileName() {
-        return getHumanName().toLowerCase() + ".png";
+        // Use internal name for texture file (icons are jack.png, jade.png, etc.), not the translated display name
+        return FIGURES[humanType].getName().toLowerCase() + ".png";
     }
 
     @Override

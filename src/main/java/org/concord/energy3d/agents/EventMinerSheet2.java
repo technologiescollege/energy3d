@@ -64,25 +64,25 @@ public class EventMinerSheet2 implements Agent {
 
 		// cases that we can immediately decide the feedback
 		mustdos = new LinkedHashMap<String, Feedback>();
-		mustdos.put("A+?", new Feedback(JOptionPane.INFORMATION_MESSAGE, false, "Try analyzing the energy use of the house using the menu<br>Analysis > Buildings > Dail Energy Analysis for Selected Building..."));
-		mustdos.put("#{2,}", new Feedback(JOptionPane.QUESTION_MESSAGE, false, "Do you want to collect the U-value of the selected wall and the energy result<br>following the analysis and type it in the table?"));
-		mustdos.put("W+?", new Feedback(JOptionPane.INFORMATION_MESSAGE, false, "Your task is to investigate how changing the U-value of a wall affects the energy use of the house.<br>Right-click a wall and select \"Insulation...\" from the popup menu to change its U-value. Don't apply<br>the change to all walls."));
+		mustdos.put("A+?", new Feedback(JOptionPane.INFORMATION_MESSAGE, false, I18n.get("feedback.mustdo.try_analyzing")));
+		mustdos.put("#{2,}", new Feedback(JOptionPane.QUESTION_MESSAGE, false, I18n.get("feedback.mustdo.collect_uvalue_result")));
+		mustdos.put("W+?", new Feedback(JOptionPane.INFORMATION_MESSAGE, false, I18n.get("feedback.mustdo.investigate_uvalue")));
 
 		// warnings upon the occurrence of the specified events
 		warnings = new LinkedHashMap<String, Feedback>();
-		warnings.put("[C]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You changed the location. As each location has a different climate,<br>changing the location may affect the result of energy use."));
-		warnings.put("[D]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You changed the date. As each date has different weather conditions,<br>changing the date may affect the result of energy use."));
-		warnings.put("[L]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You changed the color of some part of the house. As the color of a house may affect its absorption of solar energy,<br>changing the color may affect the result of energy use."));
-		warnings.put("[P]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "Modification of the house (other than the U-value) is not recommended for this investigation<br>as it may interfere with the effect of the U-value on energy use."));
-		warnings.put("[R]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You changed the U-value of an object that is not a wall.<br>In this investigation, you should select a wall and change only its U-value."));
-		warnings.put("[T]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "Adjusting the thermostat is not recommended for this investigation<br>as it may interfere with the effect of the U-value on energy use."));
-		warnings.put("[U]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You changed the U-values of all walls.<br>In this investigation, you should select a wall and change only its U-value."));
-		warnings.put("[Y]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "You ran an annual energy analysis.<br>In this investigation, you should run only daily energy analyses."));
-		warnings.put("[Z]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, "Rotation of the house is not recommended for this investigation<br>as it may interfere with the effect of the U-value on energy use."));
+		warnings.put("[C]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.changed_location")));
+		warnings.put("[D]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.changed_date")));
+		warnings.put("[L]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.changed_color")));
+		warnings.put("[P]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.modified_house")));
+		warnings.put("[R]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.changed_uvalue_not_wall")));
+		warnings.put("[T]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.adjusted_thermostat")));
+		warnings.put("[U]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.changed_all_walls")));
+		warnings.put("[Y]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.annual_analysis")));
+		warnings.put("[Z]+?", new Feedback(JOptionPane.WARNING_MESSAGE, false, I18n.get("feedback.warning.rotation")));
 
 		// reminders upon the absence of the specified events
 		reminders = new LinkedHashMap<String, Feedback>();
-		reminders.put("#{2,}", new Feedback(JOptionPane.QUESTION_MESSAGE, true, "Do you want to collect the U-value of the selected wall and the energy result<br>of the No. {ANALYSIS_NUMBER} analysis and type it in the table?"));
+		reminders.put("#{2,}", new Feedback(JOptionPane.QUESTION_MESSAGE, true, I18n.get("feedback.reminder.collect_uvalue_analysis")));
 
 		// compound regex
 		String violations = "";
@@ -93,9 +93,9 @@ public class EventMinerSheet2 implements Agent {
 
 		// instruction for progress
 		progressFeedback = new ArrayList<Feedback>();
-		progressFeedback.add(new Feedback(JOptionPane.INFORMATION_MESSAGE, false, "You have only run a valid daily energy analysis.<br>You need to run at least two such analyses."));
-		progressFeedback.add(new Feedback(JOptionPane.QUESTION_MESSAGE, false, "You have run two valid analyses. Did you compare the results to find the relationship<br>between the difference in energy use and the change of the U-value?"));
-		progressFeedback.add(new Feedback(JOptionPane.QUESTION_MESSAGE, false, "You have run {COUNT_PATTERN} valid analyses. What relationship between the energy use<br>of the house and the U-value of the wall did you find?"));
+		progressFeedback.add(new Feedback(JOptionPane.INFORMATION_MESSAGE, false, I18n.get("feedback.progress.only_one_analysis")));
+		progressFeedback.add(new Feedback(JOptionPane.QUESTION_MESSAGE, false, I18n.get("feedback.progress.two_analyses")));
+		progressFeedback.add(new Feedback(JOptionPane.QUESTION_MESSAGE, false, I18n.get("feedback.progress.multiple_analyses")));
 
 	}
 
@@ -132,7 +132,7 @@ public class EventMinerSheet2 implements Agent {
 					}
 					if (latestSegment.indexOf('W') != -1) {
 						latestHandled = true;
-						f = new Feedback(JOptionPane.QUESTION_MESSAGE, false, "Looks like that you have adjusted the U-value.<br>Do you want to follow up with an analysis?");
+						f = new Feedback(JOptionPane.QUESTION_MESSAGE, false, I18n.get("feedback.question.adjusted_uvalue"));
 					}
 					if (!latestHandled) {
 						String s = "";

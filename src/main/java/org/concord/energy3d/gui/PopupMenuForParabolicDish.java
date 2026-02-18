@@ -694,7 +694,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
                     final Foundation foundation = d.getTopContainer();
-                    final String title = "<html>Pole Height (m) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.pole_height_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();

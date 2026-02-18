@@ -150,7 +150,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                     final List<Mirror> heliostats = foundation.getHeliostats();
                     countBar.setValue(heliostats.size());
                     moduleCountBar.setValue(heliostats.size());
-                    countPanel.setBorder(EnergyPanel.createTitledBorder(heliostats.size() > 0 ? I18n.get("info.num_heliostats") : "------", true));
+                    countPanel.setBorder(EnergyPanel.createTitledBorder(heliostats.size() > 0 ? I18n.get("info.num_heliostats") : I18n.get("label.not_applicable"), true));
                     double reflectingArea = 0;
                     double apertureArea;
                     for (final Mirror m : heliostats) {

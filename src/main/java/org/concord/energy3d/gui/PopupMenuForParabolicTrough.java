@@ -833,7 +833,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough t = (ParabolicTrough) selectedPart;
                     final Foundation foundation = t.getTopContainer();
-                    final String title = "<html>Pole Height (m) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.pole_height_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
@@ -967,8 +967,8 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough trough = (ParabolicTrough) selectedPart;
                     final Foundation foundation = trough.getTopContainer();
-                    final String title = "<html>Azimuth Angle (&deg;) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The azimuth angle is measured clockwise from the true north.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.azimuth_angle_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.azimuth_clockwise_north") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);

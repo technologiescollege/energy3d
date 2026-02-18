@@ -503,7 +503,7 @@ public class EnergyPanel extends JPanel {
         // part panel
 
         partPanel = new JPanel(new BorderLayout(10, 0));
-        partPanel.setBorder(createTitledBorder("-", true));
+        partPanel.setBorder(createTitledBorder(I18n.get("part.no_selection"), true));
         partPanel.setMaximumSize(new Dimension(partPanel.getMaximumSize().width, partPanel.getPreferredSize().height));
         dataPanel.add(partPanel);
 
@@ -1260,7 +1260,7 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                             partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_length_width_center_pole"));
                             partProperty2Label.setText(I18n.get("label.angles"));
                             partProperty2TextField.setText(flat ? I18n.get("label.tilt") + ONE_DECIMAL.format(Util.isZero(sp.getTiltAngle()) ? Math.toDegrees(Math.asin(sp.getNormal().getY())) : sp.getTiltAngle())
-                                    + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
+                                    + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : I18n.get("label.na_dash"));
                             partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_angles"));
                             final String eff = ONE_DECIMAL.format(sp.getCellEfficiency() * 100) + "%";
                             if (energyViewShown) {
@@ -1350,7 +1350,7 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                                     + TWO_DECIMALS.format(m.getPoleHeight() * scale * meterToFoot) + lengthUnit);
                             partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_length_width_center"));
                             partProperty2Label.setText(I18n.get("label.angles"));
-                            partProperty2TextField.setText(flat ? I18n.get("label.tilt") + ONE_DECIMAL.format(m.getTiltAngle()) + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
+                            partProperty2TextField.setText(flat ? I18n.get("label.tilt") + ONE_DECIMAL.format(m.getTiltAngle()) + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : I18n.get("label.na_dash"));
                             partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_angles"));
                             final Foundation receiver = m.getReceiver();
                             final String s = "R=" + ONE_DECIMAL.format(m.getReflectance() * 100) + "%" + (receiver == null ? "" : ", \u03B7="
@@ -1596,7 +1596,7 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                                     + TWO_DECIMALS.format(position.getX() * scale) + ", "
                                     + TWO_DECIMALS.format(position.getY() * scale) + ")" + lengthUnit);
                             partProperty2TextField.setText(meshBoxString + ", " + meshCenterString);
-                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.node_dimension_location") + "<br>File:" + ns.getSourceURL().getFile());
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.node_dimension_location") + "<br>" + I18n.get("label.file") + ns.getSourceURL().getFile());
                             partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_dimension_location"));
                             if (energyViewShown) {
                                 double dailyMeshSolarPotential = 0;
@@ -1609,7 +1609,7 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                                 partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_normal_solar"));
                             } else {
                                 partProperty3Label.setText(I18n.get("label.normal"));
-                                partProperty3TextField.setText("\u2191" + meshNormalString + ", " + selectedMesh.getMeshData().getVertexCount() + " vertices");
+                                partProperty3TextField.setText("\u2191" + meshNormalString + ", " + selectedMesh.getMeshData().getVertexCount() + " " + I18n.get("label.vertices"));
                                 partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_normal_vertices"));
                             }
                         } else {
@@ -1621,7 +1621,7 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                             partProperty1Label.setText(I18n.get("part.size"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(lx * scale) + "\u00d7"
                                     + TWO_DECIMALS.format(ly * scale) + "\u00d7"
-                                    + TWO_DECIMALS.format(lz * scale) + lengthUnit + ", Area\u2248"
+                                    + TWO_DECIMALS.format(lz * scale) + lengthUnit + ", " + I18n.get("label.area_approx") + " "
                                     + ONE_DECIMAL.format(lx * ly * scale * scale) + landArea + lengthUnit + "\u00B2");
                             partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.foundation_length_width"));
                             partProperty2Label.setText(I18n.get("part.position"));
@@ -1888,18 +1888,18 @@ final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
                                         partProperty2Label.setText("  " + I18n.get("label.total_meshes"));
                                         partProperty2TextField.setText("" + Scene.getInstance().countMeshes());
                                         partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.total_structure_meshes"));
-                                        partProperty3Label.setText("  -");
+                                        partProperty3Label.setText(" " + I18n.get("label.separator"));
                                         partProperty3TextField.setText("");
                                         partProperty3TextField.putClientProperty("tooltip", null);
                                     } else {
                                         partPanelBorder.setTitle(I18n.get("label.separator"));
-                                        partProperty1Label.setText("  -");
+                                        partProperty1Label.setText(" " + I18n.get("label.separator"));
                                         partProperty1TextField.setText("");
                                         partProperty1TextField.putClientProperty("tooltip", null);
-                                        partProperty2Label.setText("  -");
+                                        partProperty2Label.setText(" " + I18n.get("label.separator"));
                                         partProperty2TextField.setText("");
                                         partProperty2TextField.putClientProperty("tooltip", null);
-                                        partProperty3Label.setText("  -");
+                                        partProperty3Label.setText(" " + I18n.get("label.separator"));
                                         partProperty3TextField.setText("");
                                         partProperty3TextField.putClientProperty("tooltip", null);
                                     }

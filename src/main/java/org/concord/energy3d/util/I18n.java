@@ -229,6 +229,40 @@ public final class I18n {
         return new String[]{"en", "fr"};
     }
 
+    /**
+     * Retourne le libellé traduit du type de cellule PV (identifiant interne en anglais).
+     */
+    public static String getCellTypeDisplayName(final String internalCellType) {
+        if (internalCellType == null) return get("label.not_applicable");
+        switch (internalCellType) {
+            case "Polycrystalline":
+                return get("cell_type.polycrystalline");
+            case "Monocrystalline":
+                return get("cell_type.monocrystalline");
+            case "Thin Film":
+                return get("cell_type.thin_film");
+            default:
+                return internalCellType;
+        }
+    }
+
+    /**
+     * Retourne le libellé traduit de la couleur (identifiant interne en anglais).
+     */
+    public static String getColorDisplayName(final String internalColor) {
+        if (internalColor == null) return get("label.not_applicable");
+        switch (internalColor) {
+            case "Blue":
+                return get("color.blue");
+            case "Black":
+                return get("color.black");
+            case "Gray":
+                return get("color.gray");
+            default:
+                return internalColor;
+        }
+    }
+
     /** Nom d'affichage natif pour un code (ex. "fr" → "Français"). */
     public static String getDisplayNameForLocaleCode(final String code) {
         final String name = new Locale(code).getDisplayLanguage(new Locale(code));

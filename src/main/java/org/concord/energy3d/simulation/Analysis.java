@@ -86,8 +86,8 @@ public abstract class Analysis {
         if (n > 0) {
             if (Scene.getInstance().getCalculateRoi() && SceneManager.getInstance().getSelectedPart() == null) {
                 String previousResults = "<table border=1>";
-                previousResults += "<tr bgcolor=#cccccc><td><b>Run</b></td><td><b>Annual Electricity (kWh)</b></td><td><b>Lifespan (Year)</b></td>";
-                previousResults += "<td><b>ROI (%)</b></td><td><b>Payback Period (Year)</b></td></tr>";
+                previousResults += "<tr bgcolor=#cccccc><td><b>" + I18n.get("table.run") + "</b></td><td><b>" + I18n.get("table.annual_electricity_kwh") + "</b></td><td><b>" + I18n.get("table.lifespan_year") + "</b></td>";
+                previousResults += "<td><b>" + I18n.get("table.roi_percent") + "</b></td><td><b>" + I18n.get("table.payback_period_year") + "</b></td></tr>";
                 int m = n < 5 ? 0 : n - 5;
                 for (int i = n - 1; i >= m; i--) {
                     previousResults += (i % 2 == 0 ? "<tr bgcolor=#cceecc>" : "<tr bgcolor=#eeccee>") + "<td>#" + (i + 1) + "</td>";
@@ -100,8 +100,8 @@ public abstract class Analysis {
                 previousResults += "</table>";
                 final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data")};
                 String msg = "<html>" + I18n.get("msg.annual_output_is", Graph.TWO_DECIMALS.format(annualOutput)) + ".";
-                msg += "<br>The payback period is <b>" + Graph.TWO_DECIMALS.format(paybackPeriod) + " years.</b>.";
-                msg += "<br>The return on investment over " + lifespan + " years is <b>" + (roi > 0 ? "<font color=black>" : "<font color=red>") + Graph.TWO_DECIMALS.format(roi) + "%</font></b>.";
+                msg += "<br>" + I18n.get("msg.payback_period_is", Graph.TWO_DECIMALS.format(paybackPeriod));
+                msg += "<br>" + I18n.get("msg.return_on_investment_over", String.valueOf(lifespan)) + (roi > 0 ? "<font color=black>" : "<font color=red>") + Graph.TWO_DECIMALS.format(roi) + "%</font></b>.";
                 msg += "<br><hr>" + I18n.get("msg.compare_with_last_runs", Integer.toString(n - m)) + "<br>" + previousResults + "</html>";
                 final JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
                 final JDialog dialog = optionPane.createDialog(parent, I18n.get("title.annual_analysis"));
@@ -125,7 +125,7 @@ public abstract class Analysis {
                     JOptionPane.showMessageDialog(parent, "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n + 1)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
-                String previousResults = "<table border=1><tr bgcolor=#cccccc><td><b>Run</b></td><td><b>Annual Electricity (kWh)</b></td></tr>";
+                String previousResults = "<table border=1><tr bgcolor=#cccccc><td><b>" + I18n.get("table.run") + "</b></td><td><b>" + I18n.get("table.annual_electricity_kwh") + "</b></td></tr>";
                 int m = n < 5 ? 0 : n - 5;
                 for (int i = n - 1; i >= m; i--) {
                     previousResults += (i % 2 == 0 ? "<tr bgcolor=#cceecc>" : "<tr bgcolor=#eeccee>") + "<td>#" + (i + 1) + "</td>";
@@ -155,10 +155,10 @@ public abstract class Analysis {
             }
         } else {
             StringBuilder report = new StringBuilder("<html>");
-            report.append("The annual output is <b>" + Graph.TWO_DECIMALS.format(annualOutput) + " kWh</b>.");
+            report.append(I18n.get("msg.annual_output_simple", Graph.TWO_DECIMALS.format(annualOutput)) + ".");
             if (Scene.getInstance().getCalculateRoi() && SceneManager.getInstance().getSelectedPart() == null) {
-                report.append("<br>The payback period is <b>" + Graph.TWO_DECIMALS.format(paybackPeriod) + " years.</b>.");
-                report.append("<br>The return on investment over " + lifespan + " years is <b>");
+                report.append("<br>" + I18n.get("msg.payback_period_is", Graph.TWO_DECIMALS.format(paybackPeriod)));
+                report.append("<br>" + I18n.get("msg.return_on_investment_over", String.valueOf(lifespan)));
                 report.append((roi > 0 ? "<font color=black>" : "<font color=red>") + Graph.TWO_DECIMALS.format(roi) + "%</font></b>.");
             }
             report.append("</html>");
@@ -172,8 +172,8 @@ public abstract class Analysis {
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.no_previous_run") + "</html>", I18n.get("title.full_history"), JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (Scene.getInstance().getCalculateRoi() && SceneManager.getInstance().getSelectedPart() == null) {
-                String previousResults = "<table width=100% border=1><tr bgcolor=#cccccc><td><b><font size=3>Run</b></td><td><b><font size=3>Annual Electricity (kWh)</b></td>";
-                previousResults += "<td><b><font size=3>Lifespan (year)</b></td><td><b><font size=3>ROI (%)</b></td><td><b><font size=3>Payback Period (Year)</b></td></tr>";
+                String previousResults = "<table width=100% border=1><tr bgcolor=#cccccc><td><b><font size=3>" + I18n.get("table.run") + "</b></td><td><b><font size=3>" + I18n.get("table.annual_electricity_kwh") + "</b></td>";
+                previousResults += "<td><b><font size=3>" + I18n.get("table.lifespan_year") + "</b></td><td><b><font size=3>" + I18n.get("table.roi_percent") + "</b></td><td><b><font size=3>" + I18n.get("table.payback_period_year") + "</b></td></tr>";
                 for (int i = n - 1; i >= 0; i--) {
                     previousResults += (i % 2 == 0 ? "<tr bgcolor=#cceecc>" : "<tr bgcolor=#eeccee>") + "<td><font size=3>#" + (i + 1) + "</td>";
                     double[] results = storedResults.get(i);
@@ -213,7 +213,7 @@ public abstract class Analysis {
                     clearHistory();
                 }
             } else {
-                String previousResults = "<table width=100% border=1><tr bgcolor=#cccccc><td><b><font size=3>Run</b></td><td><b><font size=3>Annual Electricity (kWh)</b></td></tr>";
+                String previousResults = "<table width=100% border=1><tr bgcolor=#cccccc><td><b><font size=3>" + I18n.get("table.run") + "</b></td><td><b><font size=3>" + I18n.get("table.annual_electricity_kwh") + "</b></td></tr>";
                 for (int i = n - 1; i >= 0; i--) {
                     previousResults += (i % 2 == 0 ? "<tr bgcolor=#cceecc>" : "<tr bgcolor=#eeccee>") + "<td><font size=3>#" + (i + 1) + "</td>";
                     double[] results = storedResults.get(i);

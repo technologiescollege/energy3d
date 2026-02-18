@@ -158,7 +158,7 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
                 s = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                 if (selectedPart instanceof Foundation) {
                     cost = (int) BuildingCost.getInstance().getCostByFoundation((Foundation) selectedPart);
-                    s = s.replaceAll("Foundation", "Building");
+                    s = s.replaceAll(I18n.get("part.foundation"), I18n.get("part.building"));
                     if (selectedPart.getChildren().isEmpty()) {
                         JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_building_on_foundation"), I18n.get("title.no_building"), JOptionPane.WARNING_MESSAGE);
                         return;

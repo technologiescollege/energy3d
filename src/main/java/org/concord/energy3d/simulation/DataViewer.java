@@ -189,29 +189,29 @@ class DataViewer {
         }
         final ArrayList<String> headers = new ArrayList<>();
         if (graph instanceof PartEnergyDailyGraph) {
-            headers.add("Hour");
+            headers.add(I18n.get("data.hour"));
         } else if (graph instanceof PartEnergyAnnualGraph) {
-            headers.add("Month");
+            headers.add(I18n.get("data.month"));
         }
         for (final HousePart p : selectedParts) {
             if (p instanceof SolarPanel || p instanceof Rack || p instanceof Mirror) {
-                headers.add("Solar " + p.getId());
+                headers.add(I18n.get("data.solar_id", String.valueOf(p.getId())));
             } else if (p instanceof Wall || p instanceof Roof || p instanceof Door) {
-                headers.add("Heat Gain " + p.getId());
+                headers.add(I18n.get("data.heat_gain_id", String.valueOf(p.getId())));
             } else if (p instanceof Window) {
-                headers.add("Solar " + p.getId());
-                headers.add("Heat Gain " + p.getId());
+                headers.add(I18n.get("data.solar_id", String.valueOf(p.getId())));
+                headers.add(I18n.get("data.heat_gain_id", String.valueOf(p.getId())));
             } else if (p instanceof Foundation) {
                 final Foundation foundation = (Foundation) p;
                 switch (foundation.getProjectType()) {
                     case Foundation.TYPE_PV_PROJECT:
-                        headers.add("PV " + p.getId());
+                        headers.add(I18n.get("data.pv_id", String.valueOf(p.getId())));
                         break;
                     case Foundation.TYPE_CSP_PROJECT:
-                        headers.add("CSP " + p.getId());
+                        headers.add(I18n.get("data.csp_id", String.valueOf(p.getId())));
                         break;
                     case Foundation.TYPE_BUILDING:
-                        headers.add("Building " + p.getId());
+                        headers.add(I18n.get("data.building_id", String.valueOf(p.getId())));
                         break;
                 }
             }

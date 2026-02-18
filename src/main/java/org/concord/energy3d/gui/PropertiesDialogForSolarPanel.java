@@ -55,13 +55,13 @@ class PropertiesDialogForSolarPanel extends PropertiesDialogFactory {
         i++;
 
         panel.add(new JLabel(I18n.get("label.color")));
-        final JTextField colorField = new JTextField(specs.getColor());
+        final JTextField colorField = new JTextField(I18n.getColorDisplayName(specs.getColor()));
         colorField.setEditable(false);
         panel.add(colorField);
         i++;
 
         panel.add(new JLabel(I18n.get("label.cell_type")));
-        final JTextField cellTypeField = new JTextField(specs.getCellType());
+        final JTextField cellTypeField = new JTextField(I18n.getCellTypeDisplayName(specs.getCellType()));
         cellTypeField.setEditable(false);
         panel.add(cellTypeField);
         i++;
