@@ -53,6 +53,8 @@ public class Wall extends HousePart implements Thermal {
     public static final int TEXTURE_05 = 5;
     public static final int TEXTURE_06 = 6;
     public static final int TEXTURE_07 = 7;
+    /** Bush / buisson texture */
+    public static final int TEXTURE_08 = 8;
 
     private static final double DEFAULT_WALL_HEIGHT = 30.0; // the recommended default wall height is 6m
     private static double userDefaultWallHeight = DEFAULT_WALL_HEIGHT;
@@ -1470,6 +1472,8 @@ public class Wall extends HousePart implements Thermal {
                 return "wall_06.png";
             case TEXTURE_07:
                 return "wall_07.png";
+            case TEXTURE_08:
+                return "wall_08.png";
         }
         return null;
     }

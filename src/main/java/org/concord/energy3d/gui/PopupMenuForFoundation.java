@@ -1825,13 +1825,16 @@ class PopupMenuForFoundation extends PopupMenuFactory {
             final JRadioButtonMenuItem rbmiTextureNone = createTextureMenuItem(Foundation.TEXTURE_NONE, null);
             final JRadioButtonMenuItem rbmiTextureEdge = createTextureMenuItem(Foundation.TEXTURE_EDGE, null);
             final JRadioButtonMenuItem rbmiTexture01 = createTextureMenuItem(Foundation.TEXTURE_01, "icons/foundation_01.png");
+            final JRadioButtonMenuItem rbmiTexture02 = createTextureMenuItem(Foundation.TEXTURE_02, "icons/foundation_02.png", "foundation.texture.grass");
             textureGroup.add(rbmiTextureNone);
             textureGroup.add(rbmiTextureEdge);
             textureGroup.add(rbmiTexture01);
+            textureGroup.add(rbmiTexture02);
             textureMenu.add(rbmiTextureNone);
             textureMenu.add(rbmiTextureEdge);
             textureMenu.addSeparator();
             textureMenu.add(rbmiTexture01);
+            textureMenu.add(rbmiTexture02);
 
             textureMenu.addMenuListener(new MenuListener() {
 
@@ -1851,6 +1854,9 @@ class PopupMenuForFoundation extends PopupMenuFactory {
                             break;
                         case Foundation.TEXTURE_01:
                             Util.selectSilently(rbmiTexture01, true);
+                            break;
+                        case Foundation.TEXTURE_02:
+                            Util.selectSilently(rbmiTexture02, true);
                             break;
                         default:
                             textureGroup.clearSelection();
@@ -2195,6 +2201,10 @@ class PopupMenuForFoundation extends PopupMenuFactory {
     }
 
     private static JRadioButtonMenuItem createTextureMenuItem(final int type, final String imageFile) {
+        return createTextureMenuItem(type, imageFile, null);
+    }
+
+    private static JRadioButtonMenuItem createTextureMenuItem(final int type, final String imageFile, final String labelI18nKey) {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
@@ -2203,7 +2213,7 @@ class PopupMenuForFoundation extends PopupMenuFactory {
             m = new JRadioButtonMenuItem(I18n.get("texture.edge"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText(I18n.get("texture.number", type));
+            m.setText(labelI18nKey != null ? I18n.get(labelI18nKey) : I18n.get("texture.number", type));
         }
 
         m.addItemListener(new ItemListener() {

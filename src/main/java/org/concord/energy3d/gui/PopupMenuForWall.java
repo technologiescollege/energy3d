@@ -507,6 +507,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             final JRadioButtonMenuItem rbmiTexture05 = createTextureMenuItem(Wall.TEXTURE_05, "icons/wall_05.png");
             final JRadioButtonMenuItem rbmiTexture06 = createTextureMenuItem(Wall.TEXTURE_06, "icons/wall_06.png");
             final JRadioButtonMenuItem rbmiTexture07 = createTextureMenuItem(Wall.TEXTURE_07, "icons/wall_07.png");
+            final JRadioButtonMenuItem rbmiTexture08 = createTextureMenuItem(Wall.TEXTURE_08, "icons/wall_08.png", "wall.texture.bush");
             textureButtonGroup.add(rbmiTextureNone);
             textureButtonGroup.add(rbmiTextureEdge);
             textureButtonGroup.add(rbmiTexture01);
@@ -516,6 +517,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             textureButtonGroup.add(rbmiTexture05);
             textureButtonGroup.add(rbmiTexture06);
             textureButtonGroup.add(rbmiTexture07);
+            textureButtonGroup.add(rbmiTexture08);
             textureMenu.add(rbmiTextureNone);
             textureMenu.add(rbmiTextureEdge);
             textureMenu.addSeparator();
@@ -526,6 +528,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             textureMenu.add(rbmiTexture05);
             textureMenu.add(rbmiTexture06);
             textureMenu.add(rbmiTexture07);
+            textureMenu.add(rbmiTexture08);
 
             textureMenu.addMenuListener(new MenuListener() {
 
@@ -563,6 +566,9 @@ class PopupMenuForWall extends PopupMenuFactory {
                             break;
                         case Wall.TEXTURE_07:
                             Util.selectSilently(rbmiTexture07, true);
+                            break;
+                        case Wall.TEXTURE_08:
+                            Util.selectSilently(rbmiTexture08, true);
                             break;
                         default:
                             textureButtonGroup.clearSelection();
@@ -820,6 +826,10 @@ class PopupMenuForWall extends PopupMenuFactory {
     }
 
     private static JRadioButtonMenuItem createTextureMenuItem(final int type, final String imageFile) {
+        return createTextureMenuItem(type, imageFile, null);
+    }
+
+    private static JRadioButtonMenuItem createTextureMenuItem(final int type, final String imageFile, final String labelI18nKey) {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
@@ -828,7 +838,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             m = new JRadioButtonMenuItem(I18n.get("wall.texture.edge_texture"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText(I18n.get("wall.texture.number", type));
+            m.setText(labelI18nKey != null ? I18n.get(labelI18nKey) : I18n.get("wall.texture.number", type));
         }
 
         m.addItemListener(new ItemListener() {

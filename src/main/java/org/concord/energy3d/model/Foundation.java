@@ -81,6 +81,8 @@ public class Foundation extends HousePart implements Thermal, Labelable {
     private static final long serialVersionUID = 1L;
 
     public static final int TEXTURE_01 = 1;
+    /** Grass / herbe texture */
+    public static final int TEXTURE_02 = 2;
 
     public static final int TYPE_AUTO_DETECTED = 0;
     public static final int TYPE_BUILDING = 1;
@@ -1207,12 +1209,25 @@ public class Foundation extends HousePart implements Thermal, Labelable {
 
         final FloatBuffer textureBuffer = mesh.getMeshData().getTextureBuffer(0);
         textureBuffer.rewind();
-        textureBuffer.put(0).put(0);
-        textureBuffer.put(1).put(0);
-        textureBuffer.put(0).put(1);
-        textureBuffer.put(0).put(1);
-        textureBuffer.put(1).put(0);
-        textureBuffer.put(1).put(1);
+        if (textureType > TEXTURE_NONE && textureType != TEXTURE_EDGE) {
+            // Tile texture when foundation is stretched (same behaviour as wall textures)
+            final double tileScale = 8.0;
+            final double uScale = p2.subtract(p0, null).length() / tileScale;
+            final double vScale = p1.subtract(p0, null).length() / tileScale;
+            textureBuffer.put(0).put(0);
+            textureBuffer.put((float) uScale).put(0);
+            textureBuffer.put(0).put((float) vScale);
+            textureBuffer.put(0).put((float) vScale);
+            textureBuffer.put((float) uScale).put(0);
+            textureBuffer.put((float) uScale).put((float) vScale);
+        } else {
+            textureBuffer.put(0).put(0);
+            textureBuffer.put(1).put(0);
+            textureBuffer.put(0).put(1);
+            textureBuffer.put(0).put(1);
+            textureBuffer.put(1).put(0);
+            textureBuffer.put(1).put(1);
+        }
 
         mesh.updateModelBound();
         CollisionTreeManager.INSTANCE.removeCollisionTree(mesh);
@@ -1446,6 +1461,8 @@ public class Foundation extends HousePart implements Thermal, Labelable {
         switch (textureType) {
             case TEXTURE_01:
                 return "foundation_01.png";
+            case TEXTURE_02:
+                return "foundation_02.png";
         }
         return null;
     }
