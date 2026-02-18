@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationSolarPanelAzimuthCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class ChangeFoundationSolarPanelAzimuthCommand extends MyAbstractUndoable
 
 	@Override
 	public String getPresentationName() {
-		return "Change Azimuth for All Solar Panels on Selected Foundation";
+		return I18n.get("undo.change_azimuth_all_solar_panels_selected_foundation");
 	}
 
 }

@@ -6,6 +6,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.SetSensorLabelCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 
@@ -17,13 +18,13 @@ class PopupMenuForSensor extends PopupMenuFactory {
 
         if (popupMenuForSensor == null) {
 
-            final JCheckBoxMenuItem miLight = new JCheckBoxMenuItem("Light", true);
-            final JCheckBoxMenuItem miHeatFlux = new JCheckBoxMenuItem("Heat Flux", true);
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
-            final JCheckBoxMenuItem miLabelLightSensorOutput = new JCheckBoxMenuItem("Light Sensor Output");
-            final JCheckBoxMenuItem miLabelHeatFluxSensorOutput = new JCheckBoxMenuItem("Heat Flux Sensor Output");
+            final JCheckBoxMenuItem miLight = new JCheckBoxMenuItem(I18n.get("sensor.light"), true);
+            final JCheckBoxMenuItem miHeatFlux = new JCheckBoxMenuItem(I18n.get("sensor.heat_flux"), true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
+            final JCheckBoxMenuItem miLabelLightSensorOutput = new JCheckBoxMenuItem(I18n.get("label.light_sensor_output"));
+            final JCheckBoxMenuItem miLabelHeatFluxSensorOutput = new JCheckBoxMenuItem(I18n.get("label.heat_flux_sensor_output"));
 
             popupMenuForSensor = createPopupMenu(false, false, () -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -64,7 +65,7 @@ class PopupMenuForSensor extends PopupMenuFactory {
             popupMenuForSensor.add(miLight);
             popupMenuForSensor.add(miHeatFlux);
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
             popupMenuForSensor.addSeparator();
             popupMenuForSensor.add(labelMenu);
 
@@ -145,7 +146,7 @@ class PopupMenuForSensor extends PopupMenuFactory {
                     final SetSensorLabelCommand c = new SetSensorLabelCommand(sensor);
                     sensor.setLabelCustom(miLabelCustom.isSelected());
                     if (sensor.getLabelCustom()) {
-                        sensor.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", sensor.getLabelCustomText()));
+                        sensor.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), sensor.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         sensor.draw();

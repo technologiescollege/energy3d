@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.ParabolicTrough;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetShapeForAllParabolicTroughsCommand extends MyAbstractUndoableEdit {
 
@@ -78,7 +79,7 @@ public class SetShapeForAllParabolicTroughsCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Set Shape for All Parabolic Troughs";
+		return I18n.get("undo.set_shape_all_parabolic_troughs");
 	}
 
 }

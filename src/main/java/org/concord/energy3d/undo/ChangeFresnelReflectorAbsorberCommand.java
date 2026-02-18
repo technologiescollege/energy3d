@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.FresnelReflector;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFresnelReflectorAbsorberCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class ChangeFresnelReflectorAbsorberCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Change Absorber";
+		return I18n.get("undo.change_absorber");
 	}
 
 }

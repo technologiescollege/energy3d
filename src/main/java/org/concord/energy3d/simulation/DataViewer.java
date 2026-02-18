@@ -26,6 +26,7 @@ import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -33,6 +34,26 @@ import org.concord.energy3d.scene.SceneManager;
 class DataViewer {
 
     private DataViewer() {
+    }
+
+    /** Returns the display label for a data table header key (internal keys stay in English for getData). */
+    private static String headerKeyToDisplayLabel(final String key) {
+        if (key == null) return "";
+        if ("Hour".equals(key)) return I18n.get("axis.hour");
+        if ("Month".equals(key)) return I18n.get("axis.month");
+        if ("Windows".equals(key)) return I18n.get("chart.series.windows");
+        if ("Solar Panels".equals(key)) return I18n.get("chart.series.solar_panels");
+        if ("Heater".equals(key)) return I18n.get("chart.series.heater");
+        if ("AC".equals(key)) return I18n.get("chart.series.ac");
+        if ("Net".equals(key)) return I18n.get("chart.series.net");
+        if ("Solar".equals(key)) return I18n.get("chart.series.solar");
+        if ("Heat Gain".equals(key)) return I18n.get("series.heat_gain");
+        if (key.startsWith("Solar ")) return I18n.get("chart.series.solar") + " " + key.substring(6);
+        if (key.startsWith("Heat Gain ")) return I18n.get("series.heat_gain") + " " + key.substring(10);
+        if (key.startsWith("PV ")) return I18n.get("panel.title_pv") + " " + key.substring(3);
+        if (key.startsWith("CSP ")) return I18n.get("panel.title_csp") + " " + key.substring(4);
+        if (key.startsWith("Building ")) return I18n.get("panel.title_building") + " " + key.substring(9);
+        return key;
     }
 
     @SuppressWarnings("serial")
@@ -49,17 +70,17 @@ class DataViewer {
         dataWindow.getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
         final JPanel p = new JPanel();
         dataWindow.getContentPane().add(p, BorderLayout.SOUTH);
-        JButton button = new JButton("Copy Data");
+        JButton button = new JButton(I18n.get("common.copy_data"));
         button.addActionListener(e -> {
             table.selectAll();
             final ActionEvent ae = new ActionEvent(table, ActionEvent.ACTION_PERFORMED, "copy");
             table.getActionMap().get(ae.getActionCommand()).actionPerformed(ae);
-            JOptionPane.showMessageDialog(parent, "The data is now ready for pasting.", "Copy Data", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, I18n.get("msg.data_ready_for_pasting"), I18n.get("title.copy_data"), JOptionPane.INFORMATION_MESSAGE);
             table.clearSelection();
         });
-        button.setToolTipText("Copy data to the system clipboard");
+        button.setToolTipText(I18n.get("tooltip.copy_data_clipboard"));
         p.add(button);
-        button = new JButton("Close");
+        button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dataWindow.dispose());
         p.add(button);
         dataWindow.pack();
@@ -90,10 +111,10 @@ class DataViewer {
                         final Sensor sensor = (Sensor) p;
                         String label = sensor.getLabelText() != null ? sensor.getLabelText() : sensor.getId() + "";
                         if (!sensor.isLightOff()) {
-                            sensorList.add("Light: #" + label);
+                            sensorList.add(I18n.get("series.light") + ": #" + label);
                         }
                         if (!sensor.isHeatFluxOff()) {
-                            sensorList.add("Heat Flux: #" + label);
+                            sensorList.add(I18n.get("series.heat_flux") + ": #" + label);
                         }
                     }
                 }
@@ -122,10 +143,10 @@ class DataViewer {
                         final Sensor sensor = (Sensor) p;
                         String label = sensor.getLabelText() != null ? sensor.getLabelText() : sensor.getId() + "";
                         if (!sensor.isLightOff()) {
-                            sensorList.add("Light: #" + label);
+                            sensorList.add(I18n.get("series.light") + ": #" + label);
                         }
                         if (!sensor.isHeatFluxOff()) {
-                            sensorList.add("Heat Flux: #" + label);
+                            sensorList.add(I18n.get("series.heat_flux") + ": #" + label);
                         }
                     }
                 }
@@ -139,7 +160,7 @@ class DataViewer {
             }
         }
         if (header == null) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Problem in finding data.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.problem_finding_data"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         final int m = header.length;
@@ -154,12 +175,16 @@ class DataViewer {
                 column[i][j] = list.get(i);
             }
         }
-        showDataWindow("Data", column, header, parent);
+        final String[] headerDisplay = new String[m];
+        for (int j = 0; j < m; j++) {
+            headerDisplay[j] = headerKeyToDisplayLabel(header[j]);
+        }
+        showDataWindow(I18n.get("title.data"), column, headerDisplay, parent);
     }
 
     static void viewRawData(final java.awt.Window parent, final Graph graph, final List<HousePart> selectedParts) {
         if (selectedParts == null || selectedParts.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "No part is selected.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_part_selected"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
         final ArrayList<String> headers = new ArrayList<>();
@@ -207,7 +232,11 @@ class DataViewer {
                 column[i][j] = list.get(i);
             }
         }
-        showDataWindow("Data", column, headersArray, parent);
+        final String[] headerDisplay = new String[m];
+        for (int j = 0; j < m; j++) {
+            headerDisplay[j] = headerKeyToDisplayLabel(headersArray[j]);
+        }
+        showDataWindow(I18n.get("title.data"), column, headerDisplay, parent);
     }
 
 }

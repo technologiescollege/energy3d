@@ -6,6 +6,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.LocationData;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.imageio.ImageIO;
@@ -58,14 +59,14 @@ class MapDialog extends JDialog {
             h = mapImageView.getPreferredSize().height;
             lngWindow = 360.0 / Math.pow(2, zoom + 8) * h;
             latWindow = lngWindow * Math.cos(Math.toRadians(lat));
-            mapImageView.setText("Loading...");
+            mapImageView.setText(I18n.get("msg.loading"));
             mapImageView.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         }
 
         @Override
         protected void process(final List<Integer> chunks) {
             final int i = chunks.get(chunks.size() - 1);
-            mapImageView.setText("Loading " + i + "%..."); // The last value in this array is all we care about.
+            mapImageView.setText(I18n.get("msg.loading_percent", Integer.toString(i))); // The last value in this array is all we care about.
             mapImageView.repaint();
             if (okButton.isEnabled()) { // sometimes the OK button can be enabled when a new download process terminates the current one
                 okButton.setEnabled(false);
@@ -131,9 +132,9 @@ class MapDialog extends JDialog {
             }
             e.printStackTrace();
             if (e.getCause() instanceof SSLKeyException) {
-                JOptionPane.showMessageDialog(MapDialog.this, "Missing feature! To use this feature you need to download and install the latest version of Energy3D.", getTitle(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MapDialog.this, I18n.get("msg.missing_feature"), getTitle(), JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(MapDialog.this, "Couldn't download map from Google!\nPlease check your internet connection and try again.", getTitle(), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(MapDialog.this, I18n.get("msg.couldnt_download_map"), getTitle(), JOptionPane.WARNING_MESSAGE);
             }
         }
 
@@ -142,7 +143,7 @@ class MapDialog extends JDialog {
     MapDialog(final JFrame owner) {
 
         super(owner);
-        setTitle("Earth View");
+        setTitle(I18n.get("dialog.earth_view"));
         setResizable(false);
         extent = Scene.getInstance().getGroundImageExtent();
 
@@ -241,7 +242,7 @@ class MapDialog extends JDialog {
         latitudeSpinner.setEditor(latEditor);
         longitudeSpinner.setEditor(lngEditor);
         zoomSpinner = new JSpinner(new SpinnerNumberModel(20, zoomMin, zoomMax, 1));
-        addressField = new JTextField("25 Love lane, Concord, MA, USA");
+        addressField = new JTextField(I18n.get("label.default_address"));
         addressField.addActionListener(e -> {
             final double[] coordinates = getGoogleMapAddressCoordinates();
             if (coordinates != null) {
@@ -267,27 +268,27 @@ class MapDialog extends JDialog {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
         panel1.setBorder(new EmptyBorder(5, 5, 0, 5));
-        panel1.add(new JLabel("Address: "));
+        panel1.add(new JLabel(I18n.get("label.address") + ": "));
         panel1.add(addressField);
-        final JButton goButton = new JButton("Go");
+        final JButton goButton = new JButton(I18n.get("common.go"));
         goButton.addActionListener(addressField.getActionListeners()[0]);
         panel1.add(goButton);
         getContentPane().add(panel1);
         final JPanel panel2 = new JPanel();
-        panel2.add(new JLabel("Latitude:"));
+        panel2.add(new JLabel(I18n.get("label.latitude") + ":"));
         panel2.add(latitudeSpinner);
-        panel2.add(new JLabel("Longitude:"));
+        panel2.add(new JLabel(I18n.get("label.longitude") + ":"));
         panel2.add(longitudeSpinner);
-        panel2.add(new JLabel("Zoom:"));
+        panel2.add(new JLabel(I18n.get("label.zoom") + ":"));
         panel2.add(zoomSpinner);
         getContentPane().add(panel2);
         getContentPane().add(mapImageView);
 
         final JPanel bottomPanel = new JPanel();
-        okButton = new JButton("OK");
+        okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
             if ((Integer) zoomSpinner.getValue() < 14) {
-                JOptionPane.showMessageDialog(MapDialog.this, "The selected region is too large. Please zoom in and try again.", MapDialog.this.getTitle(), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(MapDialog.this, I18n.get("msg.region_too_large_zoom"), MapDialog.this.getTitle(), JOptionPane.WARNING_MESSAGE);
                 return;
             }
             final double lng = (Double) longitudeSpinner.getValue();
@@ -308,7 +309,7 @@ class MapDialog extends JDialog {
             }
             dispose();
         });
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> {
             if (mapLoader != null) {
                 mapLoader.cancel(true);
@@ -320,7 +321,7 @@ class MapDialog extends JDialog {
         resolutionOptionComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if ((Integer) zoomSpinner.getValue() < 14) {
-                    JOptionPane.showMessageDialog(MapDialog.this, "The selected region is too large to apply this option.", MapDialog.this.getTitle(), JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MapDialog.this, I18n.get("msg.region_too_large_option"), MapDialog.this.getTitle(), JOptionPane.WARNING_MESSAGE);
                     Util.selectSilently(resolutionOptionComboBox, 0);
                     return;
                 }
@@ -328,9 +329,9 @@ class MapDialog extends JDialog {
                 updateMap();
             }
         });
-        bottomPanel.add(new JLabel("Resolution:"));
+        bottomPanel.add(new JLabel(I18n.get("label.resolution") + ":"));
         bottomPanel.add(resolutionOptionComboBox);
-        final JButton imageButton = new JButton("Copy Image");
+        final JButton imageButton = new JButton(I18n.get("menu.copy_image"));
         imageButton.addActionListener(e -> new ClipImage().copyImageToClipboard(mapImageView));
         bottomPanel.add(imageButton);
         bottomPanel.add(okButton);
@@ -398,9 +399,9 @@ class MapDialog extends JDialog {
             }
         } catch (final IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Could not retrieve map from google!\nPlease check your internet connection and try again.", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, I18n.get("msg.could_not_retrieve_map"), I18n.get("msg.error"), JOptionPane.WARNING_MESSAGE);
         }
-        JOptionPane.showMessageDialog(this, "Could not find the address!", "Error", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, I18n.get("msg.could_not_find_address"), I18n.get("msg.error"), JOptionPane.WARNING_MESSAGE);
         return null;
     }
 

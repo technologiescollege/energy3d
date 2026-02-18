@@ -8,6 +8,7 @@ import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -46,8 +47,8 @@ public class DailyEnvironmentalTemperature extends JPanel {
     private final double xNow;
     private final int symbolSize = 8;
     private final int numberOfTicks = 24;
-    private final String xAxisLabel = "Hour";
-    private final String yAxisLabel = "Temperature (\u00b0C)";
+    private final String xAxisLabel = I18n.get("axis.hour");
+    private final String yAxisLabel = I18n.get("axis.temperature");
     private final BasicStroke dashed = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[]{2f}, 0.0f);
     private final BasicStroke thin = new BasicStroke(1);
     private final BasicStroke thick = new BasicStroke(2);
@@ -305,7 +306,7 @@ public class DailyEnvironmentalTemperature extends JPanel {
 
     public void showDialog() {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Daily Environmental Temperature", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.daily_environmental_temperature"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         final JPanel contentPane = new JPanel(new BorderLayout());
@@ -316,11 +317,11 @@ public class DailyEnvironmentalTemperature extends JPanel {
 
         final JCheckBoxMenuItem[] cbmiGroundTemperature = new JCheckBoxMenuItem[depth.length];
         for (int i = 0; i < depth.length; i++) {
-            cbmiGroundTemperature[i] = new JCheckBoxMenuItem(i == 0 ? "Air Temperature" : "Ground Temperature (" + depth[i] + "m)");
+            cbmiGroundTemperature[i] = new JCheckBoxMenuItem(i == 0 ? I18n.get("menu.air_temperature") : I18n.get("menu.ground_temperature", String.valueOf(depth[i])));
             Util.selectSilently(cbmiGroundTemperature[i], !hideData.get(groundTemperature[i]));
         }
 
-        final JMenu menuView = new JMenu("View");
+        final JMenu menuView = new JMenu(I18n.get("menu.view"));
         menuBar.add(menuView);
         menuView.addMenuListener(new MenuListener() {
             @Override
@@ -349,10 +350,10 @@ public class DailyEnvironmentalTemperature extends JPanel {
             menuView.add(cbmiGroundTemperature[i]);
         }
 
-        final JMenu menuExport = new JMenu("Export");
+        final JMenu menuExport = new JMenu(I18n.get("menu.export"));
         menuBar.add(menuExport);
 
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(DailyEnvironmentalTemperature.this));
         menuExport.add(mi);
 
@@ -365,7 +366,7 @@ public class DailyEnvironmentalTemperature extends JPanel {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

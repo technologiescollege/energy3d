@@ -28,6 +28,7 @@ import org.concord.energy3d.MainApplication;
 import org.concord.energy3d.agents.OperationEvent;
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.gui.MainFrame;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
@@ -46,8 +47,8 @@ public class MonthlySunshineHours extends JPanel {
 
     private final int top = 25, right = 25, bottom = 45, left = 45;
     private final double xToday;
-    private final String xAxisLabel = "Month";
-    private final String yAxisLabel = "Sunshine Hours";
+    private final String xAxisLabel = I18n.get("axis.month");
+    private final String yAxisLabel = I18n.get("axis.sunshine_hours");
     private final BasicStroke thin = new BasicStroke(1);
     private final BasicStroke dashed = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[]{2f}, 0.0f);
     private final String city;
@@ -95,7 +96,7 @@ public class MonthlySunshineHours extends JPanel {
         float xTick;
         String s;
         for (int i = 0; i < sunshineHours.length; i++) {
-            s = AnnualGraph.THREE_LETTER_MONTH[i];
+            s = AnnualGraph.getThreeLetterMonth()[i];
             final int sWidth = g2.getFontMetrics().stringWidth(s);
             xTick = (int) (left + dx * (i + 0.5));
             g2.drawString(s, xTick - sWidth / 2f, height - bottom + 16);
@@ -149,7 +150,7 @@ public class MonthlySunshineHours extends JPanel {
 
     public void showDialog() {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Monthly Sunshine Hours", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.monthly_sunshine_hours"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         final JPanel contentPane = new JPanel(new BorderLayout());
@@ -158,10 +159,10 @@ public class MonthlySunshineHours extends JPanel {
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
 
-        final JMenu menuExport = new JMenu("Export");
+        final JMenu menuExport = new JMenu(I18n.get("menu.export"));
         menuBar.add(menuExport);
 
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(MonthlySunshineHours.this));
         menuExport.add(mi);
 
@@ -174,7 +175,7 @@ public class MonthlySunshineHours extends JPanel {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

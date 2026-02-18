@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeAtmosphericDustLossCommand extends MyAbstractUndoableEdit {
 
@@ -40,7 +41,7 @@ public class ChangeAtmosphericDustLossCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Atmospheric Dust Loss";
+		return I18n.get("undo.change_atmospheric_dust_loss");
 	}
 
 }

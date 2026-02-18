@@ -103,6 +103,7 @@ import org.concord.energy3d.undo.ChangeSolarHeatMapColorContrastCommand;
 import org.concord.energy3d.undo.ChangeTimeCommand;
 import org.concord.energy3d.util.BugReporter;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.OrientedBoundingBox;
@@ -149,6 +150,12 @@ public class EnergyPanel extends JPanel {
     private final JButton adjustThermostatButton;
     private JPanel partPanel;
     private JPanel timeAndLocationPanel;
+    private JLabel dateLabel;
+    private JLabel timeLabel;
+    private JLabel latitudeLabel;
+    private JLabel tempLabel;
+    private JLabel sunshineLabel;
+    private JLabel thermostatLabel;
     private JLabel partProperty1Label;
     private JLabel partProperty2Label;
     private JLabel partProperty3Label;
@@ -191,7 +198,7 @@ public class EnergyPanel extends JPanel {
         // date, time, and location
 
         timeAndLocationPanel = new JPanel();
-        timeAndLocationPanel.setBorder(createTitledBorder("Project", true));
+        timeAndLocationPanel.setBorder(createTitledBorder(I18n.get("panel.project"), true));
         dataPanel.add(timeAndLocationPanel);
         final GridBagLayout gbl_panel_3 = new GridBagLayout();
         timeAndLocationPanel.setLayout(gbl_panel_3);
@@ -199,7 +206,8 @@ public class EnergyPanel extends JPanel {
         final GridBagConstraints gbc_dateLabel = new GridBagConstraints();
         gbc_dateLabel.gridx = 0;
         gbc_dateLabel.gridy = 0;
-        timeAndLocationPanel.add(createLabel("Date: "), gbc_dateLabel);
+        dateLabel = createLabel(I18n.get("panel.date"));
+        timeAndLocationPanel.add(dateLabel, gbc_dateLabel);
 
         dateSpinner = createSpinner(new SpinnerDateModel(Calendar.getInstance().getTime(), null, null, Calendar.MONTH));
         final JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "MMMM dd");
@@ -267,7 +275,7 @@ public class EnergyPanel extends JPanel {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 final String city = (String) regionComboBox.getSelectedItem();
                 if (city.equals("")) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "No region is selected.\nEnergy simulation will not be accurate.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("panel.msg_no_region"), I18n.get("panel.msg_warning"), JOptionPane.WARNING_MESSAGE);
                     Scene.getInstance().setCity(city);
                 } else {
                     final ChangeCityCommand c = new ChangeCityCommand();
@@ -278,7 +286,7 @@ public class EnergyPanel extends JPanel {
                     Scene.getInstance().setCity(city);
                     SceneManager.getInstance().getUndoManager().addEdit(c);
                     final LocationData ld = LocationData.getInstance();
-                    regionComboBox.setToolTipText("<html>Weather data from (" + ld.getLatitudes().get(city) + "&deg;, " + ld.getLongitudes().get(city) + "&deg;), elevation " + ld.getAltitudes().get(city).intValue() + "m<br>Use Edit>Set Region... to select country and region.</html>");
+                    regionComboBox.setToolTipText("<html>" + I18n.get("tooltip.weather_data_from", ld.getLatitudes().get(city).toString(), ld.getLongitudes().get(city).toString(), Integer.toString(ld.getAltitudes().get(city).intValue())) + "</html>");
                 }
                 if (SceneManager.getInstance().getSolarHeatMap()) {
                     updateRadiationHeatMap();
@@ -292,7 +300,7 @@ public class EnergyPanel extends JPanel {
             public void mouseClicked(final MouseEvent e) {
                 if (Util.isRightClick(e)) {
                     final JPopupMenu popupMenu = new JPopupMenu();
-                    final JMenuItem mi = new JMenuItem("Show Map...");
+                    final JMenuItem mi = new JMenuItem(I18n.get("menu.show_map"));
                     mi.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
@@ -316,7 +324,8 @@ public class EnergyPanel extends JPanel {
         final GridBagConstraints gbc_timeLabel = new GridBagConstraints();
         gbc_timeLabel.gridx = 0;
         gbc_timeLabel.gridy = 1;
-        timeAndLocationPanel.add(createLabel("Time: "), gbc_timeLabel);
+        timeLabel = createLabel(I18n.get("panel.time"));
+        timeAndLocationPanel.add(timeLabel, gbc_timeLabel);
 
         timeSpinner = createSpinner(new SpinnerDateModel());
         final JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "h:mm a");
@@ -376,7 +385,8 @@ public class EnergyPanel extends JPanel {
         gbc_altitudeLabel.insets = new Insets(0, 1, 0, 0);
         gbc_altitudeLabel.gridx = 2;
         gbc_altitudeLabel.gridy = 1;
-        timeAndLocationPanel.add(createLabel("Latitude: "), gbc_altitudeLabel);
+        latitudeLabel = createLabel(I18n.get("panel.latitude"));
+        timeAndLocationPanel.add(latitudeLabel, gbc_altitudeLabel);
 
         latitudeSpinner = createSpinner(new SpinnerNumberModel(Heliodon.DEFAULT_LATITUDE, -90, 90, 1));
         latitudeSpinner.addChangeListener(latitudeChangeListener);
@@ -420,21 +430,22 @@ public class EnergyPanel extends JPanel {
         gbc_outsideTemperatureLabel.fill = GridBagConstraints.HORIZONTAL;
         gbc_outsideTemperatureLabel.gridx = 0;
         gbc_outsideTemperatureLabel.gridy = 2;
-        timeAndLocationPanel.add(createLabel("Temp.: "), gbc_outsideTemperatureLabel);
+        tempLabel = createLabel(I18n.get("panel.temp"));
+        timeAndLocationPanel.add(tempLabel, gbc_outsideTemperatureLabel);
 
         outsideTemperatureField = createTextField();
         outsideTemperatureField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 final JPopupMenu popupMenu = new JPopupMenu();
-                JMenuItem mi = new JMenuItem("Daily Environmental Temperature...");
+                JMenuItem mi = new JMenuItem(I18n.get("panel.daily_env_temp"));
                 mi.addActionListener(e1 -> {
                     if (checkRegion()) {
                         new DailyEnvironmentalTemperature().showDialog();
                     }
                 });
                 popupMenu.add(mi);
-                mi = new JMenuItem("Annual Environmental Temperature...");
+                mi = new JMenuItem(I18n.get("panel.annual_env_temp"));
                 mi.addActionListener(e2 -> {
                     if (checkRegion()) {
                         new AnnualEnvironmentalTemperature().showDialog();
@@ -445,7 +456,7 @@ public class EnergyPanel extends JPanel {
                 popupMenu.show(outsideTemperatureField, 0, 0);
             }
         });
-        outsideTemperatureField.setToolTipText("Current outside temperature at this time and day");
+        outsideTemperatureField.setToolTipText(I18n.get("panel.tooltip_temp"));
         outsideTemperatureField.setEditable(false);
         outsideTemperatureField.setEnabled(false);
         outsideTemperatureField.setBackground(Color.WHITE);
@@ -460,14 +471,15 @@ public class EnergyPanel extends JPanel {
         gbc_sunshineLabel.fill = GridBagConstraints.HORIZONTAL;
         gbc_sunshineLabel.gridx = 2;
         gbc_sunshineLabel.gridy = 2;
-        timeAndLocationPanel.add(createLabel("Sunshine: "), gbc_sunshineLabel);
+        sunshineLabel = createLabel(I18n.get("panel.sunshine"));
+        timeAndLocationPanel.add(sunshineLabel, gbc_sunshineLabel);
 
         sunshineHoursField = createTextField();
         sunshineHoursField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 final JPopupMenu popupMenu = new JPopupMenu();
-                final JMenuItem mi = new JMenuItem("Monthly Sunshine Hours...");
+                final JMenuItem mi = new JMenuItem(I18n.get("panel.monthly_sunshine_hours"));
                 mi.addActionListener(event -> {
                     if (checkRegion()) {
                         new MonthlySunshineHours().showDialog();
@@ -478,7 +490,7 @@ public class EnergyPanel extends JPanel {
                 popupMenu.show(sunshineHoursField, 0, 0);
             }
         });
-        sunshineHoursField.setToolTipText("Average sunshine hours in this month");
+        sunshineHoursField.setToolTipText(I18n.get("panel.tooltip_sunshine"));
         sunshineHoursField.setEditable(false);
         sunshineHoursField.setEnabled(false);
         sunshineHoursField.setBackground(Color.WHITE);
@@ -497,11 +509,11 @@ public class EnergyPanel extends JPanel {
 
         final JPanel labelPanel = new JPanel(new GridLayout(3, 1, 2, 2));
         partPanel.add(labelPanel, BorderLayout.WEST);
-        partProperty1Label = createLabel(" X:");
+        partProperty1Label = createLabel(I18n.get("label.coordinate_x"));
         labelPanel.add(partProperty1Label);
-        partProperty2Label = createLabel(" Y:");
+        partProperty2Label = createLabel(I18n.get("label.coordinate_y"));
         labelPanel.add(partProperty2Label);
-        partProperty3Label = createLabel(" Z:");
+        partProperty3Label = createLabel(I18n.get("label.coordinate_z"));
         labelPanel.add(partProperty3Label);
 
         final MouseListener propertyTextFieldMouseListener = new MouseAdapter() {
@@ -512,7 +524,7 @@ public class EnergyPanel extends JPanel {
                     final JDialog d = PropertiesDialogFactory.getDialog();
                     if (d != null) {
                         final JPopupMenu popupMenu = new JPopupMenu();
-                        final JMenuItem mi = new JMenuItem("Show More Properties...");
+                        final JMenuItem mi = new JMenuItem(I18n.get("panel.show_more_properties"));
                         mi.addActionListener(event -> {
                             d.setLocationRelativeTo(popupMenu.getInvoker());
                             d.setVisible(true);
@@ -534,8 +546,8 @@ public class EnergyPanel extends JPanel {
                                     popupMenu.show(e.getComponent(), 0, 0);
                                 } else if (e.getComponent() == partProperty3TextField) { // open up cost breakdown
                                     final JPopupMenu popupMenu = new JPopupMenu();
-                                    final JMenuItem mi = new JMenuItem("Cost Breakdown...");
-                                    mi.addActionListener(event -> PvProjectCost.getInstance().showGraph());
+final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
+                mi.addActionListener(event -> PvProjectCost.getInstance().showGraph());
                                     popupMenu.add(mi);
                                     popupMenu.pack();
                                     popupMenu.show(e.getComponent(), 0, 0);
@@ -544,8 +556,8 @@ public class EnergyPanel extends JPanel {
                             case Foundation.TYPE_CSP_PROJECT:
                                 if (e.getComponent() == partProperty3TextField) { // open up cost breakdown
                                     final JPopupMenu popupMenu = new JPopupMenu();
-                                    final JMenuItem mi = new JMenuItem("Cost Breakdown...");
-                                    mi.addActionListener(event -> CspProjectCost.getInstance().showGraph());
+final JMenuItem mi = new JMenuItem(I18n.get("menu.cost_breakdown"));
+                mi.addActionListener(event -> CspProjectCost.getInstance().showGraph());
                                     popupMenu.add(mi);
                                     popupMenu.pack();
                                     popupMenu.show(e.getComponent(), 0, 0);
@@ -577,7 +589,7 @@ public class EnergyPanel extends JPanel {
 
         // PV project panel
         pvProjectPanel = new JPanel();
-        pvProjectPanel.setBorder(createTitledBorder("Photovoltaic Solar Power System", true));
+        pvProjectPanel.setBorder(createTitledBorder(I18n.get("panel.pv_system"), true));
         pvProjectPanel.setLayout(new BoxLayout(pvProjectPanel, BoxLayout.Y_AXIS));
 
         pvProjectTabbedPane = new JTabbedPane();
@@ -585,13 +597,13 @@ public class EnergyPanel extends JPanel {
         pvProjectPanel.add(pvProjectTabbedPane);
 
         pvProjectZoneInfoPanel = new PvProjectZoneInfoPanel();
-        pvProjectTabbedPane.add("Info", pvProjectZoneInfoPanel);
+        pvProjectTabbedPane.add(I18n.get("tab.info"), pvProjectZoneInfoPanel);
 
         pvProjectZoneCostGraph = new PvProjectZoneCostGraph(); // cost graph
-        pvProjectTabbedPane.add("Cost", pvProjectZoneCostGraph);
+        pvProjectTabbedPane.add(I18n.get("tab.cost"), pvProjectZoneCostGraph);
 
         pvProjectDailyEnergyGraph = new PvProjectDailyEnergyGraph();
-        pvProjectTabbedPane.add("Output", pvProjectDailyEnergyGraph);
+        pvProjectTabbedPane.add(I18n.get("tab.output"), pvProjectDailyEnergyGraph);
 
         pvProjectTabbedPane.addChangeListener(e -> {
             if (pvProjectTabbedPane.getSelectedComponent() == pvProjectDailyEnergyGraph) {
@@ -610,7 +622,7 @@ public class EnergyPanel extends JPanel {
 
         // CSP project panel
         cspProjectPanel = new JPanel();
-        cspProjectPanel.setBorder(createTitledBorder("Concentrated Solar Power System", true));
+        cspProjectPanel.setBorder(createTitledBorder(I18n.get("panel.csp_system"), true));
         cspProjectPanel.setLayout(new BoxLayout(cspProjectPanel, BoxLayout.Y_AXIS));
 
         cspProjectTabbedPane = new JTabbedPane();
@@ -618,13 +630,13 @@ public class EnergyPanel extends JPanel {
         cspProjectPanel.add(cspProjectTabbedPane);
 
         cspProjectZoneInfoPanel = new CspProjectZoneInfoPanel();
-        cspProjectTabbedPane.add("Info", cspProjectZoneInfoPanel);
+        cspProjectTabbedPane.add(I18n.get("tab.info"), cspProjectZoneInfoPanel);
 
         cspProjectZoneCostGraph = new CspProjectZoneCostGraph(); // cost graph
-        cspProjectTabbedPane.add("Cost", cspProjectZoneCostGraph);
+        cspProjectTabbedPane.add(I18n.get("tab.cost"), cspProjectZoneCostGraph);
 
         cspProjectDailyEnergyGraph = new CspProjectDailyEnergyGraph();
-        cspProjectTabbedPane.add("Output", cspProjectDailyEnergyGraph);
+        cspProjectTabbedPane.add(I18n.get("tab.output"), cspProjectDailyEnergyGraph);
 
         cspProjectTabbedPane.addChangeListener(e -> {
             if (cspProjectTabbedPane.getSelectedComponent() == cspProjectDailyEnergyGraph) {
@@ -644,18 +656,19 @@ public class EnergyPanel extends JPanel {
         // building panel
 
         buildingPanel = new JPanel();
-        buildingPanel.setBorder(createTitledBorder("Building", true));
+        buildingPanel.setBorder(createTitledBorder(I18n.get("panel.building"), true));
         buildingPanel.setLayout(new BoxLayout(buildingPanel, BoxLayout.Y_AXIS));
 
         thermostatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0)); // thermostat for the selected building
         thermostatPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        thermostatPanel.add(createLabel(" Thermostat: "), BorderLayout.WEST);
+        thermostatLabel = createLabel(I18n.get("panel.thermostat"));
+        thermostatPanel.add(thermostatLabel, BorderLayout.WEST);
         thermostatTemperatureField = createTextField();
         thermostatTemperatureField.setPreferredSize(new Dimension(72, sunshineHoursField.getPreferredSize().height));
         thermostatTemperatureField.setEnabled(false);
         thermostatTemperatureField.setBackground(Color.WHITE);
         thermostatPanel.add(thermostatTemperatureField, BorderLayout.CENTER);
-        adjustThermostatButton = new JButton("Adjust");
+        adjustThermostatButton = new JButton(I18n.get("panel.adjust"));
         adjustThermostatButton.setFont(new Font(adjustThermostatButton.getFont().getName(), Font.PLAIN, adjustThermostatButton.getFont().getSize() - 2));
         adjustThermostatButton.addActionListener(e -> {
             final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -679,13 +692,13 @@ public class EnergyPanel extends JPanel {
         buildingPanel.add(buildingTabbedPane);
 
         buildingInfoPanel = new BuildingInfoPanel(); // basics panel
-        buildingTabbedPane.add("Basics", buildingInfoPanel);
+        buildingTabbedPane.add(I18n.get("tab.basics"), buildingInfoPanel);
 
         buildingCostGraph = new BuildingCostGraph(); // cost graph
-        buildingTabbedPane.add("Cost", buildingCostGraph);
+        buildingTabbedPane.add(I18n.get("tab.cost"), buildingCostGraph);
 
         buildingDailyEnergyGraph = new BuildingDailyEnergyGraph(); // hourly energy graph
-        buildingTabbedPane.add("Energy", buildingDailyEnergyGraph);
+        buildingTabbedPane.add(I18n.get("tab.energy"), buildingDailyEnergyGraph);
 
         buildingTabbedPane.addChangeListener(e -> {
             if (buildingTabbedPane.getSelectedComponent() == buildingDailyEnergyGraph) {
@@ -722,7 +735,7 @@ public class EnergyPanel extends JPanel {
                 return super.getToolTipText(e);
             }
         };
-        instructionPanel.setToolTipText("Click here to listen");
+        instructionPanel.setToolTipText(I18n.get("panel.tooltip_listen"));
         instructionPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
@@ -744,7 +757,7 @@ public class EnergyPanel extends JPanel {
                             if (MainApplication.VERSION.compareTo("8.4.5") >= 0) {
                                 if (canReadInstruction) {
                                     setReadInstructionState(true);
-                                    instructionPanel.setToolTipText("Click here to stop the speaker");
+                                    instructionPanel.setToolTipText(I18n.get("panel.tooltip_stop_speaker"));
                                     Talker.getInstance().say(text);
                                     Talker.getInstance().setCompletionCallback(() -> resetReadInstruction());
                                     canReadInstruction = false;
@@ -770,7 +783,7 @@ public class EnergyPanel extends JPanel {
             if (instructionTabbedPane.isShowing()) {
                 final HashMap<String, Object> attributes = new HashMap<>();
                 attributes.put("Sheet", instructionTabbedPane.getSelectedIndex());
-                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), "Instruction Sheet Selection", attributes));
+                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), I18n.get("event.instruction_sheet_selection"), attributes));
             }
         });
         instructionPanel.add(instructionTabbedPane);
@@ -781,16 +794,16 @@ public class EnergyPanel extends JPanel {
             ((DefaultCaret) instructionSheets[i].getEditorPane().getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
             final JScrollPane scroller = new JScrollPane(instructionSheets[i].getEditorPane());
             scroller.setPreferredSize(new Dimension(200, 220)); // somehow setting a preferred size of the scroller triggers the line wrapping of JEditorPane
-            instructionTabbedPane.add(scroller, "Sheet " + (i + 1));
+            instructionTabbedPane.add(scroller, I18n.get("panel.sheet_" + (i + 1)));
         }
 
         // heat map slider and progress bar
 
         heatMapPanel = new JPanel(new BorderLayout());
-        heatMapPanel.setBorder(createTitledBorder("Solar Irradiance Heat Map Contrast", true));
+        heatMapPanel.setBorder(createTitledBorder(I18n.get("panel.heat_map_contrast"), true));
 
         colorMapSlider = new MySlider();
-        colorMapSlider.setToolTipText("<html>Increase or decrease the color contrast of the solar irradiance heat map.</html>");
+        colorMapSlider.setToolTipText("<html>" + I18n.get("panel.tooltip_heat_map") + "</html>");
         colorMapSlider.setMinimum(15);
         colorMapSlider.setMaximum(95);
         colorMapSlider.setMinimumSize(colorMapSlider.getPreferredSize());
@@ -931,10 +944,10 @@ public class EnergyPanel extends JPanel {
         final int cellCount = (int) (Scene.getInstance().getTotalFoundationAreas() / (cellSize * cellSize));
         final int maxCells = 100000; // should we make this dependent of project type?
         if (cellCount > maxCells) {
-            final Object[] options = new Object[]{"OK, adjust it!", "No, just go with it!"};
+            final Object[] options = new Object[]{I18n.get("option.ok_adjust"), I18n.get("option.no_go_with")};
             final int x = JOptionPane.showOptionDialog(MainFrame.getInstance(),
-                    "<html>The cell size (" + cellSize + "m) of the computational grid is probably too small for this model.<br>Consider adjust it to speed up simulations.</html>",
-                    "Cell Size Adjustment Suggestion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    "<html>" + I18n.get("panel.cell_size_suggestion", Double.toString(cellSize)) + "</html>",
+                    I18n.get("dialog.cell_size_adjustment"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             if (x == JOptionPane.YES_OPTION) {
                 final SimulationSettingsDialog simulationSettingsDialog = new SimulationSettingsDialog();
                 simulationSettingsDialog.getCellSizeField().selectAll();
@@ -1026,7 +1039,7 @@ public class EnergyPanel extends JPanel {
             final Map<String, int[]> sunshineHours = LocationData.getInstance().getSunshineHours();
             final int month = Heliodon.getInstance().getCalendar().get(Calendar.MONTH);
             try {
-                sunshineHoursField.setText(ONE_DECIMAL.format(sunshineHours.get(city)[month] / 30.0) + " hours");
+                sunshineHoursField.setText(ONE_DECIMAL.format(sunshineHours.get(city)[month] / 30.0) + " " + I18n.get("panel.hours"));
             } catch (final Exception e) {
                 BugReporter.report(e);
             }
@@ -1121,11 +1134,11 @@ public class EnergyPanel extends JPanel {
             final double remainingTime = t * (100.0 / percentage - 1.0);
             String remainingTimeString;
             if (remainingTime > 300) {
-                remainingTimeString = remainingTime < 0.1 ? "" : " down, " + ONE_DECIMAL.format(remainingTime / 60) + "m to go";
+                remainingTimeString = remainingTime < 0.1 ? "" : I18n.get("progress.down") + " " + ONE_DECIMAL.format(remainingTime / 60) + I18n.get("progress.minutes_to_go");
             } else {
-                remainingTimeString = remainingTime < 0.1 ? "" : " down, " + ONE_DECIMAL.format(remainingTime) + "s to go";
+                remainingTimeString = remainingTime < 0.1 ? "" : I18n.get("progress.down") + " " + ONE_DECIMAL.format(remainingTime) + I18n.get("progress.seconds_to_go");
             }
-            progressBar.setString(Math.min(100, percentage) + "% (" + ONE_DECIMAL.format(t) + "s" + remainingTimeString + ")");
+            progressBar.setString(Math.min(100, percentage) + I18n.get("progress.percent") + " (" + ONE_DECIMAL.format(t) + I18n.get("progress.seconds") + remainingTimeString + ")");
             progressBar.setStringPainted(true);
         }
         progressBar.repaint();
@@ -1179,10 +1192,10 @@ public class EnergyPanel extends JPanel {
                 final Tree tree = (Tree) selectedPart;
                 if (tree.isDrawable()) {
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Tree (" + tree.getId() + "): " + tree.getPlantName());
-                        partProperty1Label.setText("  Spread & Height:");
-                        partProperty2Label.setText("  Type:");
-                        partProperty3Label.setText("  Position:");
+                        partPanelBorder.setTitle(I18n.get("info.tree_title", Long.toString(tree.getId()), tree.getPlantName()));
+                        partProperty1Label.setText(I18n.get("info.tree_spread_height"));
+                        partProperty2Label.setText(I18n.get("info.tree_type"));
+                        partProperty3Label.setText(I18n.get("info.tree_position"));
                         final double l = v.length();
                         double a = 90 + Math.toDegrees(Math.asin(-v.getY() / l));
                         if (v.getX() < 0) {
@@ -1192,31 +1205,31 @@ public class EnergyPanel extends JPanel {
                             a = 0;
                         }
                         partProperty1TextField.setText(ONE_DECIMAL.format(tree.getWidth() * scale) + lengthUnit + ", " + ONE_DECIMAL.format(tree.getHeight() * scale) + lengthUnit);
-                        partProperty2TextField.setText(tree.getPlantName() + " (" + (Tree.PLANTS[tree.getPlantType()].isEvergreen() ? "Evergreen" : "Deciduous") + ")");
+                        partProperty2TextField.setText(tree.getPlantName() + " (" + (Tree.PLANTS[tree.getPlantType()].isEvergreen() ? I18n.get("info.tree_evergreen") : I18n.get("info.tree_deciduous")) + ")");
                         partProperty3TextField.setText("("
                                 + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                 + ONE_DECIMAL.format(v.getY() * scale) + ")" + lengthUnit + " or ("
                                 + ONE_DECIMAL.format(l * scale) + lengthUnit + ", "
                                 + ONE_DECIMAL.format(a) + "\u00B0)");
-                        partProperty1TextField.putClientProperty("tooltip", "The spread and height of the tree");
-                        partProperty2TextField.putClientProperty("tooltip", "The type of the tree");
-                        partProperty3TextField.putClientProperty("tooltip", "The (x, y) or polar coordinates on the land");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.tree_spread_height"));
+                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.tree_type"));
+                        partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.tree_position"));
                     });
                 }
             } else if (selectedPart instanceof Human) {
                 final Human human = (Human) selectedPart;
                 if (human.isDrawable()) {
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Human (" + human.getId() + "): " + human.getHumanName());
-                        partProperty1Label.setText("  X:");
-                        partProperty2Label.setText("  Y:");
-                        partProperty3Label.setText("  Z:");
+                        partPanelBorder.setTitle(I18n.get("info.human_title", Long.toString(human.getId()), human.getHumanName()));
+                        partProperty1Label.setText(I18n.get("info.human_x"));
+                        partProperty2Label.setText(I18n.get("info.human_y"));
+                        partProperty3Label.setText(I18n.get("info.human_z"));
                         partProperty1TextField.setText(ONE_DECIMAL.format(v.getX() * scale) + lengthUnit);
                         partProperty2TextField.setText(ONE_DECIMAL.format(v.getY() * scale) + lengthUnit);
                         partProperty3TextField.setText(ONE_DECIMAL.format(v.getZ() * scale) + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "X coordinate");
-                        partProperty2TextField.putClientProperty("tooltip", "Y coordinate");
-                        partProperty3TextField.putClientProperty("tooltip", "Z coordinate");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.human_x"));
+                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.human_y"));
+                        partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.human_z"));
                     });
                 }
             } else if (selectedPart instanceof SolarPanel) {
@@ -1231,33 +1244,33 @@ public class EnergyPanel extends JPanel {
                         final double az = a;
                         final boolean flat = (sp.getContainer() instanceof Roof && Util.isZero(sp.getContainer().getHeight())) || (sp.getContainer() instanceof Foundation);
                         EventQueue.invokeLater(() -> {
-                            String title = "Solar Panel (" + sp.getId() + "), " + (sp.getModelName() == null ? "" : "Model: " + sp.getModelName());
+                            String title = I18n.get("part.solar_panel") + " (" + sp.getId() + "), " + (sp.getModelName() == null ? "" : I18n.get("label.model") + ": " + sp.getModelName());
                             final String trackerName = sp.getTrackerName();
                             if (trackerName != null) {
-                                title += ", Tracker: " + trackerName;
+                                title += ", " + I18n.get("label.tracker") + ": " + trackerName;
                             }
                             partPanelBorder.setTitle(title);
-                            partProperty1Label.setText("  Size & Position:");
+                            partProperty1Label.setText(I18n.get("label.size_and_position"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(sp.getPanelWidth() * meterToFoot) + "\u00d7"
                                     + TWO_DECIMALS.format(sp.getPanelHeight() * meterToFoot) + lengthUnit + ", ("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", pole:"
                                     + TWO_DECIMALS.format(sp.getPoleHeight() * scale * meterToFoot) + lengthUnit);
-                            partProperty1TextField.putClientProperty("tooltip", "The length, width, center coordinates, and pole height of the solar panel");
-                            partProperty2Label.setText("  Angles:");
-                            partProperty2TextField.setText(flat ? "tilt: " + ONE_DECIMAL.format(Util.isZero(sp.getTiltAngle()) ? Math.toDegrees(Math.asin(sp.getNormal().getY())) : sp.getTiltAngle())
-                                    + "\u00B0, azimuth: " + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
-                            partProperty2TextField.putClientProperty("tooltip", "The angles of the solar panel");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_length_width_center_pole"));
+                            partProperty2Label.setText(I18n.get("label.angles"));
+                            partProperty2TextField.setText(flat ? I18n.get("label.tilt") + ONE_DECIMAL.format(Util.isZero(sp.getTiltAngle()) ? Math.toDegrees(Math.asin(sp.getNormal().getY())) : sp.getTiltAngle())
+                                    + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_angles"));
                             final String eff = ONE_DECIMAL.format(sp.getCellEfficiency() * 100) + "%";
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Efficiency & Yield:");
+                                partProperty3Label.setText(I18n.get("label.efficiency_and_yield"));
                                 partProperty3TextField.setText(eff + ", " + TWO_DECIMALS.format(sp.getSolarPotentialToday()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The solar cell efficiency and daily yield of the solar panel");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_efficiency_yield"));
                             } else {
-                                partProperty3Label.setText("  Efficiency:");
+                                partProperty3Label.setText(I18n.get("label.efficiency"));
                                 partProperty3TextField.setText(eff);
-                                partProperty3TextField.putClientProperty("tooltip", "The solar cell efficiency of the solar panel");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.solar_panel_efficiency"));
                             }
                         });
                     }
@@ -1284,25 +1297,25 @@ public class EnergyPanel extends JPanel {
                                 title += ", Tracker: " + trackerName;
                             }
                             partPanelBorder.setTitle(title);
-                            partProperty1Label.setText("  Size & Center:");
+                            partProperty1Label.setText(I18n.get("label.size_and_center"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(rack.getRackWidth() * meterToFoot) + "\u00d7"
                                     + TWO_DECIMALS.format(rack.getRackHeight() * meterToFoot) + lengthUnit + ", ("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", pole:"
                                     + TWO_DECIMALS.format(rack.getPoleHeight() * scale * meterToFoot) + lengthUnit);
-                            partProperty1TextField.putClientProperty("tooltip", "The length, width, center coordinates, and pole height of the rack");
-                            partProperty2Label.setText("  Angles:");
-                            partProperty2TextField.setText("tilt: " + ONE_DECIMAL.format(Util.isZero(rack.getTiltAngle()) ? Math.toDegrees(Math.asin(rack.getNormal().getY())) : rack.getTiltAngle())
-                                    + "\u00B0, azimuth: " + ONE_DECIMAL.format(az) + "\u00B0");
-                            partProperty2TextField.putClientProperty("tooltip", "The angles of the rack");
-                            partProperty3Label.setText("  Solar Panels:");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.rack_length_width_center_pole"));
+                            partProperty2Label.setText(I18n.get("label.angles"));
+                            partProperty2TextField.setText(I18n.get("label.tilt") + ONE_DECIMAL.format(Util.isZero(rack.getTiltAngle()) ? Math.toDegrees(Math.asin(rack.getNormal().getY())) : rack.getTiltAngle())
+                                    + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.rack_angles"));
+                            partProperty3Label.setText(I18n.get("label.solar_panels"));
                             final SolarPanel sp = rack.getSolarPanel();
                             final String eff = ONE_DECIMAL.format(sp.getCellEfficiency() * 100) + "%";
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Efficiency & Yield:");
+                                partProperty3Label.setText(I18n.get("label.efficiency_and_yield"));
                                 partProperty3TextField.setText(eff + ", " + TWO_DECIMALS.format(rack.getSolarPotentialToday()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The solar cell efficiency and daily yield of the solar panel array on the rack");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.rack_efficiency_yield"));
                             } else {
                                 if (rack.isMonolithic()) {
                                     final int[] rnc = rack.getSolarPanelRowAndColumnNumbers();
@@ -1310,7 +1323,7 @@ public class EnergyPanel extends JPanel {
                                 } else {
                                     partProperty3TextField.setText("" + n);
                                 }
-                                partProperty3TextField.putClientProperty("tooltip", "Number and type of solar panels on this rack");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.rack_solar_panels"));
                             }
                         });
                     }
@@ -1327,29 +1340,29 @@ public class EnergyPanel extends JPanel {
                         final double az = a;
                         final boolean flat = m.getContainer() instanceof Foundation;
                         EventQueue.invokeLater(() -> {
-                            partPanelBorder.setTitle("Heliostat (" + m.getId() + ")");
-                            partProperty1Label.setText("  Size & Center:");
+                            partPanelBorder.setTitle(I18n.get("part.title.heliostat", Long.toString(m.getId())));
+                            partProperty1Label.setText(I18n.get("label.size_and_center"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(m.getApertureWidth() * meterToFoot) + "\u00d7"
                                     + TWO_DECIMALS.format(m.getApertureHeight() * meterToFoot) + lengthUnit + ", ("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", pole:"
                                     + TWO_DECIMALS.format(m.getPoleHeight() * scale * meterToFoot) + lengthUnit);
-                            partProperty1TextField.putClientProperty("tooltip", "The length, width, and center coordinates of the heliostat");
-                            partProperty2Label.setText("  Angles:");
-                            partProperty2TextField.setText(flat ? "tilt: " + ONE_DECIMAL.format(m.getTiltAngle()) + "\u00B0, azimuth: " + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
-                            partProperty2TextField.putClientProperty("tooltip", "The angles of the heliostat");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_length_width_center"));
+                            partProperty2Label.setText(I18n.get("label.angles"));
+                            partProperty2TextField.setText(flat ? I18n.get("label.tilt") + ONE_DECIMAL.format(m.getTiltAngle()) + "\u00B0, " + I18n.get("label.azimuth") + ONE_DECIMAL.format(az) + "\u00B0" : " --- ");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_angles"));
                             final Foundation receiver = m.getReceiver();
                             final String s = "R=" + ONE_DECIMAL.format(m.getReflectance() * 100) + "%" + (receiver == null ? "" : ", \u03B7="
                                     + ONE_DECIMAL.format(receiver.getSolarReceiverEfficiency() * 100) + "%");
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Properties & Yield:");
+                                partProperty3Label.setText(I18n.get("label.properties_and_yield"));
                                 partProperty3TextField.setText(s + ", " + ONE_DECIMAL.format(m.getSolarPotentialToday() * m.getSystemEfficiency()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The physical properties and electric yield of this heliostat");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_properties_yield"));
                             } else {
-                                partProperty3Label.setText("  Properties:");
+                                partProperty3Label.setText(I18n.get("label.properties"));
                                 partProperty3TextField.setText(s);
-                                partProperty3TextField.putClientProperty("tooltip", "The physical properties of this heliostat");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.heliostat_properties"));
                             }
                         });
                     }
@@ -1373,33 +1386,33 @@ public class EnergyPanel extends JPanel {
                         final double c = Math.sqrt(b * b + 1);
                         final double s = 0.5 * d * c + 2 * focalLength * Math.log(b + c);
                         EventQueue.invokeLater(() -> {
-                            partPanelBorder.setTitle("Parabolic Trough (" + t.getId() + ")");
-                            partProperty1Label.setText("  Length & Center:");
+                            partPanelBorder.setTitle(I18n.get("part.title.parabolic_trough", Long.toString(t.getId())));
+                            partProperty1Label.setText(I18n.get("label.length_and_center"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(t.getTroughLength() * meterToFoot) + lengthUnit + ", module:"
                                     + TWO_DECIMALS.format(t.getModuleLength() * meterToFoot) + lengthUnit + ", ("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", azimuth:"
                                     + ONE_DECIMAL.format(az) + "\u00B0");
-                            partProperty1TextField.putClientProperty("tooltip", "Assembly length, module length, center coordinates, and azimith of the parabolic trough");
-                            partProperty2Label.setText("  Parabola Shape:");
-                            partProperty2TextField.setText("f=" + ONE_DECIMAL.format(focalLength * meterToFoot) + lengthUnit + ", d="
-                                    + ONE_DECIMAL.format(t.getApertureWidth() * meterToFoot) + lengthUnit + ", h="
-                                    + ONE_DECIMAL.format(h * meterToFoot) + lengthUnit + ", \u03C6="
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_trough_assembly"));
+                            partProperty2Label.setText(I18n.get("label.parabola_shape"));
+                            partProperty2TextField.setText(I18n.get("label.focal_length_short") + ONE_DECIMAL.format(focalLength * meterToFoot) + lengthUnit + I18n.get("label.aperture_width_short")
+                                    + ONE_DECIMAL.format(t.getApertureWidth() * meterToFoot) + lengthUnit + I18n.get("label.aperture_height_short")
+                                    + ONE_DECIMAL.format(h * meterToFoot) + lengthUnit + I18n.get("label.rim_angle_short")
                                     + ONE_DECIMAL.format(rimAngle >= 0 ? rimAngle : 180 + rimAngle) + "\u00B0");
-                            partProperty2TextField.putClientProperty("tooltip", "Parameters of the parabolic shape");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_trough_shape"));
                             final String str = "R=" + ONE_DECIMAL.format(t.getReflectance() * 100) + "%, s="
                                     + ONE_DECIMAL.format(s * t.getTroughLength() * meterToFoot * meterToFoot) + lengthUnit + "\u00B2, a="
                                     + ONE_DECIMAL.format(d * t.getTroughLength() * meterToFoot * meterToFoot) + lengthUnit + "\u00B2, \u03B1="
                                     + ONE_DECIMAL.format(t.getAbsorptance() * 100) + "%";
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Properties & Yield:");
+                                partProperty3Label.setText(I18n.get("label.properties_and_yield"));
                                 partProperty3TextField.setText(str + ", " + ONE_DECIMAL.format(t.getSolarPotentialToday() * t.getSystemEfficiency()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The properties and yield of this parabolic trough");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_trough_properties_yield"));
                             } else {
-                                partProperty3Label.setText("  Properties:");
+                                partProperty3Label.setText(I18n.get("label.properties"));
                                 partProperty3TextField.setText(str);
-                                partProperty3TextField.putClientProperty("tooltip", "The properties of this parabolic trough");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_trough_properties"));
                             }
                         });
                     }
@@ -1416,27 +1429,27 @@ public class EnergyPanel extends JPanel {
                         final double focalLength = d.getFocalLength();
                         final double rimRadius = d.getRimRadius();
                         EventQueue.invokeLater(() -> {
-                            partPanelBorder.setTitle("Parabolic Dish (" + d.getId() + ")");
-                            partProperty1Label.setText("  Size & Center:");
-                            partProperty1TextField.setText("Rim radius="
+                            partPanelBorder.setTitle(I18n.get("part.title.parabolic_dish", Long.toString(d.getId())));
+                            partProperty1Label.setText(I18n.get("label.size_and_center"));
+                            partProperty1TextField.setText(I18n.get("label.rim_radius")
                                     + TWO_DECIMALS.format(rimRadius * meterToFoot) + lengthUnit + ", ("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", pole:"
                                     + TWO_DECIMALS.format(d.getPoleHeight() * scale * meterToFoot) + lengthUnit);
-                            partProperty1TextField.putClientProperty("tooltip", "Rim radius and center coordinates of the parabolic dish");
-                            partProperty2Label.setText("  Parabola Shape:");
-                            partProperty2TextField.setText("Focal length=" + ONE_DECIMAL.format(focalLength * meterToFoot) + lengthUnit);
-                            partProperty2TextField.putClientProperty("tooltip", "Parameters of the parabolic shape");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_dish_rim_radius"));
+                            partProperty2Label.setText(I18n.get("label.parabola_shape"));
+                            partProperty2TextField.setText(I18n.get("label.focal_length") + ONE_DECIMAL.format(focalLength * meterToFoot) + lengthUnit);
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_trough_shape"));
                             final String str = "R=" + ONE_DECIMAL.format(d.getReflectance() * 100) + "%, \u03B1=" + ONE_DECIMAL.format(d.getAbsorptance() * 100) + "%";
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Properties & Yield:");
+                                partProperty3Label.setText(I18n.get("label.properties_and_yield"));
                                 partProperty3TextField.setText(str + ", " + ONE_DECIMAL.format(d.getSolarPotentialToday() * d.getSystemEfficiency()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The properties and yield of this parabolic dish");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_dish_properties_yield"));
                             } else {
-                                partProperty3Label.setText("  Properties:");
+                                partProperty3Label.setText(I18n.get("label.properties"));
                                 partProperty3TextField.setText(str);
-                                partProperty3TextField.putClientProperty("tooltip", "The properties of this parabolic dish");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.parabolic_dish_properties"));
                             }
                         });
                     }
@@ -1452,32 +1465,32 @@ public class EnergyPanel extends JPanel {
                         }
                         final double az = a;
                         EventQueue.invokeLater(() -> {
-                            partPanelBorder.setTitle("Fresnel Reflector (" + r.getId() + ")");
-                            partProperty1Label.setText("  Center & Azimuth:");
+                            partPanelBorder.setTitle(I18n.get("part.title.fresnel_reflector", Long.toString(r.getId())));
+                            partProperty1Label.setText(I18n.get("label.center_and_azimuth"));
                             partProperty1TextField.setText("("
                                     + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                     + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit + ", azimuth:"
                                     + ONE_DECIMAL.format(az) + "\u00B0" + ", pole:"
                                     + TWO_DECIMALS.format(r.getPoleHeight() * scale * meterToFoot) + lengthUnit);
-                            partProperty1TextField.putClientProperty("tooltip", "Center coordinates and azimuth of the Fresnel reflector");
-                            partProperty2Label.setText("  Length & Width:");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.fresnel_reflector_center_azimuth"));
+                            partProperty2Label.setText(I18n.get("label.length_and_width"));
                             partProperty2TextField.setText(TWO_DECIMALS.format(r.getLength() * meterToFoot) + lengthUnit + ", module:"
                                     + TWO_DECIMALS.format(r.getModuleLength() * meterToFoot) + lengthUnit + ", " + ONE_DECIMAL.format(r.getModuleWidth() * meterToFoot) + lengthUnit);
-                            partProperty2TextField.putClientProperty("tooltip", "Assembly length, module length, and width of the Fresnel reflector");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.fresnel_reflector_assembly"));
                             final Foundation receiver = r.getReceiver();
                             final String str = "R="
                                     + ONE_DECIMAL.format(r.getReflectance() * 100) + "%, a="
                                     + ONE_DECIMAL.format(r.getModuleWidth() * r.getLength() * meterToFoot * meterToFoot) + lengthUnit + "\u00B2" + (receiver == null ? "" : ", \u03B7="
                                     + ONE_DECIMAL.format(receiver.getSolarReceiverEfficiency() * 100) + "%");
                             if (energyViewShown) {
-                                partProperty3Label.setText("  Properties & Yield:");
+                                partProperty3Label.setText(I18n.get("label.properties_and_yield"));
                                 partProperty3TextField.setText(str + ", " + ONE_DECIMAL.format(r.getSolarPotentialToday() * r.getSystemEfficiency()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The properties and yield of this Fresnel reflector");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.fresnel_reflector_properties_yield"));
                             } else {
-                                partProperty3Label.setText("  Properties:");
+                                partProperty3Label.setText(I18n.get("label.properties"));
                                 partProperty3TextField.setText(str);
-                                partProperty3TextField.putClientProperty("tooltip", "The properties of this Fresnel reflector");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.fresnel_reflector_properties"));
                             }
                         });
                     }
@@ -1486,19 +1499,19 @@ public class EnergyPanel extends JPanel {
                 final Sensor sensor = (Sensor) selectedPart;
                 if (sensor.isDrawable()) {
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Sensor (" + sensor.getId() + ")");
-                        partProperty1Label.setText("  Position:");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty3Label.setText("  Light:");
+                        partPanelBorder.setTitle(I18n.get("part.title.sensor", Long.toString(sensor.getId())));
+                        partProperty1Label.setText(I18n.get("label.position"));
+                        partProperty2Label.setText(I18n.get("label.thermal"));
+                        partProperty3Label.setText(I18n.get("label.light"));
                         partProperty1TextField.setText("("
                                 + ONE_DECIMAL.format(v.getX() * scale) + ", "
                                 + ONE_DECIMAL.format(v.getY() * scale) + ", "
                                 + ONE_DECIMAL.format(v.getZ() * scale) + ")" + lengthUnit);
                         partProperty2TextField.setText(TWO_DECIMALS.format(-sensor.getTotalHeatLoss() / sensor.getArea()) + " kWh/day/m\u00B2");
                         partProperty3TextField.setText(TWO_DECIMALS.format(sensor.getSolarPotentialToday() / sensor.getArea()) + " kWh/day/m\u00B2");
-                        partProperty1TextField.putClientProperty("tooltip", "The (x, y, z) coordinates of the sensor");
-                        partProperty2TextField.putClientProperty("tooltip", "The heat flux measured by the sensor");
-                        partProperty3TextField.putClientProperty("tooltip", "The light intensity measured by the sensor");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.sensor_coordinates"));
+                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.sensor_heat_flux"));
+                        partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.sensor_light_intensity"));
                     });
                 }
             } else if (selectedPart instanceof Foundation) {
@@ -1570,50 +1583,53 @@ public class EnergyPanel extends JPanel {
                                     + ONE_DECIMAL.format(meshBoxCenter.getZ() * scale) + ")" + lengthUnit;
                             final String meshNormalString = meshNormal != null ? "(" + TWO_DECIMALS.format(meshNormal.getX()) + ", " + TWO_DECIMALS.format(meshNormal.getY()) + ", "
                                     + TWO_DECIMALS.format(meshNormal.getZ()) + ")" : "";
-                            partPanelBorder.setTitle("Node #" + foundation.getImportedNodes().indexOf(selectedNode) + " ("
-                                    + Util.getFileName(ns.getSourceURL().getPath()).replace("%20", " ") + "), Mesh #" + meshIndex + ", Base #" + foundation.getId());
-                            partProperty1Label.setText("  Node:");
-                            partProperty2Label.setText("  Mesh:");
+                            partPanelBorder.setTitle(I18n.get("part.title.node", 
+                                    Integer.toString(foundation.getImportedNodes().indexOf(selectedNode)),
+                                    Util.getFileName(ns.getSourceURL().getPath()).replace("%20", " "),
+                                    Integer.toString(meshIndex),
+                                    Long.toString(foundation.getId())));
+                            partProperty1Label.setText(I18n.get("label.node"));
+                            partProperty2Label.setText(I18n.get("label.mesh"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(xNodeBox) + "\u00d7"
                                     + TWO_DECIMALS.format(yNodeBox) + "\u00d7"
                                     + TWO_DECIMALS.format(zNodeBox) + lengthUnit + ", ("
                                     + TWO_DECIMALS.format(position.getX() * scale) + ", "
                                     + TWO_DECIMALS.format(position.getY() * scale) + ")" + lengthUnit);
                             partProperty2TextField.setText(meshBoxString + ", " + meshCenterString);
-                            partProperty1TextField.putClientProperty("tooltip", "Dimension and location of the bounding box of the selected node<br>File:" + ns.getSourceURL().getFile());
-                            partProperty2TextField.putClientProperty("tooltip", "Dimension and location of the bounding box of the selected mesh");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.node_dimension_location") + "<br>File:" + ns.getSourceURL().getFile());
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_dimension_location"));
                             if (energyViewShown) {
                                 double dailyMeshSolarPotential = 0;
                                 final double[] meshSolarPotential = SolarRadiation.getInstance().getSolarPotential(selectedMesh);
                                 for (final double x : meshSolarPotential) {
                                     dailyMeshSolarPotential += x;
                                 }
-                                partProperty3Label.setText("  Solar:");
+                                partProperty3Label.setText(I18n.get("label.solar"));
                                 partProperty3TextField.setText("\u2191" + meshNormalString + ", " + TWO_DECIMALS.format(dailyMeshSolarPotential) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "Normal vector and solar potential of the selected mesh");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_normal_solar"));
                             } else {
-                                partProperty3Label.setText("  Normal:");
+                                partProperty3Label.setText(I18n.get("label.normal"));
                                 partProperty3TextField.setText("\u2191" + meshNormalString + ", " + selectedMesh.getMeshData().getVertexCount() + " vertices");
-                                partProperty3TextField.putClientProperty("tooltip", "Normal vector and vertex count of the selected mesh");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.mesh_normal_vertices"));
                             }
                         } else {
                             int solarPanelCount = 0;
                             if (Scene.getInstance().getProjectType() == Foundation.TYPE_PV_PROJECT) {
                                 solarPanelCount = foundation.countSolarPanels();
                             }
-                            partPanelBorder.setTitle("Foundation (id = " + foundation.getId() + (solarPanelCount > 0 ? ", " + solarPanelCount + " solar panels" : "") + ")");
-                            partProperty1Label.setText("  Size:");
+                            partPanelBorder.setTitle(I18n.get("part.foundation_id", String.valueOf(foundation.getId())) + (solarPanelCount > 0 ? I18n.get("part.foundation_solar_panels", String.valueOf(solarPanelCount)) : ""));
+                            partProperty1Label.setText(I18n.get("part.size"));
                             partProperty1TextField.setText(TWO_DECIMALS.format(lx * scale) + "\u00d7"
                                     + TWO_DECIMALS.format(ly * scale) + "\u00d7"
                                     + TWO_DECIMALS.format(lz * scale) + lengthUnit + ", Area\u2248"
                                     + ONE_DECIMAL.format(lx * ly * scale * scale) + landArea + lengthUnit + "\u00B2");
-                            partProperty1TextField.putClientProperty("tooltip", "The length and width of the foundation");
-                            partProperty2Label.setText("  Position:");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.foundation_length_width"));
+                            partProperty2Label.setText(I18n.get("part.position"));
                             partProperty2TextField.setText("(" + TWO_DECIMALS.format(cx * scale) + ", " + TWO_DECIMALS.format(cy * scale) + ")" + lengthUnit);
-                            partProperty2TextField.putClientProperty("tooltip", "The (x, y) coordinate of the center of the foundation");
-                            partProperty3Label.setText("  Azimuth:");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.foundation_center"));
+                            partProperty3Label.setText(I18n.get("part.azimuth"));
                             partProperty3TextField.setText(TWO_DECIMALS.format(az) + "\u00B0");
-                            partProperty3TextField.putClientProperty("tooltip", "The azimuth of the reference edge");
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.foundation_azimuth"));
                         }
                     });
                 }
@@ -1622,31 +1638,31 @@ public class EnergyPanel extends JPanel {
                 if (roof.isDrawable()) {
                     final double area = roof.getArea();
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Roof (" + roof.getId() + ")");
-                        partProperty1Label.setText("  Area & Rise:");
-                        partProperty1TextField.setText("Area = " + TWO_DECIMALS.format(area) + lengthUnit + "\u00B2, Rise = " + TWO_DECIMALS.format(roof.getHeight() * scale) + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "The total area and the rise of the roof<br>(The rise is the highest point of the roof to the top of the walls.)");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty3Label.setText("  Solar:");
+                        partPanelBorder.setTitle(I18n.get("part.roof", String.valueOf(roof.getId())));
+                        partProperty1Label.setText(I18n.get("label.area_and_rise"));
+                        partProperty1TextField.setText(I18n.get("label.area") + TWO_DECIMALS.format(area) + lengthUnit + "\u00B2, " + I18n.get("label.rise") + TWO_DECIMALS.format(roof.getHeight() * scale) + lengthUnit);
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_total_area_rise"));
+                        partProperty2Label.setText(I18n.get("part.thermal"));
+                        partProperty3Label.setText(I18n.get("part.solar"));
                         final String rval = ONE_DECIMAL.format(Util.toUsRValue(roof.getUValue()));
                         final boolean isBuildingProject = Scene.getInstance().getProjectType() == Foundation.TYPE_BUILDING;
                         final float absorptance = 1 - roof.getAlbedo();
                         if (energyViewShown) {
-                            partProperty2TextField.setText("R-value = " + rval + ", Gain = " + TWO_DECIMALS.format(-roof.getTotalHeatLoss()) + " kWh");
-                            partProperty2TextField.putClientProperty("tooltip", "The R-value and daily thermal gain of the roof");
+                            partProperty2TextField.setText(I18n.get("label.r_value") + rval + ", " + I18n.get("label.gain") + TWO_DECIMALS.format(-roof.getTotalHeatLoss()) + " kWh");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_r_value_gain"));
                             if (isBuildingProject) {
-                                partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance) + ", Absorption = "
+                                partProperty3TextField.setText(I18n.get("label.absorptance") + TWO_DECIMALS.format(absorptance) + ", " + I18n.get("label.absorption") + " "
                                         + TWO_DECIMALS.format(roof.getSolarPotentialToday() * absorptance) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The absorptance and daily solar heat gain of the roof surface");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_absorptance_gain"));
                             } else {
-                                partProperty3TextField.setText("Radiation energy = " + TWO_DECIMALS.format(roof.getSolarPotentialToday()) + " kWh");
-                                partProperty3TextField.putClientProperty("tooltip", "The solar radiation energy onto this roof surface");
+                                partProperty3TextField.setText(I18n.get("label.radiation_energy") + TWO_DECIMALS.format(roof.getSolarPotentialToday()) + " kWh");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_radiation_energy"));
                             }
                         } else {
-                            partProperty2TextField.setText("R-value = " + rval + " (US system)");
-                            partProperty2TextField.putClientProperty("tooltip", "The R-value of the roof");
-                            partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance));
-                            partProperty3TextField.putClientProperty("tooltip", "The absorptance of the roof surface");
+                            partProperty2TextField.setText(I18n.get("part.r_value_us_display", rval));
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_r_value"));
+                            partProperty3TextField.setText(I18n.get("part.absorptance_display", TWO_DECIMALS.format(absorptance)));
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.roof_absorptance"));
                         }
                     });
                 }
@@ -1662,28 +1678,28 @@ public class EnergyPanel extends JPanel {
                     final double cy = 0.25 * (v.getY() + v1.getY() + v2.getY() + v3.getY());
                     final double cz = 0.25 * (v.getZ() + v1.getZ() + v2.getZ() + v3.getZ());
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Window (" + window.getId() + ")");
-                        partProperty1Label.setText("  Size & Center:");
+                        partPanelBorder.setTitle(I18n.get("part.window", String.valueOf(window.getId())));
+                        partProperty1Label.setText(I18n.get("part.size_center"));
                         partProperty1TextField.setText(TWO_DECIMALS.format(lx) + "\u00d7"
                                 + TWO_DECIMALS.format(ly) + lengthUnit + " \u2248 "
                                 + TWO_DECIMALS.format(lx * ly) + lengthUnit + "\u00B2, ("
                                 + TWO_DECIMALS.format(cx * scale) + ", "
                                 + TWO_DECIMALS.format(cy * scale) + ", "
                                 + TWO_DECIMALS.format(cz * scale) + ")" + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "The width, height, and center of the window");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty3Label.setText("  Solar:");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.window_width_height_center"));
+                        partProperty2Label.setText(I18n.get("part.thermal"));
+                        partProperty3Label.setText(I18n.get("part.solar"));
                         final String shgc = TWO_DECIMALS.format(window.getSolarHeatGainCoefficient());
                         if (energyViewShown) {
-                            partProperty2TextField.setText("U-Value = " + TWO_DECIMALS.format(Util.toUsUValue(window.getUValue())) + ", Gain = " + TWO_DECIMALS.format(-window.getTotalHeatLoss()) + " kWh");
-                            partProperty2TextField.putClientProperty("tooltip", "The U-value and daily thermal gain of the window");
-                            partProperty3TextField.setText("SHGC = " + shgc + ", Gain = " + TWO_DECIMALS.format(window.getSolarPotentialToday() * window.getSolarHeatGainCoefficient()) + " kWh");
-                            partProperty3TextField.putClientProperty("tooltip", "The SHGC value and daily solar gain of the window");
+                            partProperty2TextField.setText(I18n.get("label.u_value") + TWO_DECIMALS.format(Util.toUsUValue(window.getUValue())) + ", " + I18n.get("label.gain") + TWO_DECIMALS.format(-window.getTotalHeatLoss()) + " kWh");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.window_u_value_gain"));
+                            partProperty3TextField.setText(I18n.get("label.shgc") + shgc + ", " + I18n.get("label.gain") + TWO_DECIMALS.format(window.getSolarPotentialToday() * window.getSolarHeatGainCoefficient()) + " kWh");
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.window_shgc_gain"));
                         } else {
-                            partProperty2TextField.setText("U-Value = " + TWO_DECIMALS.format(Util.toUsUValue(window.getUValue())) + " (US system)");
-                            partProperty2TextField.putClientProperty("tooltip", "The U-value of the window");
-                            partProperty3TextField.setText("SHGC = " + shgc);
-                            partProperty3TextField.putClientProperty("tooltip", "The solar heat gain coefficient (SHGC) of the window");
+                            partProperty2TextField.setText(I18n.get("part.u_value_us_display", TWO_DECIMALS.format(Util.toUsUValue(window.getUValue()))));
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.window_u_value"));
+                            partProperty3TextField.setText(I18n.get("label.shgc") + shgc);
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.window_shgc"));
                         }
                     });
                 }
@@ -1699,8 +1715,8 @@ public class EnergyPanel extends JPanel {
                     final double lx = v.distance(v2);
                     final double ly = v.distance(v1);
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Wall (" + wall.getId() + ")");
-                        partProperty1Label.setText("  Size & Center:");
+                        partPanelBorder.setTitle(I18n.get("part.wall", String.valueOf(wall.getId())));
+                        partProperty1Label.setText(I18n.get("part.size_center"));
                         partProperty1TextField.setText(TWO_DECIMALS.format(lx * scale) + "\u00d7"
                                 + TWO_DECIMALS.format(ly * scale) + lengthUnit + " \u2248 "
                                 + TWO_DECIMALS.format(lx * ly * scale * scale) + lengthUnit + "\u00B2 (eff. "
@@ -1708,22 +1724,22 @@ public class EnergyPanel extends JPanel {
                                 + TWO_DECIMALS.format(cx * scale) + ", "
                                 + TWO_DECIMALS.format(cy * scale) + ", "
                                 + TWO_DECIMALS.format(cz * scale) + ")" + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "The width, height, and center of the wall");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty3Label.setText("  Solar:");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.wall_width_height_center"));
+                        partProperty2Label.setText(I18n.get("part.thermal"));
+                        partProperty3Label.setText(I18n.get("part.solar"));
                         final String rval = ONE_DECIMAL.format(Util.toUsRValue(wall.getUValue()));
                         final float absorptance = 1 - wall.getAlbedo();
                         if (energyViewShown) {
-                            partProperty2TextField.setText("R-Value = " + rval + ", Gain = " + TWO_DECIMALS.format(-wall.getTotalHeatLoss()) + " kWh");
-                            partProperty2TextField.putClientProperty("tooltip", "The R-value and daily thermal gain of the wall");
-                            partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance) + ", Absorption = "
+                            partProperty2TextField.setText(I18n.get("label.r_value") + rval + ", " + I18n.get("label.gain") + TWO_DECIMALS.format(-wall.getTotalHeatLoss()) + " kWh");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.wall_r_value_gain"));
+                            partProperty3TextField.setText(I18n.get("part.absorptance") + TWO_DECIMALS.format(absorptance) + ", Absorption = "
                                     + TWO_DECIMALS.format(wall.getSolarPotentialToday() * absorptance) + " kWh");
-                            partProperty3TextField.putClientProperty("tooltip", "The absorptance and daily solar heat gain of the wall surface");
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.wall_absorptance_gain"));
                         } else {
-                            partProperty2TextField.setText("R-Value = " + rval + " (US system)");
-                            partProperty2TextField.putClientProperty("tooltip", "The R-value of the wall");
-                            partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance));
-                            partProperty3TextField.putClientProperty("tooltip", "The absorptance of the wall surface");
+                            partProperty2TextField.setText(I18n.get("part.r_value_us_display", rval));
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.wall_r_value"));
+                            partProperty3TextField.setText(I18n.get("part.absorptance_display", TWO_DECIMALS.format(absorptance)));
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.wall_absorptance"));
                         }
                     });
                 }
@@ -1739,30 +1755,30 @@ public class EnergyPanel extends JPanel {
                     final double lx = v.distance(v2);
                     final double ly = v.distance(v1);
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Door (" + door.getId() + ")");
-                        partProperty1Label.setText("  Size & Center:");
+                        partPanelBorder.setTitle(I18n.get("part.door", String.valueOf(door.getId())));
+                        partProperty1Label.setText(I18n.get("part.size_center"));
                         partProperty1TextField.setText(TWO_DECIMALS.format(lx * scale) + "\u00d7"
                                 + TWO_DECIMALS.format(ly * scale) + lengthUnit + " \u2248 "
                                 + TWO_DECIMALS.format(lx * ly * scale * scale) + lengthUnit + "\u00B2, ("
                                 + TWO_DECIMALS.format(cx * scale) + ", "
                                 + TWO_DECIMALS.format(cy * scale) + ", "
                                 + TWO_DECIMALS.format(cz * scale) + ")" + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "The width, height, and center of the door");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty3Label.setText("  Solar:");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.door_width_height_center"));
+                        partProperty2Label.setText(I18n.get("part.thermal"));
+                        partProperty3Label.setText(I18n.get("part.solar"));
                         final String uval = TWO_DECIMALS.format(Util.toUsUValue(door.getUValue()));
                         final float absorptance = 1 - door.getAlbedo();
                         if (energyViewShown) {
-                            partProperty2TextField.setText("U-Value = " + uval + ", Gain = " + TWO_DECIMALS.format(-door.getTotalHeatLoss()) + " kWh");
-                            partProperty2TextField.putClientProperty("tooltip", "The R-value and daily thermal gain of the door");
-                            partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance) + ", Absorption = "
+                            partProperty2TextField.setText(I18n.get("label.u_value") + uval + ", " + I18n.get("label.gain") + TWO_DECIMALS.format(-door.getTotalHeatLoss()) + " kWh");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.door_r_value_gain"));
+                            partProperty3TextField.setText(I18n.get("part.absorptance") + TWO_DECIMALS.format(absorptance) + ", Absorption = "
                                     + TWO_DECIMALS.format(door.getSolarPotentialToday() * absorptance) + " kWh");
-                            partProperty3TextField.putClientProperty("tooltip", "The absorptance and daily solar heat gain of the door surface");
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.door_absorptance_gain"));
                         } else {
-                            partProperty2TextField.setText("U-Value = " + uval + " (US system)");
-                            partProperty2TextField.putClientProperty("tooltip", "The U-value of the door");
-                            partProperty3TextField.setText("Absorptance = " + TWO_DECIMALS.format(absorptance));
-                            partProperty3TextField.putClientProperty("tooltip", "The absorptance of the door surface");
+                            partProperty2TextField.setText(I18n.get("part.u_value_us_display", uval));
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.door_u_value"));
+                            partProperty3TextField.setText(I18n.get("part.absorptance_display", TWO_DECIMALS.format(absorptance)));
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.door_absorptance"));
                         }
                     });
                 }
@@ -1782,17 +1798,17 @@ public class EnergyPanel extends JPanel {
                         cy = v.getY();
                     }
                     EventQueue.invokeLater(() -> {
-                        partPanelBorder.setTitle("Floor (" + floor.getId() + ")");
-                        partProperty1Label.setText("  Area & Center");
+                        partPanelBorder.setTitle(I18n.get("part.floor", String.valueOf(floor.getId())));
+                        partProperty1Label.setText(I18n.get("label.area_and_center"));
                         partProperty1TextField.setText(ONE_DECIMAL.format(floor.getArea()) + lengthUnit + "\u00B2, ("
                                 + ONE_DECIMAL.format(cx * scale) + ", " + ONE_DECIMAL.format(cy * scale) + ", " + ONE_DECIMAL.format(cz * scale) + ")" + lengthUnit);
-                        partProperty1TextField.putClientProperty("tooltip", "The area and center of the floor");
-                        partProperty2Label.setText("  Thermal:");
-                        partProperty2TextField.setText("N.A.");
-                        partProperty2TextField.putClientProperty("tooltip", "Not applicable to thermal analysis");
-                        partProperty3Label.setText("  Solar:");
-                        partProperty3TextField.setText("N.A.");
-                        partProperty3TextField.putClientProperty("tooltip", "Not applicable to solar analysis");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.floor_area_center"));
+                        partProperty2Label.setText(I18n.get("part.thermal"));
+                        partProperty2TextField.setText(I18n.get("label.not_applicable"));
+                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.not_applicable_thermal"));
+                        partProperty3Label.setText(I18n.get("part.solar"));
+                        partProperty3TextField.setText(I18n.get("label.not_applicable"));
+                        partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.not_applicable_solar"));
                     });
                 }
             }
@@ -1800,83 +1816,83 @@ public class EnergyPanel extends JPanel {
             EventQueue.invokeLater(() -> {
                 final int numberOfSolarPanels = Scene.getInstance().countSolarPanels();
                 if (numberOfSolarPanels > 0) {
-                    partPanelBorder.setTitle("Solar Panels");
-                    partProperty1Label.setText("  Total Number:");
+                    partPanelBorder.setTitle(I18n.get("part.solar_panels"));
+                    partProperty1Label.setText(I18n.get("part.total_number"));
                     partProperty1TextField.setText("" + numberOfSolarPanels);
-                    partProperty1TextField.putClientProperty("tooltip", "Total number of solar panels");
-                    partProperty2Label.setText("  Upfront Cost:");
+                    partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_solar_panels"));
+                    partProperty2Label.setText(I18n.get("part.upfront_cost"));
                     partProperty2TextField.setText("$" + TWO_DECIMALS.format(PvProjectCost.getInstance().getTotalUpFrontCost()));
-                    partProperty2TextField.putClientProperty("tooltip", "Upfront cost of solar panels");
-                    partProperty3Label.setText("  Total Cost over " + Scene.getInstance().getPvFinancialModel().getLifespan() + " Years:");
+                    partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.upfront_cost_solar_panels"));
+                    partProperty3Label.setText(I18n.get("part.total_cost_years", Integer.toString(Scene.getInstance().getPvFinancialModel().getLifespan())));
                     partProperty3TextField.setText("$" + TWO_DECIMALS.format(PvProjectCost.getInstance().getTotalCost()));
-                    partProperty3TextField.putClientProperty("tooltip", "Total project cost");
+                    partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.total_project_cost"));
                 } else {
                     final int numberOfHeliostats = Scene.getInstance().countParts(Mirror.class);
                     if (numberOfHeliostats > 0) {
-                        partPanelBorder.setTitle("Heliostats");
-                        partProperty1Label.setText("  Total Number:");
+                        partPanelBorder.setTitle(I18n.get("part.heliostats"));
+                        partProperty1Label.setText("  " + I18n.get("label.total_number"));
                         partProperty1TextField.setText("" + numberOfHeliostats);
-                        partProperty1TextField.putClientProperty("tooltip", "Total number of heliostats");
-                        partProperty2Label.setText("  Upfront Cost:");
+                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_heliostats"));
+                        partProperty2Label.setText(I18n.get("part.upfront_cost"));
                         partProperty2TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalUpFrontCost()));
-                        partProperty2TextField.putClientProperty("tooltip", "Upfront cost of heliostats");
-                        partProperty3Label.setText("  Total Cost over " + Scene.getInstance().getCspFinancialModel().getLifespan() + " Years:");
+                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.upfront_cost_heliostats"));
+                        partProperty3Label.setText(I18n.get("part.total_cost_years", Integer.toString(Scene.getInstance().getCspFinancialModel().getLifespan())));
                         partProperty3TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalCost()));
-                        partProperty3TextField.putClientProperty("tooltip", "Total project cost");
+                        partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.total_project_cost"));
                     } else {
                         final int numberOfParabolicTroughs = Scene.getInstance().countParts(ParabolicTrough.class);
                         if (numberOfParabolicTroughs > 0) {
-                            partPanelBorder.setTitle("Parabolic Troughs");
-                            partProperty1Label.setText("  Total Number:");
+                            partPanelBorder.setTitle(I18n.get("part.parabolic_troughs"));
+                            partProperty1Label.setText("  " + I18n.get("label.total_number"));
                             partProperty1TextField.setText("" + numberOfParabolicTroughs);
-                            partProperty1TextField.putClientProperty("tooltip", "Total number of parabolic troughs");
-                            partProperty2Label.setText("  Upfront Cost:");
+                            partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_parabolic_troughs"));
+                            partProperty2Label.setText(I18n.get("part.upfront_cost"));
                             partProperty2TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalUpFrontCost()));
-                            partProperty2TextField.putClientProperty("tooltip", "Upfront cost of parabolic troughs");
-                            partProperty3Label.setText("  Total Cost over " + Scene.getInstance().getCspFinancialModel().getLifespan() + " Years:");
+                            partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.upfront_cost_parabolic_troughs"));
+                            partProperty3Label.setText(I18n.get("part.total_cost_years", Integer.toString(Scene.getInstance().getCspFinancialModel().getLifespan())));
                             partProperty3TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalCost()));
-                            partProperty3TextField.putClientProperty("tooltip", "Total project cost");
+                            partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.total_project_cost"));
                         } else {
                             final int numberOfParabolicDishes = Scene.getInstance().countParts(ParabolicDish.class);
                             if (numberOfParabolicDishes > 0) {
-                                partPanelBorder.setTitle("Parabolic Dishes");
-                                partProperty1Label.setText("  Total Number:");
+                                partPanelBorder.setTitle(I18n.get("part.parabolic_dishes"));
+                                partProperty1Label.setText("  " + I18n.get("label.total_number"));
                                 partProperty1TextField.setText("" + numberOfParabolicDishes);
-                                partProperty1TextField.putClientProperty("tooltip", "Total number of parabolic dishes");
-                                partProperty2Label.setText("  Upfront Cost:");
+                                partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_parabolic_dishes"));
+                                partProperty2Label.setText(I18n.get("part.upfront_cost"));
                                 partProperty2TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalUpFrontCost()));
-                                partProperty2TextField.putClientProperty("tooltip", "Upfront cost of parabolic dishes");
-                                partProperty3Label.setText("  Total Cost over " + Scene.getInstance().getCspFinancialModel().getLifespan() + " Years:");
+                                partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.upfront_cost_parabolic_dishes"));
+                                partProperty3Label.setText(I18n.get("part.total_cost_years", Integer.toString(Scene.getInstance().getCspFinancialModel().getLifespan())));
                                 partProperty3TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalCost()));
-                                partProperty3TextField.putClientProperty("tooltip", "Total project cost");
+                                partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.total_project_cost"));
                             } else {
                                 final int numberOfFresnelReflectors = Scene.getInstance().countParts(FresnelReflector.class);
                                 if (numberOfFresnelReflectors > 0) {
-                                    partPanelBorder.setTitle("Fresnel Reflectors");
-                                    partProperty1Label.setText("  Total Number:");
+                                    partPanelBorder.setTitle(I18n.get("part.fresnel_reflectors"));
+                                    partProperty1Label.setText("  " + I18n.get("label.total_number"));
                                     partProperty1TextField.setText("" + numberOfFresnelReflectors);
-                                    partProperty1TextField.putClientProperty("tooltip", "Total number of Fresnel reflectors");
-                                    partProperty2Label.setText("  Upfront Cost:");
+                                    partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_fresnel_reflectors"));
+                                    partProperty2Label.setText(I18n.get("part.upfront_cost"));
                                     partProperty2TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalUpFrontCost()));
-                                    partProperty2TextField.putClientProperty("tooltip", "Upfront cost of Fresnel reflectors");
-                                    partProperty3Label.setText("  Total Cost over " + Scene.getInstance().getCspFinancialModel().getLifespan() + " Years:");
+                                    partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.upfront_cost_fresnel_reflectors"));
+                                    partProperty3Label.setText(I18n.get("part.total_cost_years", Integer.toString(Scene.getInstance().getCspFinancialModel().getLifespan())));
                                     partProperty3TextField.setText("$" + TWO_DECIMALS.format(CspProjectCost.getInstance().getTotalCost()));
-                                    partProperty3TextField.putClientProperty("tooltip", "Total project cost");
+                                    partProperty3TextField.putClientProperty("tooltip", I18n.get("tooltip.total_project_cost"));
                                 } else {
                                     final int numberOfNodes = Scene.getInstance().countNodes();
                                     if (numberOfNodes > 0) {
-                                        partPanelBorder.setTitle("Structures");
-                                        partProperty1Label.setText("  Total Nodes:");
+                                        partPanelBorder.setTitle(I18n.get("part.structures"));
+                                        partProperty1Label.setText("  " + I18n.get("label.total_nodes"));
                                         partProperty1TextField.setText("" + numberOfNodes);
-                                        partProperty1TextField.putClientProperty("tooltip", "Total number of structure nodes");
-                                        partProperty2Label.setText("  Total Meshes:");
+                                        partProperty1TextField.putClientProperty("tooltip", I18n.get("tooltip.total_structure_nodes"));
+                                        partProperty2Label.setText("  " + I18n.get("label.total_meshes"));
                                         partProperty2TextField.setText("" + Scene.getInstance().countMeshes());
-                                        partProperty2TextField.putClientProperty("tooltip", "Total number of structure meshes");
+                                        partProperty2TextField.putClientProperty("tooltip", I18n.get("tooltip.total_structure_meshes"));
                                         partProperty3Label.setText("  -");
                                         partProperty3TextField.setText("");
                                         partProperty3TextField.putClientProperty("tooltip", null);
                                     } else {
-                                        partPanelBorder.setTitle(" -");
+                                        partPanelBorder.setTitle(I18n.get("label.separator"));
                                         partProperty1Label.setText("  -");
                                         partProperty1TextField.setText("");
                                         partProperty1TextField.putClientProperty("tooltip", null);
@@ -1929,7 +1945,7 @@ public class EnergyPanel extends JPanel {
                         s2 = s2.substring(0, s2.indexOf(')') + 1);
                         final int i1 = s2.indexOf('(');
                         final int i2 = s2.indexOf(')');
-                        ((TitledBorder) buildingPanel.getBorder()).setTitle("Building #" + s2.substring(i1 + 1, i2));
+                        ((TitledBorder) buildingPanel.getBorder()).setTitle(I18n.get("part.building_num", s2.substring(i1 + 1, i2)));
                         buildingInfoPanel.update(selectedFoundation);
                         break;
                     case Foundation.TYPE_PV_PROJECT:
@@ -1938,7 +1954,7 @@ public class EnergyPanel extends JPanel {
                         dataPanel.remove(cspProjectPanel);
                         dataPanel.add(pvProjectPanel, 2);
                         pvProjectZoneInfoPanel.update(selectedFoundation);
-                        pvProjectPanel.setBorder(createTitledBorder("Photovoltaic Solar Power System (Zone #" + selectedFoundation.getId() + ")", true));
+                        pvProjectPanel.setBorder(createTitledBorder(I18n.get("panel.pv_zone", String.valueOf(selectedFoundation.getId())), true));
                         break;
                     case Foundation.TYPE_CSP_PROJECT:
                         dataPanel.remove(instructionPanel);
@@ -1946,7 +1962,7 @@ public class EnergyPanel extends JPanel {
                         dataPanel.remove(pvProjectPanel);
                         dataPanel.add(cspProjectPanel, 2);
                         cspProjectZoneInfoPanel.update(selectedFoundation);
-                        cspProjectPanel.setBorder(createTitledBorder("Concentrated Solar Power System (Zone #" + selectedFoundation.getId() + ")", true));
+                        cspProjectPanel.setBorder(createTitledBorder(I18n.get("panel.csp_zone", String.valueOf(selectedFoundation.getId())), true));
                         break;
                     case -1:
                         dataPanel.remove(instructionPanel);
@@ -1999,29 +2015,33 @@ public class EnergyPanel extends JPanel {
         }
     }
 
+    private String getProjectBorderTitle() {
+        final String s = Scene.getInstance().getProjectName();
+        String title = "";
+        switch (Scene.getInstance().getProjectType()) {
+            case Foundation.TYPE_BUILDING:
+                title = I18n.get("panel.title_building");
+                break;
+            case Foundation.TYPE_PV_PROJECT:
+                title = I18n.get("panel.title_pv");
+                break;
+            case Foundation.TYPE_CSP_PROJECT:
+                title = I18n.get("panel.title_csp");
+                break;
+        }
+        String author = "";
+        if (Scene.getInstance().getDesigner() != null) {
+            final String name = Scene.getInstance().getDesigner().getName();
+            if (!I18n.get("props.user").equals(name)) {
+                author += name + "'s";
+            }
+        }
+        return I18n.get("panel.project_title", author, title, s != null ? s : "");
+    }
+
     public void update() {
         EventQueue.invokeLater(() -> {
-            final String s = Scene.getInstance().getProjectName();
-            String title = "";
-            switch (Scene.getInstance().getProjectType()) {
-                case Foundation.TYPE_BUILDING:
-                    title = "Building";
-                    break;
-                case Foundation.TYPE_PV_PROJECT:
-                    title = "PV";
-                    break;
-                case Foundation.TYPE_CSP_PROJECT:
-                    title = "CSP";
-                    break;
-            }
-            String author = "";
-            if (Scene.getInstance().getDesigner() != null) {
-                final String name = Scene.getInstance().getDesigner().getName();
-                if (!"User".equals(name)) {
-                    author += name + "'s";
-                }
-            }
-            timeAndLocationPanel.setBorder(createTitledBorder(author + " " + title + " Project: " + (s != null ? s : ""), true));
+            timeAndLocationPanel.setBorder(createTitledBorder(getProjectBorderTitle(), true));
             dateSpinner.setEnabled(!Scene.getInstance().isDateFixed());
             regionComboBox.setEnabled(!Scene.getInstance().isLocationFixed());
             latitudeSpinner.setEnabled(!Scene.getInstance().isLocationFixed());
@@ -2105,6 +2125,47 @@ public class EnergyPanel extends JPanel {
         });
     }
 
+    /** Updates all panel labels, borders and tooltips after a locale change. */
+    public void refreshLabelsAfterLocaleChange() {
+        if (dateLabel != null) dateLabel.setText(I18n.get("panel.date"));
+        if (timeLabel != null) timeLabel.setText(I18n.get("panel.time"));
+        if (latitudeLabel != null) latitudeLabel.setText(I18n.get("panel.latitude"));
+        if (tempLabel != null) tempLabel.setText(I18n.get("panel.temp"));
+        if (sunshineLabel != null) sunshineLabel.setText(I18n.get("panel.sunshine"));
+        if (thermostatLabel != null) thermostatLabel.setText(I18n.get("panel.thermostat"));
+        if (adjustThermostatButton != null) adjustThermostatButton.setText(I18n.get("panel.adjust"));
+        timeAndLocationPanel.setBorder(createTitledBorder(getProjectBorderTitle(), true));
+        heatMapPanel.setBorder(createTitledBorder(I18n.get("panel.heat_map_contrast"), true));
+        colorMapSlider.setToolTipText("<html>" + I18n.get("panel.tooltip_heat_map") + "</html>");
+        sunshineHoursField.setToolTipText(I18n.get("panel.tooltip_sunshine"));
+        outsideTemperatureField.setToolTipText(I18n.get("panel.tooltip_temp"));
+        for (int i = 0; i < instructionSheets.length; i++) {
+            instructionTabbedPane.setTitleAt(i, I18n.get("panel.sheet_" + (i + 1)));
+        }
+        final Border border = instructionPanel.getBorder();
+        if (border instanceof TitledBorder) {
+            ((TitledBorder) border).setTitle(I18n.get("panel.instruction_documentation"));
+        }
+        instructionPanel.setToolTipText(I18n.get("panel.tooltip_listen"));
+        if (buildingTabbedPane != null) {
+            buildingTabbedPane.setTitleAt(0, I18n.get("tab.basics"));
+            buildingTabbedPane.setTitleAt(1, I18n.get("tab.cost"));
+            buildingTabbedPane.setTitleAt(2, I18n.get("tab.energy"));
+        }
+        if (pvProjectTabbedPane != null && pvProjectTabbedPane.getTabCount() >= 3) {
+            pvProjectTabbedPane.setTitleAt(0, I18n.get("tab.info"));
+            pvProjectTabbedPane.setTitleAt(1, I18n.get("tab.cost"));
+            pvProjectTabbedPane.setTitleAt(2, I18n.get("tab.output"));
+        }
+        if (cspProjectTabbedPane != null && cspProjectTabbedPane.getTabCount() >= 3) {
+            cspProjectTabbedPane.setTitleAt(0, I18n.get("tab.info"));
+            cspProjectTabbedPane.setTitleAt(1, I18n.get("tab.cost"));
+            cspProjectTabbedPane.setTitleAt(2, I18n.get("tab.output"));
+        }
+        if (buildingInfoPanel != null) buildingInfoPanel.refreshLabelsAfterLocaleChange();
+        EventQueue.invokeLater(() -> updateProperties());
+    }
+
     private JLabel createLabel(final String text) {
         final JLabel label = new JLabel(text);
         label.setFont(new Font(label.getFont().getName(), Font.PLAIN, label.getFont().getSize() - 2));
@@ -2153,7 +2214,7 @@ public class EnergyPanel extends JPanel {
     boolean checkRegion() {
         final String region = (String) regionComboBox.getSelectedItem();
         if ("".equals(region)) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Can't perform this task without specifying a region.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.cant_perform_without_region"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -2166,13 +2227,13 @@ public class EnergyPanel extends JPanel {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        instructionPanel.setBorder(createImageTitledBorder("Instruction & Documentation", image, true));
+        instructionPanel.setBorder(createImageTitledBorder(I18n.get("panel.instruction_documentation"), image, true));
     }
 
     public void resetReadInstruction() {
         setReadInstructionState(false);
         canReadInstruction = true;
-        instructionPanel.setToolTipText("Click here to listen");
+        instructionPanel.setToolTipText(I18n.get("panel.tooltip_listen"));
     }
 
 }

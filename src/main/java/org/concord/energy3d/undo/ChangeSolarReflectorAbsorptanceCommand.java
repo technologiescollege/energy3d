@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarReflector;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeSolarReflectorAbsorptanceCommand extends MyAbstractUndoableEdit {
 
@@ -44,7 +45,7 @@ public class ChangeSolarReflectorAbsorptanceCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Absorptance Change for Selected " + reflector.getClass().getSimpleName();
+		return I18n.get("undo.absorptance_change_selected") + " " + MyAbstractUndoableEdit.getPartDisplayName(reflector.getClass());
 	}
 
 }

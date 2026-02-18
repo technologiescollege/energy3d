@@ -1,6 +1,7 @@
 package org.concord.energy3d.shapes;
 
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.math.ColorRGBA;
@@ -22,7 +23,7 @@ public abstract class Annotation extends Node {
     }
 
     public static BMText makeNewLabel(final double fontSize) {
-        final BMText label = new BMText("Annotation Label", "", FontManager.getInstance().getAnnotationFont(), BMText.Align.Center, BMText.Justify.Center);
+        final BMText label = new BMText(I18n.get("label.annotation"), "", FontManager.getInstance().getAnnotationFont(), BMText.Align.Center, BMText.Justify.Center);
         label.setTextColor(ColorRGBA.BLACK);
         label.setAutoScale(AutoScale.Off);
         label.setFontScale(fontSize);

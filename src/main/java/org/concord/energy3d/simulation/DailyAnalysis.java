@@ -17,6 +17,7 @@ import javax.swing.event.MenuListener;
 import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -25,10 +26,10 @@ abstract class DailyAnalysis extends Analysis {
 
     JMenu createOptionsMenu(final JDialog dialog, final List<HousePart> selectedParts, final boolean selectAll) {
 
-        final JMenuItem miClear = new JMenuItem("Clear Previous Results in Graph");
-        final JMenuItem miView = new JMenuItem("View Raw Data...");
+        final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear_previous_results"));
+        final JMenuItem miView = new JMenuItem(I18n.get("menu.view_raw_data"));
 
-        final JMenu menu = new JMenu("Options");
+        final JMenu menu = new JMenu(I18n.get("menu.options"));
         menu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(final MenuEvent e) {
@@ -45,11 +46,11 @@ abstract class DailyAnalysis extends Analysis {
             }
         });
 
-        final JMenu chartMenu = new JMenu("Chart");
+        final JMenu chartMenu = new JMenu(I18n.get("menu.chart"));
         final ButtonGroup chartGroup = new ButtonGroup();
         menu.add(chartMenu);
 
-        final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem("Bar");
+        final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem(I18n.get("menu.bar"));
         miBar.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.BAR_CHART);
@@ -60,7 +61,7 @@ abstract class DailyAnalysis extends Analysis {
         chartGroup.add(miBar);
         miBar.setSelected(graph.getGraphType() == Graph.BAR_CHART);
 
-        final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem("Line");
+        final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem(I18n.get("menu.line"));
         miLine.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.LINE_CHART);
@@ -71,7 +72,7 @@ abstract class DailyAnalysis extends Analysis {
         chartGroup.add(miLine);
         miLine.setSelected(graph.getGraphType() == Graph.LINE_CHART);
 
-        final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem("Area");
+        final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem(I18n.get("menu.area"));
         miArea.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.AREA_CHART);
@@ -82,7 +83,7 @@ abstract class DailyAnalysis extends Analysis {
         chartGroup.add(miArea);
         miArea.setSelected(graph.getGraphType() == Graph.AREA_CHART);
 
-        final JCheckBoxMenuItem miMilitaryTime = new JCheckBoxMenuItem("Military Time");
+        final JCheckBoxMenuItem miMilitaryTime = new JCheckBoxMenuItem(I18n.get("menu.military_time"));
         miMilitaryTime.addItemListener(e -> {
             if (graph instanceof DailyGraph) {
                 ((DailyGraph) graph).setMilitaryTime(miMilitaryTime.isSelected());
@@ -92,7 +93,7 @@ abstract class DailyAnalysis extends Analysis {
         menu.add(miMilitaryTime);
 
         miClear.addActionListener(e -> {
-            final int i = JOptionPane.showConfirmDialog(dialog, "Are you sure that you want to clear all the previous results\nrelated to the selected object?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            final int i = JOptionPane.showConfirmDialog(dialog, I18n.get("msg.confirm_clear_previous_results"), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION);
             if (i != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -111,7 +112,7 @@ abstract class DailyAnalysis extends Analysis {
         });
         menu.add(miView);
 
-        final JMenuItem miCopyImage = new JMenuItem("Copy Image");
+        final JMenuItem miCopyImage = new JMenuItem(I18n.get("menu.copy_image"));
         miCopyImage.addActionListener(e -> new ClipImage().copyImageToClipboard(graph));
         menu.add(miCopyImage);
 
@@ -121,13 +122,13 @@ abstract class DailyAnalysis extends Analysis {
 
     JMenu createRunsMenu() {
 
-        final JMenu menu = new JMenu("Runs");
+        final JMenu menu = new JMenu(I18n.get("menu.runs"));
         menu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(final MenuEvent e) {
                 menu.removeAll();
                 if (!DailyGraph.records.isEmpty()) {
-                    JMenuItem mi = new JMenuItem("Show All");
+                    JMenuItem mi = new JMenuItem(I18n.get("menu.show_all"));
                     mi.addActionListener(e1 -> {
                         for (final Results r : DailyGraph.records) {
                             graph.hideRun(r.getID(), false);
@@ -136,7 +137,7 @@ abstract class DailyAnalysis extends Analysis {
                         TimeSeriesLogger.getInstance().logShowRun(graph.getClass().getSimpleName(), "All", true);
                     });
                     menu.add(mi);
-                    mi = new JMenuItem("Hide All");
+                    mi = new JMenuItem(I18n.get("menu.hide_all"));
                     mi.addActionListener(e1 -> {
                         for (final Results r : DailyGraph.records) {
                             graph.hideRun(r.getID(), true);

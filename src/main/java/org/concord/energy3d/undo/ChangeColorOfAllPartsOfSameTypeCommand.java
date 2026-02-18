@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.type.ReadOnlyColorRGBA;
 
@@ -64,7 +65,7 @@ public class ChangeColorOfAllPartsOfSameTypeCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Color Change for All Parts of Same Type";
+		return I18n.get("undo.color_change_all_parts_same_type");
 	}
 
 }

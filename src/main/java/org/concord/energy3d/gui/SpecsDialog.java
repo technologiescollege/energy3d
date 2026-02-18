@@ -5,6 +5,7 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.CspDesignSpecs;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.simulation.DesignSpecs;
 import org.concord.energy3d.simulation.PvDesignSpecs;
 
@@ -51,10 +52,10 @@ class SpecsDialog extends JDialog {
             // set the budget limit
 
             JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Budget ($)"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.budget")));
             panel.add(p);
             budgetCheckBox = new JCheckBox("", specs.isBudgetEnabled());
-            budgetCheckBox.setToolTipText("Select to apply a budget");
+            budgetCheckBox.setToolTipText(I18n.get("tooltip.select_apply_budget"));
             budgetField = new JTextField(FORMAT2.format(specs.getMaximumBudget()), 10);
             p.add(budgetCheckBox);
             p.add(new JLabel("<"));
@@ -65,10 +66,10 @@ class SpecsDialog extends JDialog {
             // set the maximum number of solar panels allowed
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Solar Panels"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_solar_panels")));
             panel.add(p);
             numberOfSolarPanelsCheckBox = new JCheckBox("", specs.isNumberOfSolarPanelsEnabled());
-            numberOfSolarPanelsCheckBox.setToolTipText("Select to apply a requirement of the number of solar panels");
+            numberOfSolarPanelsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_solar_panels"));
             p.add(numberOfSolarPanelsCheckBox);
             p.add(new JLabel("<"));
             maximumNumberOfSolarPanelsField = new JTextField("" + specs.getMaximumNumberOfSolarPanels(), 10);
@@ -117,10 +118,10 @@ class SpecsDialog extends JDialog {
             // set the budget limit
 
             JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Budget ($)"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.budget")));
             panel.add(p);
             budgetCheckBox = new JCheckBox("", specs.isBudgetEnabled());
-            budgetCheckBox.setToolTipText("Select to apply a budget");
+            budgetCheckBox.setToolTipText(I18n.get("tooltip.select_apply_budget"));
             budgetField = new JTextField(FORMAT2.format(specs.getMaximumBudget()), 10);
             p.add(budgetCheckBox);
             p.add(new JLabel("<"));
@@ -131,10 +132,10 @@ class SpecsDialog extends JDialog {
             // set the maximum number of mirrors allowed
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Mirrors"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_mirrors")));
             panel.add(p);
             numberOfMirrorsCheckBox = new JCheckBox("", specs.isNumberOfMirrorsEnabled());
-            numberOfMirrorsCheckBox.setToolTipText("Select to apply a requirement of the number of mirrors");
+            numberOfMirrorsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_mirrors"));
             p.add(numberOfMirrorsCheckBox);
             p.add(new JLabel("<"));
             maximumNumberOfMirrorsField = new JTextField("" + specs.getMaximumNumberOfMirrors(), 10);
@@ -145,10 +146,10 @@ class SpecsDialog extends JDialog {
             // set the maximum number of parabolic troughs allowed
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Parabolic Troughs"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_parabolic_troughs")));
             panel.add(p);
             numberOfParabolicTroughsCheckBox = new JCheckBox("", specs.isNumberOfParabolicTroughsEnabled());
-            numberOfParabolicTroughsCheckBox.setToolTipText("Select to apply a requirement of the number of parabolic troughs");
+            numberOfParabolicTroughsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_parabolic_troughs"));
             p.add(numberOfParabolicTroughsCheckBox);
             p.add(new JLabel("<"));
             maximumNumberOfParabolicTroughsField = new JTextField("" + specs.getMaximumNumberOfParabolicTroughs(), 10);
@@ -231,10 +232,10 @@ class SpecsDialog extends JDialog {
             // set the budget limit
 
             JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Budget ($)"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.budget")));
             panel.add(p);
             budgetCheckBox = new JCheckBox("", specs.isBudgetEnabled());
-            budgetCheckBox.setToolTipText("Select to apply a budget");
+            budgetCheckBox.setToolTipText(I18n.get("tooltip.select_apply_budget"));
             budgetField = new JTextField(FORMAT2.format(specs.getMaximumBudget()), 6);
             p.add(budgetCheckBox);
             p.add(new JLabel("<"));
@@ -245,10 +246,10 @@ class SpecsDialog extends JDialog {
             // set the maximum number of windows allowed
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Windows"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_windows")));
             panel.add(p);
             numberOfWindowsCheckBox = new JCheckBox("", specs.isNumberOfWindowsEnabled());
-            numberOfWindowsCheckBox.setToolTipText("Select to apply a requirement of the number of windows");
+            numberOfWindowsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_windows"));
             p.add(numberOfWindowsCheckBox);
             minimumNumberOfWindowsField = new JTextField("" + specs.getMinimumNumberOfWindows(), 6);
             p.add(minimumNumberOfWindowsField);
@@ -261,10 +262,10 @@ class SpecsDialog extends JDialog {
             // set the maximum number of solar panels allowed
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Solar Panels"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_solar_panels")));
             panel.add(p);
             numberOfSolarPanelsCheckBox = new JCheckBox("", specs.isNumberOfSolarPanelsEnabled());
-            numberOfSolarPanelsCheckBox.setToolTipText("Select to apply a requirement of the number of solar panels");
+            numberOfSolarPanelsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_solar_panels"));
             p.add(numberOfSolarPanelsCheckBox);
             minimumNumberOfSolarPanelsField = new JTextField("" + specs.getMinimumNumberOfSolarPanels(), 6);
             p.add(minimumNumberOfSolarPanelsField);
@@ -277,10 +278,10 @@ class SpecsDialog extends JDialog {
             // set minimum and maximum numbers of walls
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Number of Walls"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.number_walls")));
             panel.add(p);
             numberOfWallsCheckBox = new JCheckBox("", specs.isNumberOfWallsEnabled());
-            numberOfWallsCheckBox.setToolTipText("Select to apply a requirement for the number of walls");
+            numberOfWallsCheckBox.setToolTipText(I18n.get("tooltip.select_apply_walls"));
             numberOfWallsCheckBox.addItemListener(e -> enableNumberOfWallsItems(numberOfWallsCheckBox.isSelected()));
             p.add(numberOfWallsCheckBox);
             minimumNumberOfWallsField = new JTextField(specs.getMinimumNumberOfWalls() + "", 6);
@@ -297,10 +298,10 @@ class SpecsDialog extends JDialog {
             // set the minimum and maximum window to floor area ratio
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Window-to-Floor Area Ratio"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.window_floor_ratio")));
             panel.add(p);
             windowToFloorRatioCheckBox = new JCheckBox("", specs.isWindowToFloorRatioEnabled());
-            windowToFloorRatioCheckBox.setToolTipText("Select to apply a requirement of window-to-floor area ratio");
+            windowToFloorRatioCheckBox.setToolTipText(I18n.get("tooltip.select_apply_window_floor_ratio"));
             windowToFloorRatioCheckBox.addItemListener(e -> enableWindowToFloorRatioItems(windowToFloorRatioCheckBox.isSelected()));
             p.add(windowToFloorRatioCheckBox);
             minimumWindowToFloorRatioField = new JTextField(FORMAT1.format(specs.getMinimumWindowToFloorRatio()), 6);
@@ -313,10 +314,10 @@ class SpecsDialog extends JDialog {
             // set the minimum and maximum areas
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Area of Building (\u33A1)"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.area_building")));
             panel.add(p);
             areaCheckBox = new JCheckBox("", specs.isAreaEnabled());
-            areaCheckBox.setToolTipText("Select to apply a requirement of building area");
+            areaCheckBox.setToolTipText(I18n.get("tooltip.select_apply_building_area"));
             areaCheckBox.addItemListener(e -> enableAreaItems(areaCheckBox.isSelected()));
             p.add(areaCheckBox);
             minimumAreaField = new JTextField(FORMAT1.format(specs.getMinimumArea()), 6);
@@ -329,10 +330,10 @@ class SpecsDialog extends JDialog {
             // set the minimum and maximum heights
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("Height of Building (m)"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("specs.height_building")));
             panel.add(p);
             heightCheckBox = new JCheckBox("", specs.isHeightEnabled());
-            heightCheckBox.setToolTipText("Select to apply a height requirement");
+            heightCheckBox.setToolTipText(I18n.get("tooltip.select_apply_height"));
             heightCheckBox.addItemListener(e -> enableHeightItems(heightCheckBox.isSelected()));
             p.add(heightCheckBox);
             minimumHeightField = new JTextField(FORMAT1.format(specs.getMinimumHeight()), 6);
@@ -344,7 +345,7 @@ class SpecsDialog extends JDialog {
             enableHeightItems(specs.isHeightEnabled());
 
             p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            p.setBorder(BorderFactory.createTitledBorder("TBD"));
+            p.setBorder(BorderFactory.createTitledBorder(I18n.get("label.tbd")));
             final JCheckBox cb = new JCheckBox();
             cb.setEnabled(false);
             p.add(cb);
@@ -370,7 +371,7 @@ class SpecsDialog extends JDialog {
 
         super(MainFrame.getInstance(), true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setTitle("Specifications");
+        setTitle(I18n.get("dialog.specifications"));
 
         tabbedPane = new JTabbedPane();
         getContentPane().setLayout(new BorderLayout());
@@ -378,21 +379,21 @@ class SpecsDialog extends JDialog {
 
         buildingSpecsPanel = new BuildingSpecsPanel();
         buildingSpecsPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        tabbedPane.addTab("Building", buildingSpecsPanel);
+        tabbedPane.addTab(I18n.get("tab.building"), buildingSpecsPanel);
 
         pvSpecsPanel = new PvSpecsPanel();
         pvSpecsPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        tabbedPane.addTab("PV", pvSpecsPanel);
+        tabbedPane.addTab(I18n.get("tab.pv"), pvSpecsPanel);
 
         cspSpecsPanel = new CspSpecsPanel();
         cspSpecsPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        tabbedPane.addTab("CSP", cspSpecsPanel);
+        tabbedPane.addTab(I18n.get("tab.csp"), cspSpecsPanel);
 
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
 
             // Building
@@ -419,67 +420,67 @@ class SpecsDialog extends JDialog {
                 maximumWindowToFloorRatio = Double.parseDouble(buildingSpecsPanel.maximumWindowToFloorRatioField.getText());
             } catch (final NumberFormatException err) {
                 err.printStackTrace();
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // range check
             if (maximumBudgetOfBuilding <= 1000) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Your budget is too low to construct a building.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.budget_too_low_building"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumNumberOfWindows < 0 || maximumNumberOfWindows < 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Number of windows cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.windows_cannot_be_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumNumberOfWindows >= maximumNumberOfWindows) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Maximum number of windows must be greater than minimum.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.max_windows_greater_than_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumNumberOfWalls < 3 || maximumNumberOfWalls < 3) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Number of walls must be greater than 2 to form a closed building.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.walls_must_be_greater_than_2"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumNumberOfWalls >= maximumNumberOfWalls) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Maximum number of walls must be greater than minimum.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.max_walls_greater_than_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumNumberOfSolarPanelsOnBuilding < 0 || maximumNumberOfSolarPanelsOnBuilding < 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Number of solar panels cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.solar_panels_cannot_be_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumNumberOfSolarPanelsOnBuilding >= maximumNumberOfSolarPanelsOnBuilding) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Maximum number of solar panels must be greater than minimum.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.max_solar_panels_greater_than_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumWindowToFloorRatio <= 0 || maximumWindowToFloorRatio <= 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Window-to-floor ratio must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.window_floor_ratio_must_be_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumWindowToFloorRatio >= maximumWindowToFloorRatio) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Maximum window-to-floor area ratio must be greater than minimum.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.max_window_floor_ratio_greater_than_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumAreaOfBuilding < 0 || maximumAreaOfBuilding < 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Area cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.area_cannot_be_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumAreaOfBuilding >= maximumAreaOfBuilding) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Minimum area must be less than maximum area.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.min_area_less_than_max"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (minimumHeightOfBuilding < 0 || maximumHeightOfBuilding < 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Height cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.height_cannot_be_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (minimumHeightOfBuilding >= maximumHeightOfBuilding) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Minimum height must be less than maximum height.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.min_height_less_than_max"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -521,18 +522,18 @@ class SpecsDialog extends JDialog {
                 maximumNumberOfSolarPanelsOnPV = Integer.parseInt(pvSpecsPanel.maximumNumberOfSolarPanelsField.getText());
             } catch (final NumberFormatException err) {
                 err.printStackTrace();
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // range check
             if (maximumBudgetOfPV <= 1000) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Your budget is too low to construct a PV array.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.budget_too_low_pv"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (maximumNumberOfSolarPanelsOnPV <= 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Number of solar panels on a PV site must be greater than zero.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.solar_panels_pv_site_greater_than_zero"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -553,18 +554,18 @@ class SpecsDialog extends JDialog {
                 maximumNumberOfMirrors = Integer.parseInt(cspSpecsPanel.maximumNumberOfMirrorsField.getText());
             } catch (final NumberFormatException err) {
                 err.printStackTrace();
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // range check
             if (maximumBudgetOfCSP <= 1000) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Your budget is too low to construct a CSP power plant.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.budget_too_low_csp"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (maximumNumberOfMirrors <= 0) {
-                JOptionPane.showMessageDialog(SpecsDialog.this, "Number of mirrors on a CSP site must be greater than zero.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SpecsDialog.this, I18n.get("msg.mirrors_csp_site_greater_than_zero"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -602,7 +603,7 @@ class SpecsDialog extends JDialog {
         buttonPanel.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> SpecsDialog.this.dispose());
         cancelButton.setActionCommand("Cancel");
         buttonPanel.add(cancelButton);

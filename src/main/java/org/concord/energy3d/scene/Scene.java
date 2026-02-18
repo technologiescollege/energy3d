@@ -26,6 +26,7 @@ import org.concord.energy3d.agents.OperationEvent;
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.gui.MainPanel;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.logger.SnapshotLogger;
 import org.concord.energy3d.model.*;
 import org.concord.energy3d.scene.SceneManager.ViewMode;
@@ -80,9 +81,9 @@ public class Scene implements Serializable {
     public static final int INSTRUCTION_SHEET_NUMBER = 5;
 
     private static final long serialVersionUID = 1L;
-    private static final Node root = new Node("Model Root");
-    private static final Node originalHouseRoot = new Node("Original Model Root");
-    private static final Node notReceivingShadowRoot = new Node("No-Shadow Root");
+    private static final Node root = new Node(I18n.get("node.model_root"));
+    private static final Node originalHouseRoot = new Node(I18n.get("node.original_model_root"));
+    private static final Node notReceivingShadowRoot = new Node(I18n.get("node.no_shadow_root"));
     private static boolean first = true;
     private static Scene instance;
     private static URL url;
@@ -343,6 +344,10 @@ public class Scene implements Serializable {
 
         instance.init();
         instance.applyGroundImage();
+        // Rebuild meshes and apply textures (textureType) after deserialization; critical for .ng3 from SweetEnergy3D
+        if (file != null) {
+            instance.redrawAllNow();
+        }
 
         // update GUI must be called in Event Queue to prevent possible deadlocks
         EventQueue.invokeLater(() -> {
@@ -351,8 +356,8 @@ public class Scene implements Serializable {
             SceneManager.getInstance().cursorWait(false);
             if (file != null) {
                 final HashMap<String, Object> attributes = new HashMap<String, Object>();
-                attributes.put("Open File", Scene.getURL());
-                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), "Open File", attributes));
+                attributes.put(I18n.get("event.open_file"), Scene.getURL());
+                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), I18n.get("event.open_file"), attributes));
             }
         });
 
@@ -404,9 +409,9 @@ public class Scene implements Serializable {
             Util.selectSilently(energyPanel.getRegionComboBox(), city);
             final LocationData ld = LocationData.getInstance();
             if (ld.getLatitudes().get(city) != null) {
-                energyPanel.getRegionComboBox().setToolTipText("<html>Weather data from (" + ld.getLatitudes().get(city) + "&deg;, " + ld.getLongitudes().get(city) + "&deg;), elevation " + ld.getAltitudes().get(city).intValue() + "m<br>Use Edit>Set Region... to select country and region.</html>");
+                energyPanel.getRegionComboBox().setToolTipText("<html>" + I18n.get("tooltip.weather_data_from", ld.getLatitudes().get(city).toString(), ld.getLongitudes().get(city).toString(), Integer.toString(ld.getAltitudes().get(city).intValue())) + "</html>");
             } else {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), city + " not supported. Please upgrade your Energy3D to the latest.", "Missing City", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.city_not_supported", city), I18n.get("title.missing_city"), JOptionPane.ERROR_MESSAGE);
             }
             Scene.getInstance().updateTreeLeaves();
             Heliodon.getInstance().drawSun();
@@ -608,7 +613,7 @@ public class Scene implements Serializable {
                 setEdited(true);
             });
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "URL doesn't exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.url_doesnt_exist"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
         }
         return cmd;
     }
@@ -1067,7 +1072,7 @@ public class Scene implements Serializable {
         }
         if (isTooFar(position)) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "This position to paste was not allowed because it was too far from the center.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                    I18n.get("msg.paste_position_too_far"), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
             return;
         }
         if (c instanceof Tree || c instanceof Human) {
@@ -1235,7 +1240,7 @@ public class Scene implements Serializable {
             if (rack.outOfBound()) {
                 final String name = rack.getClass().getSimpleName() + " (" + rack.getId() + ")";
                 EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                        "Pasting " + name + " was not allowed because it would not be completely inside the underlying surface.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                        I18n.get("msg.paste_not_allowed", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                 addSuccess = false;
             }
         } else if (c instanceof SolarPanel) {
@@ -1243,7 +1248,7 @@ public class Scene implements Serializable {
             if (panel.outOfBound()) {
                 final String name = panel.getClass().getSimpleName() + " (" + panel.getId() + ")";
                 EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                        "Pasting " + name + " was not allowed because it would not be completely inside the underlying surface.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                        I18n.get("msg.paste_not_allowed", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                 addSuccess = false;
             }
         }
@@ -1752,10 +1757,10 @@ public class Scene implements Serializable {
             }
         }
         if (trees.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no tree to remove.", "No Tree", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_tree_to_remove"), I18n.get("title.no_tree"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + trees.size() + " trees?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_trees", Integer.toString(trees.size())), I18n.get("common.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1779,10 +1784,10 @@ public class Scene implements Serializable {
             }
         }
         if (humans.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no human to remove.", "No Human", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_human_to_remove"), I18n.get("title.no_human"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + humans.size() + " humans?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_humans", Integer.toString(humans.size())), I18n.get("common.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1806,10 +1811,10 @@ public class Scene implements Serializable {
             }
         }
         if (roofs.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no roof to remove.", "No Roof", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_roof_to_remove"), I18n.get("title.no_roof"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + roofs.size() + " roofs?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_roofs", Integer.toString(roofs.size())), I18n.get("common.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1833,10 +1838,10 @@ public class Scene implements Serializable {
             }
         }
         if (floors.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no floor to remove.", "No Floor", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_floor_to_remove"), I18n.get("title.no_floor"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + floors.size() + " floors?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_floors", Integer.toString(floors.size())), I18n.get("common.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1880,10 +1885,11 @@ public class Scene implements Serializable {
             }
         }
         if (panels.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no solar panel to remove.", "No Solar Panel", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_solar_panel_to_remove"), I18n.get("title.no_solar_panel"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + panels.size() + " solar panels" + (selectedPart != null ? " of the selected building" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_of_selected_building") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_solar_panels", Integer.toString(panels.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         final List<SolarPanel> panels2 = panels;
@@ -1918,10 +1924,11 @@ public class Scene implements Serializable {
             }
         }
         if (racks.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no rack to remove.", "No Rack", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_rack_to_remove"), I18n.get("title.no_rack"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + racks.size() + " solar panel racks" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_racks", Integer.toString(racks.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1955,10 +1962,11 @@ public class Scene implements Serializable {
             }
         }
         if (heliostats.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no heliostat to remove.", "No Heliostat", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_heliostat_to_remove"), I18n.get("title.no_heliostat"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + heliostats.size() + " heliostats" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_heliostats", Integer.toString(heliostats.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -1992,10 +2000,11 @@ public class Scene implements Serializable {
             }
         }
         if (troughs.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no parabolic trough to remove.", "No Parabolic Trough", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_parabolic_trough_to_remove"), I18n.get("title.no_parabolic_trough"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + troughs.size() + " parabolic troughs" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_parabolic_troughs", Integer.toString(troughs.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2029,10 +2038,11 @@ public class Scene implements Serializable {
             }
         }
         if (dishes.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no parabolic dish to remove.", "No Parabolic Dish", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_parabolic_dish_to_remove"), I18n.get("title.no_parabolic_dish"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + dishes.size() + " parabolic dishes" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_parabolic_dishes", Integer.toString(dishes.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2066,10 +2076,11 @@ public class Scene implements Serializable {
             }
         }
         if (reflectors.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no Fresnel reflector to remove.", "No Fresnel Reflector", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_fresnel_reflector_to_remove"), I18n.get("title.no_fresnel_reflector"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + reflectors.size() + " Fresnel reflectors" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_fresnel_reflectors", Integer.toString(reflectors.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2103,10 +2114,11 @@ public class Scene implements Serializable {
             }
         }
         if (sensors.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no sensor to remove.", "No Sensor", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_sensor_to_remove"), I18n.get("title.no_sensor"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + sensors.size() + " sensors" + (selectedPart != null ? " on the selected foundation" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_on_selected_foundation") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_sensors", Integer.toString(sensors.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2140,10 +2152,11 @@ public class Scene implements Serializable {
             }
         }
         if (walls.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no wall to remove.", "No Wall", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_wall_to_remove"), I18n.get("title.no_wall"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + walls.size() + " walls" + (selectedPart != null ? " of the selected building" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_of_selected_building") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_walls", Integer.toString(walls.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2177,10 +2190,11 @@ public class Scene implements Serializable {
             }
         }
         if (windows.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no window to remove.", "No Window", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_window_to_remove"), I18n.get("title.no_window"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + windows.size() + " windows" + (selectedPart != null ? " of the selected building" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_of_selected_building") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_windows", Integer.toString(windows.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2220,10 +2234,11 @@ public class Scene implements Serializable {
             }
         }
         if (windows.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no window shutter to remove.", "No Shutter", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_shutter_to_remove"), I18n.get("title.no_shutter"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + windows.size() + " window shutters" + (selectedPart != null ? " of the selected building" : "") + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        final String context = selectedPart != null ? I18n.get("msg.context_of_selected_building") : "";
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_shutters", Integer.toString(windows.size()), context), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2249,10 +2264,10 @@ public class Scene implements Serializable {
             }
         }
         if (foundations.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no activated foundation to remove.", "No Foundation", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_foundation_to_remove"), I18n.get("title.no_foundation"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + foundations.size() + " foundations?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_foundations", Integer.toString(foundations.size())), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2279,10 +2294,10 @@ public class Scene implements Serializable {
             copy.add(p);
         }
         if (copy.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no element to remove from " + s + ".", "No Element", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_element_to_remove", s), I18n.get("title.no_element"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + copy.size() + " elements of " + s + "?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_all_elements", Integer.toString(copy.size()), s), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
             return;
         }
         final RemoveMultiplePartsCommand c = new RemoveMultiplePartsCommand(copy);
@@ -2319,11 +2334,11 @@ public class Scene implements Serializable {
         }
         if (!lock) {
             if (lockCount > 0) {
-                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>A lock prevents a component from being edited.<br>Do you really want to remove all the existing " + lockCount + " locks?</html>", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.confirm_remove_all_locks", Integer.toString(lockCount)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
                     return;
                 }
             } else {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>A lock prevents a component from being edited.<br>There is no lock to remove.</html>");
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.no_lock_to_remove") + "</html>");
                 return;
             }
         }
@@ -4276,7 +4291,12 @@ public class Scene implements Serializable {
     // Classes that require special handling during the deserialization process must implement a special method with this exact signature
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        groundImage = ImageIO.read(in);
+        // Ground image is optional (e.g. .ng3 exported by SweetEnergy plugin does not append one)
+        try {
+            groundImage = ImageIO.read(in);
+        } catch (final Exception e) {
+            groundImage = null;
+        }
     }
 
     public static boolean isSaving() {

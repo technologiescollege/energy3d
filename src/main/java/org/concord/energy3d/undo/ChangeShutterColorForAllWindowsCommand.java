@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.ColorRGBA;
 import com.ardor3d.math.type.ReadOnlyColorRGBA;
@@ -53,7 +54,7 @@ public class ChangeShutterColorForAllWindowsCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Shutter Color Change for All Windows";
+		return I18n.get("undo.shutter_color_change_all_windows");
 	}
 
 }

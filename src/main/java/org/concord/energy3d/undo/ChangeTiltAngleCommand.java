@@ -7,6 +7,7 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Mirror;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeTiltAngleCommand extends MyAbstractUndoableEdit {
 
@@ -75,7 +76,7 @@ public class ChangeTiltAngleCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Tilt Angle";
+		return I18n.get("undo.change_tilt_angle");
 	}
 
 }

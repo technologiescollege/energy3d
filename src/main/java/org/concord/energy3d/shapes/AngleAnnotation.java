@@ -2,6 +2,7 @@ package org.concord.energy3d.shapes;
 
 import java.nio.FloatBuffer;
 
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.math.MathUtils;
@@ -83,7 +84,7 @@ public class AngleAnnotation extends Annotation {
                     angle = 0;
                 }
                 end = start + angle;
-                label.setText("A=" + (angleDegrees == 0 ? 0 : (360 - angleDegrees)) + "\u00B0");
+                label.setText(I18n.get("label.angle") + (angleDegrees == 0 ? 0 : (360 - angleDegrees)) + "\u00B0");
                 special = true;
             } else {
                 label.setText((customText != null ? customText + "=" : "") + angleDegrees + "\u00B0");

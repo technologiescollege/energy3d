@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ShowAxesCommand extends MyAbstractUndoableEdit {
 
@@ -33,7 +34,7 @@ public class ShowAxesCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Axes";
+		return I18n.get("undo.show_axes");
 	}
 
 }

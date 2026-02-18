@@ -10,6 +10,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.ChangeTimeAndDateWithHeliodonCommand;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingVolume;
@@ -214,31 +215,31 @@ public class Heliodon {
 
         // Azimuth: N = 0, E = 90, S = 180, W = 270
         final double radius = 6;
-        final BMText northLabel = createText("0\u00B0");
+        final BMText northLabel = createText(I18n.get("angle.0"));
         northLabel.setRotation(new Matrix3().fromAngles(-MathUtils.HALF_PI, 0, 0));
         northLabel.setTranslation(0, radius, 0);
-        final BMText southLabel = createText("180\u00B0");
+        final BMText southLabel = createText(I18n.get("angle.180"));
         southLabel.setRotation(new Matrix3().fromAngles(-MathUtils.HALF_PI, 0, Math.PI));
         southLabel.setTranslation(0, -radius, 0);
-        final BMText eastLabel = createText("90\u00B0");
+        final BMText eastLabel = createText(I18n.get("angle.90"));
         eastLabel.setRotation(new Matrix3().fromAngles(-MathUtils.HALF_PI, 0, -MathUtils.HALF_PI));
         eastLabel.setTranslation(radius, 0, 0);
-        final BMText westLabel = createText("270\u00B0");
+        final BMText westLabel = createText(I18n.get("angle.270"));
         westLabel.setRotation(new Matrix3().fromAngles(-MathUtils.HALF_PI, 0, MathUtils.HALF_PI));
         westLabel.setTranslation(-radius, 0, 0);
 
         // TODO: Not exactly working at they do not lie on the ground
         // NE = 45, SE = 135, NW = 315, SW = 225
-        final BMText northEastLabel = createText("45\u00B0");
+        final BMText northEastLabel = createText(I18n.get("angle.45"));
         northEastLabel.setRotation(new Matrix3().fromAngles(-MathUtils.QUARTER_PI, 0, -MathUtils.QUARTER_PI));
         northEastLabel.setTranslation(radius * Math.cos(MathUtils.QUARTER_PI), radius * Math.sin(MathUtils.QUARTER_PI), 0);
-        final BMText southEastLabel = createText("135\u00B0");
+        final BMText southEastLabel = createText(I18n.get("angle.135"));
         southEastLabel.setRotation(new Matrix3().fromAngles(-MathUtils.QUARTER_PI, 0, Math.PI + MathUtils.QUARTER_PI));
         southEastLabel.setTranslation(radius * Math.cos(MathUtils.QUARTER_PI), radius * Math.sin(-MathUtils.QUARTER_PI), 0);
-        final BMText northWestLabel = createText("315\u00B0");
+        final BMText northWestLabel = createText(I18n.get("angle.315"));
         northWestLabel.setRotation(new Matrix3().fromAngles(-MathUtils.QUARTER_PI, 0, MathUtils.QUARTER_PI));
         northWestLabel.setTranslation(radius * Math.cos(MathUtils.QUARTER_PI + MathUtils.HALF_PI), radius * Math.sin(MathUtils.QUARTER_PI + MathUtils.HALF_PI), 0);
-        final BMText southWestLabel = createText("225\u00B0");
+        final BMText southWestLabel = createText(I18n.get("angle.225"));
         southWestLabel.setRotation(new Matrix3().fromAngles(-MathUtils.QUARTER_PI, 0, Math.PI - MathUtils.QUARTER_PI));
         southWestLabel.setTranslation(radius * Math.cos(MathUtils.QUARTER_PI + MathUtils.PI), radius * Math.sin(MathUtils.QUARTER_PI + MathUtils.PI), 0);
 

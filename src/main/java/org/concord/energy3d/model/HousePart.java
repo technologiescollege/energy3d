@@ -17,6 +17,7 @@ import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.shapes.SizeAnnotation;
 import org.concord.energy3d.simulation.SolarRadiation;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.ObjectCloner;
 import org.concord.energy3d.util.SelectUtil;
 import org.concord.energy3d.util.Util;
@@ -186,12 +187,12 @@ public abstract class HousePart implements Serializable {
         }
 
         root = new Node(toString());
-        pointsRoot = new Node("Edit Points");
-        sizeAnnotRoot = new Node("Size Annotations");
+        pointsRoot = new Node(I18n.get("node.edit_points"));
+        sizeAnnotRoot = new Node(I18n.get("node.size_annotations"));
         sizeAnnotRoot.getSceneHints().setAllPickingHints(false);
-        angleAnnotRoot = new Node("Angle Annotations");
+        angleAnnotRoot = new Node(I18n.get("node.angle_annotations"));
         angleAnnotRoot.getSceneHints().setAllPickingHints(false);
-        labelsRoot = new Node("Labels");
+        labelsRoot = new Node(I18n.get("node.labels"));
         labelsRoot.getSceneHints().setAllPickingHints(false);
 
         setAnnotationsVisible(Scene.getInstance().areAnnotationsVisible());
@@ -680,7 +681,7 @@ public abstract class HousePart implements Serializable {
             label.setText(text);
             label.getSceneHints().setCullHint(CullHint.Inherit);
         } else {
-            label = new BMText("Label Text", text, FontManager.getInstance().getPartNumberFont(), Align.Center, Justify.Center);
+            label = new BMText(I18n.get("label.text"), text, FontManager.getInstance().getPartNumberFont(), Align.Center, Justify.Center);
             Util.initHousePartLabel(label);
             labelsRoot.attachChild(label);
         }

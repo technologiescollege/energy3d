@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
+import org.concord.energy3d.util.I18n;
 
 public class SetFoundationLabelCommand extends MyAbstractUndoableEdit {
 
@@ -86,7 +87,7 @@ public class SetFoundationLabelCommand extends MyAbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        return "Change Label of Foundation";
+        return I18n.get("undo.change_label_foundation");
     }
 
 }

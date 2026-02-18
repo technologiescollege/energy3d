@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ChangeLatitudeCommand extends MyAbstractUndoableEdit {
@@ -38,7 +39,7 @@ public class ChangeLatitudeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Latitude";
+		return I18n.get("undo.change_latitude");
 	}
 
 }

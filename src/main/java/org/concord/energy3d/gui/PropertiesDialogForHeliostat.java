@@ -14,6 +14,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
 import org.concord.energy3d.model.Mirror;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 /**
@@ -23,10 +24,10 @@ class PropertiesDialogForHeliostat extends PropertiesDialogFactory {
 
     static JDialog getDialog(final Mirror mirror) {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Heliostat", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("part.heliostat"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         final String info = mirror.toString().substring(0, mirror.toString().indexOf(')') + 1);
-        dialog.setTitle("Properties - " + info);
+        dialog.setTitle(I18n.get("dialog.properties_part", info));
 
         dialog.getContentPane().setLayout(new BorderLayout());
         final JPanel panel = new JPanel(new SpringLayout());
@@ -38,14 +39,14 @@ class PropertiesDialogForHeliostat extends PropertiesDialogFactory {
 
         int i = 0;
 
-        panel.add(new JLabel("Size: "));
+        panel.add(new JLabel(I18n.get("label.size")));
         final JTextField sizeField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(mirror.getApertureWidth()) + "\u00D7" +
                 PopupMenuFactory.threeDecimalsFormat.format(mirror.getApertureHeight()) + " m");
         sizeField.setEditable(false);
         panel.add(sizeField);
         i++;
 
-        panel.add(new JLabel("Reflectance: "));
+        panel.add(new JLabel(I18n.get("label.mirror_reflectance")));
         final JTextField reflectanceField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(mirror.getReflectance() * 100) + "%");
         reflectanceField.setEditable(false);
         panel.add(reflectanceField);
@@ -56,7 +57,7 @@ class PropertiesDialogForHeliostat extends PropertiesDialogFactory {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

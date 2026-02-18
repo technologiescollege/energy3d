@@ -29,6 +29,8 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.model.Tree;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
+import org.concord.energy3d.undo.MyAbstractUndoableEdit;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 
@@ -266,14 +268,14 @@ public class BuildingCost extends ProjectCost {
         final PieChart pie = new PieChart(data, BuildingCostGraph.colors, BuildingCostGraph.legends, "$", info, count > 1 ? details.toString() : null, true);
         pie.setBackground(Color.WHITE);
         pie.setBorder(BorderFactory.createEtchedBorder());
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Project Costs by Category", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.project_costs_by_category"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.getContentPane().add(pie, BorderLayout.CENTER);
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        final JButton buttonItemize = new JButton("Itemize");
+        final JButton buttonItemize = new JButton(I18n.get("common.itemize"));
         buttonItemize.addActionListener(e -> showItemizedCost());
         buttonPanel.add(buttonItemize);
-        final JButton buttonClose = new JButton("Close");
+        final JButton buttonClose = new JButton(I18n.get("common.close"));
         buttonClose.addActionListener(e -> dialog.dispose());
         buttonPanel.add(buttonClose);
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -286,7 +288,7 @@ public class BuildingCost extends ProjectCost {
     @SuppressWarnings("serial")
     public void showItemizedCost() {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Itemized Construction Cost", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.itemized_construction_cost"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         final JPanel contentPane = new JPanel(new BorderLayout());
         dialog.setContentPane(contentPane);
@@ -301,7 +303,7 @@ public class BuildingCost extends ProjectCost {
             foundation = (Foundation) selectedPart;
         }
 
-        final String[] header = new String[]{"ID", "Type", "Cost"};
+        final String[] header = new String[]{I18n.get("table.id"), I18n.get("table.type"), I18n.get("table.cost")};
         final int m = header.length;
         final List<HousePart> parts = Scene.getInstance().getParts();
         int n = 0;
@@ -327,12 +329,7 @@ public class BuildingCost extends ProjectCost {
             }
             if (p == foundation || p.getTopContainer() == foundation) {
                 column[i][0] = p.getId();
-                String partName = p.toString().substring(0, p.toString().indexOf(')') + 1);
-                final int beg = partName.indexOf("(");
-                if (beg != -1) {
-                    partName = partName.substring(0, beg);
-                }
-                column[i][1] = partName;
+                column[i][1] = MyAbstractUndoableEdit.getPartDisplayName(p.getClass());
                 column[i][2] = "$" + getPartCost(p);
                 i++;
             }
@@ -350,7 +347,7 @@ public class BuildingCost extends ProjectCost {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> {
             windowLocation.setLocation(dialog.getLocationOnScreen());
             dialog.dispose();

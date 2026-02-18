@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.ParabolicTrough;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.Vector3;
 
@@ -45,7 +46,7 @@ public class EditParabolicTroughCommand extends EditPartCommand {
 
 	@Override
 	public String getPresentationName() {
-		return "Edit Parabolic Trough";
+		return I18n.get("undo.edit_parabolic_trough");
 	}
 
 }

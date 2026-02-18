@@ -6,6 +6,7 @@ import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.*;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -36,15 +37,15 @@ public class RackAzimuthChanger {
         final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
         final Rack rack = (Rack) selectedPart;
         final Foundation foundation = rack.getTopContainer();
-        final String title = "<html>Azimuth Angle of " + partInfo + " (&deg;)</html>";
-        final String footnote = "<html><hr><font size=2>The azimuth angle is measured clockwise from the true north.<hr></html>";
+        final String title = "<html>" + I18n.get("title.azimuth_angle_of", partInfo) + " (&deg;)</html>";
+        final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.azimuth_angle") + "<hr></html>";
         final JPanel gui = new JPanel(new BorderLayout());
         final JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-        final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-        final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-        final JRadioButton rb3 = new JRadioButton("All Racks");
+        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
         panel.add(rb1);
         panel.add(rb2);
         panel.add(rb3);
@@ -71,9 +72,9 @@ public class RackAzimuthChanger {
         final JTextField inputField = new JTextField(a + "");
         gui.add(inputField, BorderLayout.SOUTH);
 
-        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
         final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Azimuth Angle");
+        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.azimuth_angle"));
 
         while (true) {
             inputField.selectAll();
@@ -87,7 +88,7 @@ public class RackAzimuthChanger {
                 try {
                     a = Double.parseDouble(inputField.getText()) - foundation.getAzimuth();
                 } catch (final NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                     ok = false;
                 }
                 if (ok) {

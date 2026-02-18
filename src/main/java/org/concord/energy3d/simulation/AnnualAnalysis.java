@@ -23,6 +23,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -33,11 +34,11 @@ abstract class AnnualAnalysis extends Analysis {
 
     JMenu createOptionsMenu(final JDialog dialog, final List<HousePart> selectedParts, final boolean selectAll, final boolean exportStoredResults) {
 
-        final JMenuItem miClear = new JMenuItem("Clear Previous Results in Graph");
-        final JMenuItem miView = new JMenuItem("View Raw Data...");
-        final JMenuItem miExportStoredResults = new JMenuItem("Export Stored Hourly Results");
+        final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear_previous_results"));
+        final JMenuItem miView = new JMenuItem(I18n.get("menu.view_raw_data"));
+        final JMenuItem miExportStoredResults = new JMenuItem(I18n.get("menu.export_stored_hourly_results"));
 
-        final JMenu menu = new JMenu("Options");
+        final JMenu menu = new JMenu(I18n.get("menu.options"));
         menu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(final MenuEvent e) {
@@ -56,7 +57,7 @@ abstract class AnnualAnalysis extends Analysis {
         });
 
         if (!(this instanceof EnergyAnnualAnalysis)) {
-            final JMenuItem miFinance = new JMenuItem("Financial Settings...");
+            final JMenuItem miFinance = new JMenuItem(I18n.get("menu.financial_settings"));
             miFinance.addActionListener(e -> {
                 FinancialSettingsDialog fsd = new FinancialSettingsDialog();
                 switch (Scene.getInstance().getProjectType()) {
@@ -78,11 +79,11 @@ abstract class AnnualAnalysis extends Analysis {
             menu.addSeparator();
         }
 
-        final JMenu chartMenu = new JMenu("Chart");
+        final JMenu chartMenu = new JMenu(I18n.get("menu.chart"));
         final ButtonGroup chartGroup = new ButtonGroup();
         menu.add(chartMenu);
 
-        final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem("Bar");
+        final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem(I18n.get("menu.bar"));
         miBar.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.BAR_CHART);
@@ -93,7 +94,7 @@ abstract class AnnualAnalysis extends Analysis {
         chartGroup.add(miBar);
         miBar.setSelected(graph.getGraphType() == Graph.BAR_CHART);
 
-        final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem("Line");
+        final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem(I18n.get("menu.line"));
         miLine.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.LINE_CHART);
@@ -104,7 +105,7 @@ abstract class AnnualAnalysis extends Analysis {
         chartGroup.add(miLine);
         miLine.setSelected(graph.getGraphType() == Graph.LINE_CHART);
 
-        final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem("Area");
+        final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem(I18n.get("menu.area"));
         miArea.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 graph.setGraphType(Graph.AREA_CHART);
@@ -116,8 +117,8 @@ abstract class AnnualAnalysis extends Analysis {
         miArea.setSelected(graph.getGraphType() == Graph.AREA_CHART);
 
         miClear.addActionListener(e -> {
-            final int i = JOptionPane.showConfirmDialog(dialog, "Are you sure that you want to clear all the previous results\nrelated to the selected object?",
-                    "Confirmation", JOptionPane.YES_NO_OPTION);
+            final int i = JOptionPane.showConfirmDialog(dialog, I18n.get("msg.confirm_clear_previous_results"),
+                    I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION);
             if (i != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -136,7 +137,7 @@ abstract class AnnualAnalysis extends Analysis {
         });
         menu.add(miView);
 
-        final JMenuItem miCopyImage = new JMenuItem("Copy Image");
+        final JMenuItem miCopyImage = new JMenuItem(I18n.get("menu.copy_image"));
         miCopyImage.addActionListener(e -> new ClipImage().copyImageToClipboard(graph));
         menu.add(miCopyImage);
 
@@ -155,7 +156,7 @@ abstract class AnnualAnalysis extends Analysis {
                     sum *= 365.0 / 12.0;
                     StringBuilder s = new StringBuilder();
                     for (int i = 0; i < solarResults.length; i++) {
-                        s.append("\"").append(AnnualGraph.THREE_LETTER_MONTH[i]).append("\": \"");
+                        s.append("\"").append(AnnualGraph.getThreeLetterMonth()[i]).append("\": \"");
                         for (int j = 0; j < solarResults[i].length; j++) {
                             s.append(EnergyPanel.FIVE_DECIMALS.format(solarResults[i][j]).replaceAll(",", "")).append(" ");
                         }
@@ -163,7 +164,7 @@ abstract class AnnualAnalysis extends Analysis {
                     }
                     s = new StringBuilder(s.substring(0, s.length() - 1));
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(s.toString()), null);
-                    JOptionPane.showMessageDialog(dialog, "A total of " + EnergyPanel.TWO_DECIMALS.format(sum) + " KWh was copied to the clipboard.", "Export", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, I18n.get("msg.total_kwh_copied", EnergyPanel.TWO_DECIMALS.format(sum)), I18n.get("menu.export"), JOptionPane.INFORMATION_MESSAGE);
                 }
             });
             menu.add(miExportStoredResults);
@@ -175,13 +176,13 @@ abstract class AnnualAnalysis extends Analysis {
 
     JMenu createRunsMenu() {
 
-        final JMenu menu = new JMenu("Runs");
+        final JMenu menu = new JMenu(I18n.get("menu.runs"));
         menu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(final MenuEvent e) {
                 menu.removeAll();
                 if (!AnnualGraph.records.isEmpty()) {
-                    JMenuItem mi = new JMenuItem("Show All");
+                    JMenuItem mi = new JMenuItem(I18n.get("menu.show_all"));
                     mi.addActionListener(e1 -> {
                         for (final Results r : AnnualGraph.records) {
                             graph.hideRun(r.getID(), false);
@@ -190,7 +191,7 @@ abstract class AnnualAnalysis extends Analysis {
                         TimeSeriesLogger.getInstance().logShowRun(graph.getClass().getSimpleName(), "All", true);
                     });
                     menu.add(mi);
-                    mi = new JMenuItem("Hide All");
+                    mi = new JMenuItem(I18n.get("menu.hide_all"));
                     mi.addActionListener(e1 -> {
                         for (final Results r : AnnualGraph.records) {
                             graph.hideRun(r.getID(), true);

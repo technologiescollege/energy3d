@@ -2,7 +2,7 @@
 <!DOCTYPE xml>
 <project name="Energy3D" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
 	<property name="app.name" value="Energy3D"/>
-	<property name="app.version" value="8.x"/>
+	<property name="app.version" value="8.8.0"/>
 	<property name="build.src.dir" value="src" />
 	<property name="build.classes.dir" value="classes" />
 	<property name="build.dist.dir" value="${basedir}${file.separator}dist" />
@@ -125,7 +125,12 @@
 				<include name="lib/**" />
 			</fileset>
 		</copy>
-		<echo message="Distribution : ${deploy.portable.dir} (app/ + ant exe pour Energy3D.exe)" />
+		<!-- Dossier locales/ à côté du JAR : modifiable par l'utilisateur, chargé à chaque lancement -->
+		<mkdir dir="${deploy.portable.dir}/app/locales" />
+		<copy todir="${deploy.portable.dir}/app/locales" flatten="true">
+			<fileset dir="src/main/resources/org/concord/energy3d/locales" includes="*.json" />
+		</copy>
+		<echo message="Distribution : ${deploy.portable.dir} (app/ + app/locales/ + ant exe pour Energy3D.exe)" />
 	</target>
 
 	<!-- Tout-en-un : exécutable Windows comme energy3D_win. Commande : ant deploy-win
@@ -166,17 +171,36 @@
 		<echo message="JRE copié de ${jre.source} vers ${deploy.portable.dir}/runtime/" />
 	</target>
 
-	<!-- Génère Energy3D.exe avec Launch4j (Windows). Nécessite Launch4j installé ; ant deploy est fait avant. -->
+	<!-- Génère Energy3D.exe avec Launch4j (Windows). Si le linker Launch4j échoue (bug .debug_macinfo MinGW), un .bat de secours est créé. -->
 	<target name="exe" depends="deploy">
 		<property name="deploy.portable.dir" value="${build.dist.dir}/Energy3D_portable" />
 		<copy file="package/windows/Energy3D.ico" todir="${deploy.portable.dir}" flatten="true" />
 		<copy file="package/windows/Energy3D-launch4j-portable.xml" tofile="${deploy.portable.dir}/Energy3D-launch4j.xml" />
 		<available file="${launch4j.exe}" property="launch4j.available" />
-		<fail message="Launch4j non trouvé à ${launch4j.exe}. Installez https://launch4j.sourceforge.net/ ou lancez ant avec -Dlaunch4j.exe=chemin/launch4jc.exe" unless="launch4j.available" />
-		<exec executable="${launch4j.exe}" failonerror="true" dir="${deploy.portable.dir}">
+		<exec executable="${launch4j.exe}" failonerror="false" resultproperty="launch4j.result" dir="${deploy.portable.dir}">
 			<arg value="Energy3D-launch4j.xml" />
 		</exec>
-		<echo message="Energy3D.exe créé dans ${deploy.portable.dir}/" />
+		<condition property="launch4j.ok">
+			<and><isset property="launch4j.available"/><equals arg1="${launch4j.result}" arg2="0"/></and>
+		</condition>
+		<antcall target="exe-success" />
+		<antcall target="exe-fallback" />
+	</target>
+	<target name="exe-success" if="launch4j.ok">
+		<echo message="Energy3D.exe créé dans ${build.dist.dir}/Energy3D_portable/" />
+	</target>
+	<target name="exe-fallback" unless="launch4j.ok">
+		<echo message="[ATTENTION] Launch4j n'a pas produit Energy3D.exe (linker MinGW : .debug_macinfo). Création du lanceur Lancer Energy3D.bat." />
+		<echo message="Lancez le bundle avec Lancer Energy3D.bat (JRE inclus dans runtime/)." />
+		<echo file="${deploy.portable.dir}/Lancer Energy3D.bat" append="false">@echo off
+cd /d "%~dp0"
+if not exist "runtime\bin\javaw.exe" (
+  echo Erreur: runtime\bin\javaw.exe introuvable. Lancez depuis dist\Energy3D_portable\.
+  pause
+  exit /b 1
+)
+start "" "runtime\bin\javaw.exe" -Xmx512m -Djava.library.path=app\lib\jogl\native\windows-64 -Dapp=true -jar "app\energy3d.jar"
+</echo>
 	</target>
 
 	<!-- Bundle portable qui fonctionne : Launch4j + JRE copié depuis JAVA_HOME (runtime/bin/java.exe). Pas de Java requis sur la machine. -->

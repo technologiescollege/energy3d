@@ -46,7 +46,7 @@ public class Updater {
                             if (!messageShown) {
                                 EventQueue.invokeLater(() -> {
                                     if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(MainFrame.getInstance(),
-                                            "A new update is available. Would you like to install updates and restart now?", "Update", JOptionPane.YES_NO_OPTION)) {
+                                            org.concord.energy3d.util.I18n.get("msg.update_available"), org.concord.energy3d.util.I18n.get("title.update"), JOptionPane.YES_NO_OPTION)) {
                                         restartRequested = true;
                                         MainFrame.getInstance().exit();
                                     } else {

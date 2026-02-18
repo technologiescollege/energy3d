@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeThicknessForAllWallsCommand extends MyAbstractUndoableEdit {
 
@@ -55,7 +56,7 @@ public class ChangeThicknessForAllWallsCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Thickness for All Walls";
+		return I18n.get("undo.change_thickness_all_walls");
 	}
 
 }

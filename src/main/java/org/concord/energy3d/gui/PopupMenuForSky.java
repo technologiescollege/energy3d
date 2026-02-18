@@ -11,6 +11,7 @@ import org.concord.energy3d.undo.ChangeEnvironmentCommand;
 import org.concord.energy3d.util.Config;
 import org.concord.energy3d.util.SpringUtilities;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -28,17 +29,17 @@ class PopupMenuForSky extends PopupMenuFactory {
 
         if (popupMenuForSky == null) {
 
-            final JMenuItem miInfo = new JMenuItem("Sky");
+            final JMenuItem miInfo = new JMenuItem(I18n.get("menu.sky"));
             miInfo.setEnabled(false);
             miInfo.setOpaque(true);
             miInfo.setBackground(Config.isMac() ? Color.DARK_GRAY : Color.GRAY);
             miInfo.setForeground(Color.WHITE);
 
-            final JCheckBoxMenuItem miHeliodon = new JCheckBoxMenuItem("Heliodon");
+            final JCheckBoxMenuItem miHeliodon = new JCheckBoxMenuItem(I18n.get("menu.heliodon"));
             miHeliodon.addItemListener(e -> MainPanel.getInstance().getHeliodonButton().doClick());
 
-            final JMenu weatherMenu = new JMenu("Weather");
-            JMenuItem mi = new JMenuItem("Monthly Sunshine Hours...");
+            final JMenu weatherMenu = new JMenu(I18n.get("menu.weather"));
+            JMenuItem mi = new JMenuItem(I18n.get("menu.monthly_sunshine_hours"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new MonthlySunshineHours().showDialog();
@@ -46,7 +47,7 @@ class PopupMenuForSky extends PopupMenuFactory {
             });
             weatherMenu.add(mi);
 
-            mi = new JMenuItem("Annual Environmental Temperature...");
+            mi = new JMenuItem(I18n.get("menu.annual_environmental_temperature"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new AnnualEnvironmentalTemperature().showDialog();
@@ -54,7 +55,7 @@ class PopupMenuForSky extends PopupMenuFactory {
             });
             weatherMenu.add(mi);
 
-            mi = new JMenuItem("Daily Environmental Temperature...");
+            mi = new JMenuItem(I18n.get("menu.daily_environmental_temperature"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new DailyEnvironmentalTemperature().showDialog();
@@ -62,10 +63,10 @@ class PopupMenuForSky extends PopupMenuFactory {
             });
             weatherMenu.add(mi);
 
-            final JMenu environmentMenu = new JMenu("Environment");
+            final JMenu environmentMenu = new JMenu(I18n.get("menu.environment"));
             final ButtonGroup environmentButtonGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem miDefault = new JRadioButtonMenuItem("Default");
+            final JRadioButtonMenuItem miDefault = new JRadioButtonMenuItem(I18n.get("environment.default"));
             miDefault.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -80,7 +81,7 @@ class PopupMenuForSky extends PopupMenuFactory {
             environmentButtonGroup.add(miDefault);
             environmentMenu.add(miDefault);
 
-            final JRadioButtonMenuItem miDesert = new JRadioButtonMenuItem("Desert");
+            final JRadioButtonMenuItem miDesert = new JRadioButtonMenuItem(I18n.get("environment.desert"));
             miDesert.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -95,7 +96,7 @@ class PopupMenuForSky extends PopupMenuFactory {
             environmentButtonGroup.add(miDesert);
             environmentMenu.add(miDesert);
 
-            final JRadioButtonMenuItem miGrassland = new JRadioButtonMenuItem("Grassland");
+            final JRadioButtonMenuItem miGrassland = new JRadioButtonMenuItem(I18n.get("environment.grassland"));
             miGrassland.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -110,7 +111,7 @@ class PopupMenuForSky extends PopupMenuFactory {
             environmentButtonGroup.add(miGrassland);
             environmentMenu.add(miGrassland);
 
-            final JRadioButtonMenuItem miForest = new JRadioButtonMenuItem("Forest");
+            final JRadioButtonMenuItem miForest = new JRadioButtonMenuItem(I18n.get("environment.forest"));
             miForest.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -144,17 +145,17 @@ class PopupMenuForSky extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miDustLoss = new JMenuItem("Dust & Pollen...");
+            final JMenuItem miDustLoss = new JMenuItem(I18n.get("menu.dust_pollen"));
             miDustLoss.addActionListener(e -> {
                 final JPanel gui = new JPanel(new BorderLayout());
-                final String title = "<html><b>Soiling loss factor:</b><br>Loss of productivity due to atmospheric dust and pollen<br>(a dimensionless parameter within [0, 1])</html>";
+                final String title = "<html>" + I18n.get("title.soiling_loss_factor") + "</html>";
                 gui.add(new JLabel(title), BorderLayout.NORTH);
                 final JPanel inputPanel = new JPanel(new SpringLayout());
                 inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                 gui.add(inputPanel, BorderLayout.CENTER);
                 final JTextField[] fields = new JTextField[12];
                 for (int i = 0; i < 12; i++) {
-                    final JLabel l = new JLabel(AnnualGraph.THREE_LETTER_MONTH[i] + ": ", JLabel.LEFT);
+                    final JLabel l = new JLabel(AnnualGraph.getThreeLetterMonth()[i] + ": ", JLabel.LEFT);
                     inputPanel.add(l);
                     fields[i] = new JTextField(threeDecimalsFormat.format(Scene.getInstance().getAtmosphere().getDustLoss(i)), 5);
                     l.setLabelFor(fields[i]);
@@ -162,7 +163,7 @@ class PopupMenuForSky extends PopupMenuFactory {
                 }
                 SpringUtilities.makeCompactGrid(inputPanel, 12, 2, 6, 6, 6, 6);
                 while (true) {
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, "Dust and pollen loss", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, I18n.get("dialog.dust_pollen_loss"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
                         break;
                     }
                     boolean pass = true;
@@ -171,11 +172,11 @@ class PopupMenuForSky extends PopupMenuFactory {
                         try {
                             val[i] = Double.parseDouble(fields[i].getText());
                             if (val[i] < 0 || val[i] > 1) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Dust and pollen loss value must be in 0-1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.dust_pollen_loss_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 pass = false;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), fields[i].getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", fields[i].getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             pass = false;
                         }
                     }

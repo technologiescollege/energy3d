@@ -14,6 +14,7 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 /**
  * Chromosome of an individual is encoded as follows:
@@ -49,7 +50,7 @@ public class SolarPanelTiltAngleOptimizer extends SolarOutputOptimizer {
                     individual.setGene(i, v);
                 }
             }
-            setGeneName(i, "Tilt Angle (" + r.getId() + ")");
+            setGeneName(i, org.concord.energy3d.util.I18n.get("param.tilt_angle_with_id", String.valueOf(r.getId())));
             setGeneMinimum(i, -90);
             setGeneMaximum(i, 90);
             setInitialGene(i, r.getTiltAngle());
@@ -101,10 +102,10 @@ public class SolarPanelTiltAngleOptimizer extends SolarOutputOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Output: " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
+                s = I18n.get("label.daily_output") + ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Output: " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_output") + ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);
@@ -119,11 +120,11 @@ public class SolarPanelTiltAngleOptimizer extends SolarOutputOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Output\nCurrent: " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", Top: " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
+                s = I18n.get("label.daily_output") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", " + I18n.get("label.top") + ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Output\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0)
-                        + ", Top: " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_output") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0)
+                        + ", " + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);

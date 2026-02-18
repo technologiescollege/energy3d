@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
+import org.concord.energy3d.util.I18n;
 
 public class LockEditPointsOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -53,7 +54,7 @@ public class LockEditPointsOnFoundationCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Lock Edit Points of Class on Selected Foundation";
+		return I18n.get("undo.lock_edit_points_class_foundation");
 	}
 
 }

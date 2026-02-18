@@ -21,6 +21,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Thermostat;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -40,7 +41,8 @@ class ThermostatDialog extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         Calendar calendar = Heliodon.getInstance().getCalendar();
         int month = calendar.get(Calendar.MONTH);
-        setTitle("Thermostat Schedule: " + new DateFormatSymbols().getMonths()[month]);
+        final String monthName = new DateFormatSymbols(I18n.getLocale()).getMonths()[month];
+        setTitle(I18n.get("dialog.thermostat_schedule", monthName));
         getContentPane().setLayout(new BorderLayout());
 
         ThermostatView[] temperatureButtons = new ThermostatView[7];
@@ -87,14 +89,11 @@ class ThermostatDialog extends JDialog {
         hourPanel.setBackground(bgColor);
         hourPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
 
+        final String[] shortWeekdays = new DateFormatSymbols(I18n.getLocale()).getShortWeekdays();
         JLabel[] labels = new JLabel[7];
-        labels[0] = new JLabel("Sun");
-        labels[1] = new JLabel("Mon");
-        labels[2] = new JLabel("Tue");
-        labels[3] = new JLabel("Wed");
-        labels[4] = new JLabel("Thu");
-        labels[5] = new JLabel("Fri");
-        labels[6] = new JLabel("Sat");
+        for (int i = 0; i < 7; i++) {
+            labels[i] = new JLabel(shortWeekdays[i + 1]);
+        }
         for (JLabel jLabel : labels) {
             jLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
             jLabel.setMinimumSize(new Dimension(40, 30));
@@ -148,12 +147,12 @@ class ThermostatDialog extends JDialog {
         final JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(actionPanel, BorderLayout.WEST);
 
-        actionPanel.add(new JLabel("  Drag a number up or down to raise or lower temperature"));
+        actionPanel.add(new JLabel("  " + I18n.get("msg.thermostat_drag")));
 
         final JPanel okPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(okPanel, BorderLayout.EAST);
 
-        final JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
             EnergyPanel.getInstance().updateThermostat();
             Scene.getInstance().setEdited(true);
@@ -163,7 +162,7 @@ class ThermostatDialog extends JDialog {
         okPanel.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> {
             EnergyPanel.getInstance().updateThermostat();
             ThermostatDialog.this.dispose();

@@ -14,6 +14,7 @@ import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.simulation.DesignSpecs;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -43,8 +44,8 @@ public class BuildingInfoPanel extends JPanel {
         // area for the selected building
 
         areaPanel = new JPanel(new BorderLayout());
-        areaPanel.setBorder(EnergyPanel.createTitledBorder("Area (\u33A1)", true));
-        areaPanel.setToolTipText("<html>The area of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        areaPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.area_m2"), true));
+        areaPanel.setToolTipText("<html>" + I18n.get("tooltip.building_area") + "</html>");
         container.add(areaPanel);
         areaBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         areaBar.setUnit("");
@@ -58,8 +59,8 @@ public class BuildingInfoPanel extends JPanel {
         // height for the selected building
 
         heightPanel = new JPanel(new BorderLayout());
-        heightPanel.setBorder(EnergyPanel.createTitledBorder("Height (m)", true));
-        heightPanel.setToolTipText("<html>The height of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        heightPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.height_m"), true));
+        heightPanel.setToolTipText("<html>" + I18n.get("tooltip.building_height") + "</html>");
         container.add(heightPanel);
         heightBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         heightBar.setUnit("");
@@ -73,8 +74,8 @@ public class BuildingInfoPanel extends JPanel {
         // window-to-floor area ratio for the selected building
 
         windowToFloorPanel = new JPanel(new BorderLayout());
-        windowToFloorPanel.setBorder(EnergyPanel.createTitledBorder("Window/floor area ratio", true));
-        windowToFloorPanel.setToolTipText("<html>The window to floor area ratio of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        windowToFloorPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.window_floor_ratio"), true));
+        windowToFloorPanel.setToolTipText("<html>" + I18n.get("tooltip.window_to_floor_ratio") + "</html>");
         container.add(windowToFloorPanel);
         windowToFloorBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         windowToFloorBar.setUnit("");
@@ -88,8 +89,8 @@ public class BuildingInfoPanel extends JPanel {
         // window count for the selected building
 
         windowCountPanel = new JPanel(new BorderLayout());
-        windowCountPanel.setBorder(EnergyPanel.createTitledBorder("Number of windows", true));
-        windowCountPanel.setToolTipText("<html>The number of windows of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        windowCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_windows"), true));
+        windowCountPanel.setToolTipText("<html>" + I18n.get("tooltip.window_count") + "</html>");
         container.add(windowCountPanel);
         windowCountBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         windowCountBar.setUnit("");
@@ -103,8 +104,8 @@ public class BuildingInfoPanel extends JPanel {
         // wall count for the selected building
 
         wallCountPanel = new JPanel(new BorderLayout());
-        wallCountPanel.setBorder(EnergyPanel.createTitledBorder("Number of walls", true));
-        wallCountPanel.setToolTipText("<html>The number of walls of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        wallCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_walls"), true));
+        wallCountPanel.setToolTipText("<html>" + I18n.get("tooltip.wall_count") + "</html>");
         container.add(wallCountPanel);
         wallCountBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         wallCountBar.setUnit("");
@@ -118,8 +119,8 @@ public class BuildingInfoPanel extends JPanel {
         // solar panel count for the selected building
 
         solarPanelCountPanel = new JPanel(new BorderLayout());
-        solarPanelCountPanel.setBorder(EnergyPanel.createTitledBorder("Number of solar panels", true));
-        solarPanelCountPanel.setToolTipText("<html>The number of solar panels of the selected building<br><b>Must be within the specified range (if any).</b></html>");
+        solarPanelCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_solar_panels"), true));
+        solarPanelCountPanel.setToolTipText("<html>" + I18n.get("tooltip.solar_panel_count") + "</html>");
         container.add(solarPanelCountPanel);
         solarPanelCountBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         solarPanelCountBar.setUnit("");
@@ -130,6 +131,16 @@ public class BuildingInfoPanel extends JPanel {
         solarPanelCountBar.setPreferredSize(new Dimension(100, 16));
         solarPanelCountPanel.add(solarPanelCountBar, BorderLayout.CENTER);
 
+    }
+
+    /** Updates border titles after locale change. */
+    public void refreshLabelsAfterLocaleChange() {
+        areaPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.area_m2"), true));
+        heightPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.height_m"), true));
+        windowToFloorPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.window_floor_ratio"), true));
+        windowCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_windows"), true));
+        wallCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_walls"), true));
+        solarPanelCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_solar_panels"), true));
     }
 
     void update(final Foundation foundation) {
@@ -170,23 +181,26 @@ public class BuildingInfoPanel extends JPanel {
             return;
         }
         final double r = 3.28084 * 3.28084;
-        String t = "Area (";
+        String t;
         switch (Scene.getInstance().getUnit()) {
             case InternationalSystemOfUnits:
+                t = I18n.get("info.area_m2");
                 if (specs.isAreaEnabled()) {
-                    t += twoDecimals.format(specs.getMinimumArea()) + " - " + twoDecimals.format(specs.getMaximumArea()) + " ";
+                    t += I18n.get("info.range_prefix") + twoDecimals.format(specs.getMinimumArea()) + I18n.get("info.range_separator") + twoDecimals.format(specs.getMaximumArea()) + I18n.get("info.range_suffix");
                 }
-                t += "m\u00B2)";
                 areaBar.setMinimum(specs.getMinimumArea());
                 areaBar.setMaximum(specs.getMaximumArea());
                 break;
             case USCustomaryUnits:
+                t = I18n.get("info.area_ft2");
                 if (specs.isAreaEnabled()) {
-                    t += noDecimals.format(specs.getMinimumArea() * r) + " - " + noDecimals.format(specs.getMaximumArea() * r) + " ";
+                    t += I18n.get("info.range_prefix") + noDecimals.format(specs.getMinimumArea() * r) + I18n.get("info.range_separator") + noDecimals.format(specs.getMaximumArea() * r) + I18n.get("info.range_suffix");
                 }
-                t += "ft\u00B2)";
                 areaBar.setMinimum(specs.getMinimumArea() * r);
                 areaBar.setMaximum(specs.getMaximumArea() * r);
+                break;
+            default:
+                t = I18n.get("info.area_m2");
                 break;
         }
         areaPanel.setBorder(EnergyPanel.createTitledBorder(t, true));
@@ -200,23 +214,26 @@ public class BuildingInfoPanel extends JPanel {
             return;
         }
         final double r = 3.28084;
-        String t = "Height (";
+        String t;
         switch (Scene.getInstance().getUnit()) {
             case InternationalSystemOfUnits:
+                t = I18n.get("info.height_m");
                 if (specs.isHeightEnabled()) {
-                    t += twoDecimals.format(specs.getMinimumHeight()) + " - " + twoDecimals.format(specs.getMaximumHeight()) + " ";
+                    t += I18n.get("info.range_prefix") + twoDecimals.format(specs.getMinimumHeight()) + I18n.get("info.range_separator") + twoDecimals.format(specs.getMaximumHeight()) + I18n.get("info.range_suffix");
                 }
-                t += "m)";
                 heightBar.setMinimum(specs.getMinimumHeight());
                 heightBar.setMaximum(specs.getMaximumHeight());
                 break;
             case USCustomaryUnits:
+                t = I18n.get("info.height_ft");
                 if (specs.isHeightEnabled()) {
-                    t += noDecimals.format(specs.getMinimumHeight() * r) + " - " + noDecimals.format(specs.getMaximumHeight() * r) + " ";
+                    t += I18n.get("info.range_prefix") + noDecimals.format(specs.getMinimumHeight() * r) + I18n.get("info.range_separator") + noDecimals.format(specs.getMaximumHeight() * r) + I18n.get("info.range_suffix");
                 }
-                t += "ft)";
                 heightBar.setMinimum(specs.getMinimumHeight() * r);
                 heightBar.setMaximum(specs.getMaximumHeight() * r);
+                break;
+            default:
+                t = I18n.get("info.height_m");
                 break;
         }
         heightPanel.setBorder(EnergyPanel.createTitledBorder(t, true));
@@ -229,9 +246,9 @@ public class BuildingInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Window/floor area ratio";
+        String t = I18n.get("info.window_floor_ratio");
         if (specs.isWindowToFloorRatioEnabled()) {
-            t += " (" + twoDecimals.format(specs.getMinimumWindowToFloorRatio()) + " - " + twoDecimals.format(specs.getMaximumWindowToFloorRatio()) + ")";
+            t += I18n.get("info.range_prefix") + twoDecimals.format(specs.getMinimumWindowToFloorRatio()) + I18n.get("info.range_separator") + twoDecimals.format(specs.getMaximumWindowToFloorRatio()) + I18n.get("info.range_suffix");
         }
         windowToFloorBar.setMinimum(specs.getMinimumWindowToFloorRatio());
         windowToFloorBar.setMaximum(specs.getMaximumWindowToFloorRatio());
@@ -245,9 +262,9 @@ public class BuildingInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Number of solar panels";
+        String t = I18n.get("info.num_solar_panels");
         if (specs.isNumberOfSolarPanelsEnabled()) {
-            t += " (" + specs.getMinimumNumberOfSolarPanels() + " - " + specs.getMaximumNumberOfSolarPanels() + ")";
+            t += I18n.get("info.range_prefix") + specs.getMinimumNumberOfSolarPanels() + I18n.get("info.range_separator") + specs.getMaximumNumberOfSolarPanels() + I18n.get("info.range_suffix");
         }
         solarPanelCountBar.setMinimum(specs.getMinimumNumberOfSolarPanels());
         solarPanelCountBar.setMaximum(specs.getMaximumNumberOfSolarPanels());
@@ -261,12 +278,12 @@ public class BuildingInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Number of windows";
+        String t = I18n.get("info.num_windows");
         if (specs.isNumberOfWindowsEnabled()) {
             if (specs.getMinimumNumberOfWindows() == 0) {
-                t += " (<" + specs.getMaximumNumberOfWindows() + ")";
+                t += I18n.get("info.range_less_than") + specs.getMaximumNumberOfWindows() + I18n.get("info.range_suffix");
             } else {
-                t += " (" + specs.getMinimumNumberOfWindows() + " - " + specs.getMaximumNumberOfWindows() + ")";
+                t += I18n.get("info.range_prefix") + specs.getMinimumNumberOfWindows() + I18n.get("info.range_separator") + specs.getMaximumNumberOfWindows() + I18n.get("info.range_suffix");
             }
         }
         windowCountBar.setMinimum(specs.getMinimumNumberOfWindows());
@@ -281,9 +298,9 @@ public class BuildingInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Number of walls";
+        String t = I18n.get("info.num_walls");
         if (specs.isNumberOfWallsEnabled()) {
-            t += " (" + specs.getMinimumNumberOfWalls() + " - " + specs.getMaximumNumberOfWalls() + ")";
+            t += I18n.get("info.range_prefix") + specs.getMinimumNumberOfWalls() + I18n.get("info.range_separator") + specs.getMaximumNumberOfWalls() + I18n.get("info.range_suffix");
         }
         wallCountBar.setMinimum(specs.getMinimumNumberOfWalls());
         wallCountBar.setMaximum(specs.getMaximumNumberOfWalls());

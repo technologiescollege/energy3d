@@ -8,6 +8,7 @@ import org.concord.energy3d.simulation.EnergyAnnualAnalysis;
 import org.concord.energy3d.simulation.EnergyDailyAnalysis;
 import org.concord.energy3d.undo.*;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ class PopupMenuForWall extends PopupMenuFactory {
 
         if (popupMenuForWall == null) {
 
-            final JMenuItem miPaste = new JMenuItem("Paste");
+            final JMenuItem miPaste = new JMenuItem(I18n.get("menu.paste"));
             miPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miPaste.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
@@ -35,7 +36,7 @@ class PopupMenuForWall extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miClear = new JMenuItem("Clear");
+            final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear"));
             miClear.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
                     Scene.getInstance().removeAllChildren(SceneManager.getInstance().getSelectedPart());
@@ -45,7 +46,7 @@ class PopupMenuForWall extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miDeleteAllConnectedWalls = new JMenuItem("Delete All Connected Walls");
+            final JMenuItem miDeleteAllConnectedWalls = new JMenuItem(I18n.get("menu.delete_all_connected_walls"));
             miDeleteAllConnectedWalls.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Wall) {
@@ -56,7 +57,7 @@ class PopupMenuForWall extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miThickness = new JMenuItem("Thickness...");
+            final JMenuItem miThickness = new JMenuItem(I18n.get("menu.thickness"));
             miThickness.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -69,16 +70,16 @@ class PopupMenuForWall extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Wall w = (Wall) selectedPart;
-                    final String title = "<html>Thickness of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Thickness of wall is in meters.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.thickness_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("msg.wall_thickness_footnote") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Wall", true);
-                    final JRadioButton rb2 = new JRadioButton("All Walls on This Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Walls");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_wall"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_walls_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_walls"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -100,9 +101,9 @@ class PopupMenuForWall extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(w.getThickness() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Wall Thickness");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.wall_thickness"));
 
                     while (true) {
                         inputField.selectAll();
@@ -117,12 +118,12 @@ class PopupMenuForWall extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0.1 || val > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The thickness of a wall must be between 0.1 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.wall_thickness_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     val /= Scene.getInstance().getScale();
                                     Wall.setDefaultThickess(val);
@@ -192,7 +193,7 @@ class PopupMenuForWall extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miHeight = new JMenuItem("Height...");
+            final JMenuItem miHeight = new JMenuItem(I18n.get("menu.height"));
             miHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -207,17 +208,17 @@ class PopupMenuForWall extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Wall w = (Wall) selectedPart;
-                    final String title = "<html>Height of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Height of wall is in meters.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.height_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("msg.wall_height_footnote") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Wall", true);
-                    final JRadioButton rb2 = new JRadioButton("All Walls Connected to This One (Direct and Indirect)");
-                    final JRadioButton rb3 = new JRadioButton("All Walls on This Foundation");
-                    final JRadioButton rb4 = new JRadioButton("All Walls");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_wall"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_walls_connected"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_walls_on_foundation"));
+                    final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_walls"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -244,9 +245,9 @@ class PopupMenuForWall extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(w.getHeight() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Wall Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.wall_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -260,12 +261,12 @@ class PopupMenuForWall extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 1 || val > 1000) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The height of a wall must be between 1 and 1000 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.wall_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     val /= Scene.getInstance().getScale();
                                     changed = Math.abs(val - w.getHeight()) > 0.000001;
@@ -369,7 +370,7 @@ class PopupMenuForWall extends PopupMenuFactory {
                 }
             });
 
-            final JCheckBoxMenuItem miOutline = new JCheckBoxMenuItem("Outline...", true);
+            final JCheckBoxMenuItem miOutline = new JCheckBoxMenuItem(I18n.get("menu.outline"), true);
             miOutline.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -382,17 +383,17 @@ class PopupMenuForWall extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Wall w = (Wall) selectedPart;
-                    final String title = "<html>Outline of " + partInfo + "</html>";
-                    final String footnote = "<html>Hiding outline may create a continuous effect of a polygon<br>formed by many walls.</html>";
+                    final String title = "<html>" + I18n.get("title.outline_of", partInfo) + "</html>";
+                    final String footnote = "<html>" + I18n.get("msg.wall_outline_footnote") + "</html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Wall", true);
-                    final JRadioButton rb2 = new JRadioButton("All Walls Connected to This One (Direct and Indirect)");
-                    final JRadioButton rb3 = new JRadioButton("All Walls on This Foundation");
-                    final JRadioButton rb4 = new JRadioButton("All Walls");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_wall"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_walls_connected"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_walls_on_foundation"));
+                    final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_walls"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -417,9 +418,9 @@ class PopupMenuForWall extends PopupMenuFactory {
                             break;
                     }
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Wall Outline");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.wall_outline"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -494,7 +495,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             popupMenuForWall.add(createVolumetricHeatCapacityMenuItem());
             popupMenuForWall.addSeparator();
 
-            final JMenu textureMenu = new JMenu("Texture");
+            final JMenu textureMenu = new JMenu(I18n.get("menu.texture"));
             popupMenuForWall.add(textureMenu);
             final ButtonGroup textureButtonGroup = new ButtonGroup();
             final JRadioButtonMenuItem rbmiTextureNone = createTextureMenuItem(Wall.TEXTURE_NONE, null);
@@ -580,12 +581,12 @@ class PopupMenuForWall extends PopupMenuFactory {
 
             });
 
-            final JMenu typeMenu = new JMenu("Type");
+            final JMenu typeMenu = new JMenu(I18n.get("menu.type"));
             popupMenuForWall.add(typeMenu);
             popupMenuForWall.addSeparator();
             final ButtonGroup typeGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem rbmiSolidWall = new JRadioButtonMenuItem("Solid Wall");
+            final JRadioButtonMenuItem rbmiSolidWall = new JRadioButtonMenuItem(I18n.get("wall.type.solid"));
             rbmiSolidWall.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -605,7 +606,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiSolidWall);
             typeGroup.add(rbmiSolidWall);
 
-            final JRadioButtonMenuItem rbmiEmpty = new JRadioButtonMenuItem("Empty");
+            final JRadioButtonMenuItem rbmiEmpty = new JRadioButtonMenuItem(I18n.get("wall.type.empty"));
             rbmiEmpty.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -625,7 +626,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiEmpty);
             typeGroup.add(rbmiEmpty);
 
-            final JRadioButtonMenuItem rbmiEdges = new JRadioButtonMenuItem("Vertical Edges");
+            final JRadioButtonMenuItem rbmiEdges = new JRadioButtonMenuItem(I18n.get("wall.type.vertical_edges"));
             rbmiEdges.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -645,7 +646,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiEdges);
             typeGroup.add(rbmiEdges);
 
-            final JRadioButtonMenuItem rbmiColumns = new JRadioButtonMenuItem("Columns");
+            final JRadioButtonMenuItem rbmiColumns = new JRadioButtonMenuItem(I18n.get("wall.type.columns"));
             rbmiColumns.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -665,7 +666,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiColumns);
             typeGroup.add(rbmiColumns);
 
-            final JRadioButtonMenuItem rbmiRails = new JRadioButtonMenuItem("Rails");
+            final JRadioButtonMenuItem rbmiRails = new JRadioButtonMenuItem(I18n.get("wall.type.rails"));
             rbmiRails.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -685,7 +686,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiRails);
             typeGroup.add(rbmiRails);
 
-            final JRadioButtonMenuItem rbmiColumnsAndRailings = new JRadioButtonMenuItem("Columns & Railings");
+            final JRadioButtonMenuItem rbmiColumnsAndRailings = new JRadioButtonMenuItem(I18n.get("wall.type.columns_railings"));
             rbmiColumnsAndRailings.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -705,7 +706,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiColumnsAndRailings);
             typeGroup.add(rbmiColumnsAndRailings);
 
-            final JRadioButtonMenuItem rbmiFence = new JRadioButtonMenuItem("Fence");
+            final JRadioButtonMenuItem rbmiFence = new JRadioButtonMenuItem(I18n.get("wall.type.fence"));
             rbmiFence.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -725,7 +726,7 @@ class PopupMenuForWall extends PopupMenuFactory {
             typeMenu.add(rbmiFence);
             typeGroup.add(rbmiFence);
 
-            final JRadioButtonMenuItem rbmiSteelFrame = new JRadioButtonMenuItem("Steel Frame");
+            final JRadioButtonMenuItem rbmiSteelFrame = new JRadioButtonMenuItem(I18n.get("wall.type.steel_frame"));
             rbmiSteelFrame.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -790,24 +791,24 @@ class PopupMenuForWall extends PopupMenuFactory {
 
             });
 
-            JMenuItem mi = new JMenuItem("Daily Energy Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Wall) {
-                    new EnergyDailyAnalysis().show("Daily Energy for Wall");
+                    new EnergyDailyAnalysis().show(I18n.get("title.daily_energy_for_wall"));
                 }
             });
             popupMenuForWall.add(mi);
 
-            mi = new JMenuItem("Annual Energy Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Wall) {
-                    new EnergyAnnualAnalysis().show("Annual Energy for Wall");
+                    new EnergyAnnualAnalysis().show(I18n.get("title.annual_energy_for_wall"));
                 }
             });
             popupMenuForWall.add(mi);
@@ -822,12 +823,12 @@ class PopupMenuForWall extends PopupMenuFactory {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
-            m = new JRadioButtonMenuItem("No Texture");
+            m = new JRadioButtonMenuItem(I18n.get("wall.texture.no_texture"));
         } else if (type == HousePart.TEXTURE_EDGE) {
-            m = new JRadioButtonMenuItem("Edge Texture");
+            m = new JRadioButtonMenuItem(I18n.get("wall.texture.edge_texture"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText("Texture #" + type);
+            m.setText(I18n.get("wall.texture.number", type));
         }
 
         m.addItemListener(new ItemListener() {
@@ -847,10 +848,10 @@ class PopupMenuForWall extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Wall", true);
-                    final JRadioButton rb2 = new JRadioButton("All Walls on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Walls");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_wall"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_walls_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_walls"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -871,9 +872,9 @@ class PopupMenuForWall extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set Texture for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Wall Texture");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_texture_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.wall_texture"));
 
                     while (true) {
                         dialog.setVisible(true);

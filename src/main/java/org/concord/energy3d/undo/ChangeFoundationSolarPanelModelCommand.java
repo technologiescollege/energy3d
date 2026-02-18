@@ -9,6 +9,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.PvModuleSpecs;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationSolarPanelModelCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class ChangeFoundationSolarPanelModelCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Change Model for All Solar Panels on Selected Foundation";
+		return I18n.get("undo.change_model_all_solar_panels_selected_foundation");
 	}
 
 }

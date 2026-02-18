@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.gui.MainPanel;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ShowHeliodonCommand extends MyAbstractUndoableEdit {
@@ -37,7 +38,7 @@ public class ShowHeliodonCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Heliodon";
+		return I18n.get("undo.show_heliodon");
 	}
 
 }

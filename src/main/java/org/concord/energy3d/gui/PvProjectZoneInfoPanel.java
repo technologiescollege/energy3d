@@ -17,6 +17,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.simulation.PvFinancialModel;
 import org.concord.energy3d.simulation.PvDesignSpecs;
 import org.concord.energy3d.simulation.PvProjectCost;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -42,7 +43,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         // solar panel count on the selected zone
 
         countPanel = new JPanel(new BorderLayout());
-        countPanel.setBorder(EnergyPanel.createTitledBorder("Number of solar panels", true));
+        countPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_solar_panels"), true));
         container.add(countPanel);
         countBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         countBar.setUnit("");
@@ -56,7 +57,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         // average area of a solar panel on the selected zone
 
         landAreaPanel = new JPanel(new BorderLayout());
-        landAreaPanel.setBorder(EnergyPanel.createTitledBorder("<html>Average land area occupied by a panel (m<sup>2</sup>)</html>", true));
+        landAreaPanel.setBorder(EnergyPanel.createTitledBorder("<html>" + I18n.get("label.average_land_area_per_panel") + "</html>", true));
         container.add(landAreaPanel);
         landAreaBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         landAreaBar.setUnit("");
@@ -70,7 +71,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         // total solar panel area on the selected zone
 
         panelAreaPanel = new JPanel(new BorderLayout());
-        panelAreaPanel.setBorder(EnergyPanel.createTitledBorder("<html>Total surface area of panels (m<sup>2</sup>)</html>", true));
+        panelAreaPanel.setBorder(EnergyPanel.createTitledBorder("<html>" + I18n.get("label.total_panel_surface_area") + "</html>", true));
         container.add(panelAreaPanel);
         panelAreaBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         panelAreaBar.setUnit("");
@@ -84,7 +85,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         // solar panel cost on the selected zone
 
         costPanel = new JPanel(new BorderLayout());
-        costPanel.setBorder(EnergyPanel.createTitledBorder("Total cost", true));
+        costPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.total_cost"), true));
         container.add(costPanel);
         costBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         costBar.setUnit("$");
@@ -146,7 +147,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         costBar.setValue(Math.round(PvProjectCost.getInstance().getCostByFoundation(foundation)));
         costBar.setMaximum(specs.getMaximumBudget());
         costBar.setEnabled(specs.isBudgetEnabled());
-        String t = "Total cost over " + model.getLifespan() + " years";
+        String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
         if (specs.isBudgetEnabled()) {
             t += " (" + "<$" + specs.getMaximumBudget() + ")";
         }
@@ -164,7 +165,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Total cost over " + model.getLifespan() + " years";
+        String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
         if (specs.isBudgetEnabled()) {
             t += " (" + "<$" + specs.getMaximumBudget() + ")";
         }
@@ -179,7 +180,7 @@ public class PvProjectZoneInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Number of solar panels";
+        String t = I18n.get("info.num_solar_panels");
         if (specs.isNumberOfSolarPanelsEnabled()) {
             t += " (" + "<" + specs.getMaximumNumberOfSolarPanels() + ")";
         }

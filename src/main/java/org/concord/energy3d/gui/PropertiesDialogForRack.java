@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.simulation.PvModuleSpecs;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 /**
@@ -27,10 +28,10 @@ class PropertiesDialogForRack extends PropertiesDialogFactory {
 
         final SolarPanel solarPanel = rack.getSolarPanel();
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Solar Panel", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         final String info = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
-        dialog.setTitle("Properties - " + info);
+        dialog.setTitle(I18n.get("dialog.properties_part", info));
 
         dialog.getContentPane().setLayout(new BorderLayout());
         final JPanel panel = new JPanel(new SpringLayout());
@@ -44,106 +45,106 @@ class PropertiesDialogForRack extends PropertiesDialogFactory {
 
         int i = 0;
 
-        panel.add(new JLabel("Solar Panel Manufacturer: "));
+        panel.add(new JLabel(I18n.get("label.solar_panel_manufacturer")));
         final JTextField brandField = new JTextField(specs.getBrand());
         brandField.setEditable(false);
         panel.add(brandField);
         i++;
 
-        panel.add(new JLabel("Solar Panel Model: "));
+        panel.add(new JLabel(I18n.get("label.solar_panel_model")));
         final JTextField modelField = new JTextField(specs.getModel());
         modelField.setEditable(false);
         panel.add(modelField);
         i++;
 
-        panel.add(new JLabel("Solar Panels: "));
+        panel.add(new JLabel(I18n.get("part.solar_panels") + ": "));
         final int[] nxny = rack.getSolarPanelRowAndColumnNumbers();
         final JTextField layoutField = new JTextField(nxny[0] + "\u00D7" + nxny[1] + " = " + rack.getNumberOfSolarPanels());
         layoutField.setEditable(false);
         panel.add(layoutField);
         i++;
 
-        panel.add(new JLabel("Solar Panel Color: "));
+        panel.add(new JLabel(I18n.get("label.solar_panel_color")));
         final JTextField colorField = new JTextField(specs.getColor());
         colorField.setEditable(false);
         panel.add(colorField);
         i++;
 
-        panel.add(new JLabel("Solar Cell Type: "));
+        panel.add(new JLabel(I18n.get("label.solar_cell_type")));
         final JTextField cellTypeField = new JTextField(specs.getCellType());
         cellTypeField.setEditable(false);
         panel.add(cellTypeField);
         i++;
 
-        panel.add(new JLabel("Solar Cell Efficiency: "));
+        panel.add(new JLabel(I18n.get("label.solar_cell_efficiency")));
         final JTextField cellEfficiencyField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getCelLEfficiency() * 100) + "%");
         cellEfficiencyField.setEditable(false);
         panel.add(cellEfficiencyField);
         i++;
 
-        panel.add(new JLabel("Solar Panel Dimension: "));
+        panel.add(new JLabel(I18n.get("label.solar_panel_dimension")));
         final JTextField dimensionField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getLength()) + "\u00D7" +
                 PopupMenuFactory.threeDecimalsFormat.format(specs.getWidth()) + "\u00D7" + PopupMenuFactory.threeDecimalsFormat.format(specs.getThickness()) + " m");
         dimensionField.setEditable(false);
         panel.add(dimensionField);
         i++;
 
-        panel.add(new JLabel("Solar Cells on Each Panel: "));
+        panel.add(new JLabel(I18n.get("label.solar_cells_on_each_panel")));
         final JTextField cellsField = new JTextField(specs.getLayout().width + "\u00D7" + specs.getLayout().height);
         cellsField.setEditable(false);
         panel.add(cellsField);
         i++;
 
-        panel.add(new JLabel("Solar Panel Maximal Power (Pmax): "));
+        panel.add(new JLabel(I18n.get("label.solar_panel_maximal_power")));
         final JTextField pmaxField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getPmax()) + " W");
         pmaxField.setEditable(false);
         panel.add(pmaxField);
         i++;
 
-        panel.add(new JLabel("Voltage at Maximal Power Point (Vmpp): "));
+        panel.add(new JLabel(I18n.get("label.voltage_at_maximal_power_point")));
         final JTextField vmppField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getVmpp()) + " V");
         vmppField.setEditable(false);
         panel.add(vmppField);
         i++;
 
-        panel.add(new JLabel("Current at Maximal Power Point (Impp): "));
+        panel.add(new JLabel(I18n.get("label.current_at_maximal_power_point")));
         final JTextField imppField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getImpp()) + " A");
         imppField.setEditable(false);
         panel.add(imppField);
         i++;
 
-        panel.add(new JLabel("Voltage at Open Circuit (Voc): "));
+        panel.add(new JLabel(I18n.get("label.voltage_at_open_circuit")));
         final JTextField vocField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getVoc()) + " V");
         vocField.setEditable(false);
         panel.add(vocField);
         i++;
 
-        panel.add(new JLabel("Current at Short Circuit (Isc): "));
+        panel.add(new JLabel(I18n.get("label.current_at_short_circuit")));
         final JTextField iscField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getIsc()) + " A");
         iscField.setEditable(false);
         panel.add(iscField);
         i++;
 
-        panel.add(new JLabel("Nominal Operating Cell Temperature (NOCT): "));
+        panel.add(new JLabel(I18n.get("label.nominal_operating_cell_temperature")));
         final JTextField noctField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getNoct()) + " \u00B0C");
         noctField.setEditable(false);
         panel.add(noctField);
         i++;
 
-        panel.add(new JLabel("Temperature Coefficient of Power: "));
+        panel.add(new JLabel(I18n.get("label.temperature_coefficient_of_power")));
         final JTextField pmaxTcField = new JTextField(PopupMenuFactory.sixDecimalsFormat.format(specs.getPmaxTc()) + "%/\u00B0C");
         pmaxTcField.setEditable(false);
         panel.add(pmaxTcField);
         i++;
 
-        panel.add(new JLabel("Single Solar Panel Weight: "));
+        panel.add(new JLabel(I18n.get("label.single_solar_panel_weight")));
         final JTextField weightField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(specs.getWeight()) + " kg");
         weightField.setEditable(false);
         panel.add(weightField);
         i++;
 
-        panel.add(new JLabel("Tracker: "));
-        final JTextField trackerField = new JTextField(rack.getTrackerName() == null ? "None" : rack.getTrackerName());
+        panel.add(new JLabel(I18n.get("label.tracker") + ": "));
+        final JTextField trackerField = new JTextField(rack.getTrackerName() == null ? I18n.get("common.none") : rack.getTrackerName());
         trackerField.setEditable(false);
         panel.add(trackerField);
         i++;
@@ -153,7 +154,7 @@ class PropertiesDialogForRack extends PropertiesDialogFactory {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

@@ -18,6 +18,7 @@ import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.PvModuleSpecs;
 import org.concord.energy3d.undo.AddArrayCommand;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -624,7 +625,7 @@ public class Rack extends HousePart implements Trackable, Meshable, Labelable {
             }
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.TWO_DECIMALS.format(solarPotentialToday) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.TWO_DECIMALS.format(solarPotentialToday) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -640,23 +641,23 @@ public class Rack extends HousePart implements Trackable, Meshable, Labelable {
         String name = null;
         switch (trackerType) {
             case HORIZONTAL_SINGLE_AXIS_TRACKER:
-                name = "HSAT";
+                name = I18n.get("tracker.hsat");
                 break;
             case TILTED_SINGLE_AXIS_TRACKER:
-                name = "TSAT";
+                name = I18n.get("tracker.tsat");
                 break;
             case VERTICAL_SINGLE_AXIS_TRACKER:
-                name = "VSAT";
+                name = I18n.get("tracker.vsat");
                 break;
             case ALTAZIMUTH_DUAL_AXIS_TRACKER:
-                name = "AADAT";
+                name = I18n.get("tracker.aadat");
                 break;
         }
         return name;
     }
 
     private void addPole(final Vector3 position, final double poleHeight, final double baseZ) {
-        final MyCylinder pole = new MyCylinder("Pole Cylinder", 10, 10, 10, 0);
+        final MyCylinder pole = new MyCylinder(I18n.get("node.pole_cylinder"), 10, 10, 10, 0);
         pole.setRadius(0.6);
         pole.setRenderState(offsetState);
         pole.setHeight(poleHeight - 0.5 * pole.getRadius()); // slightly shorter so that the pole won't penetrate the surface of the rack
@@ -855,7 +856,7 @@ public class Rack extends HousePart implements Trackable, Meshable, Labelable {
         final double o = rack.checkCopyOverlap(inHeight);
         if (o >= 0) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "Sorry, your new rack is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE));
+                    I18n.get("msg.rack_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE));
             return false;
         }
         return true;
@@ -898,13 +899,13 @@ public class Rack extends HousePart implements Trackable, Meshable, Labelable {
         final boolean isOutside = !roof.insideWallsPolygon(rack.getAbsCenter());
         if (isOutside) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "Sorry, you are not allowed to paste a solar panel rack outside a roof.", "Error", JOptionPane.ERROR_MESSAGE));
+                    I18n.get("msg.rack_paste_outside_roof"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE));
             return false;
         }
         final double o = rack.copyOverlap(); // TODO
         if (o >= 0) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "Sorry, your new rack is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE));
+                    I18n.get("msg.rack_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE));
             return false;
         }
         return true;
@@ -926,13 +927,13 @@ public class Rack extends HousePart implements Trackable, Meshable, Labelable {
         final boolean isOutside = !floor.insideWallsPolygon(rack.getAbsCenter());
         if (isOutside) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "Sorry, you are not allowed to paste a solar panel rack outside a floor.", "Error", JOptionPane.ERROR_MESSAGE));
+                    I18n.get("msg.rack_paste_outside_floor"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE));
             return false;
         }
         final double o = rack.copyOverlap(); // TODO
         if (o >= 0) {
             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                    "Sorry, your new rack is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE));
+                    I18n.get("msg.rack_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE));
             return false;
         }
         return true;

@@ -56,6 +56,7 @@ import org.concord.energy3d.undo.SetShapeForAllParabolicTroughsCommand;
 import org.concord.energy3d.undo.SetShapeForParabolicTroughsOnFoundationCommand;
 import org.concord.energy3d.undo.ShowSunBeamCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 class PopupMenuForParabolicTrough extends PopupMenuFactory {
 
@@ -65,7 +66,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
 
         if (popupMenuForParabolicTrough == null) {
 
-            final JMenuItem miMesh = new JMenuItem("Mesh...");
+            final JMenuItem miMesh = new JMenuItem(I18n.get("menu.mesh"));
             miMesh.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -82,19 +83,19 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Parabolic cross-section: "));
+                    inputPanel.add(new JLabel(I18n.get("label.parabolic_cross_section")));
                     final JTextField nParabolaField = new JTextField("" + t.getNSectionParabola());
                     inputPanel.add(nParabolaField);
-                    inputPanel.add(new JLabel("Axial direction: "));
+                    inputPanel.add(new JLabel(I18n.get("label.axial_direction")));
                     final JTextField nAxisField = new JTextField("" + t.getNSectionAxis());
                     inputPanel.add(nAxisField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -115,9 +116,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set mesh for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Mesh");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_mesh_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_mesh"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -131,16 +132,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                                 nSectionParabola = Integer.parseInt(nParabolaField.getText());
                                 nSectionAxis = Integer.parseInt(nAxisField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (nSectionParabola < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic sections must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_sections_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (nSectionAxis < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Axis mesh must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.axis_mesh_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (!Util.isPowerOfTwo(nSectionParabola) || !Util.isPowerOfTwo(nSectionAxis)) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Number of parabolic trough mesh sections in x or y direction must be power of two.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_mesh_power_of_two"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     final int nSectionParabola2 = nSectionParabola;
                                     final int nSectionAxis2 = nSectionAxis;
@@ -183,7 +184,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem("Disable Edit Points");
+            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
             cbmiDisableEditPoints.addItemListener(new ItemListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -201,10 +202,10 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -224,11 +225,11 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             break;
                     }
 
-                    final String title = "<html>" + (disabled ? "Disable" : "Enable") + " edit points for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Disable the edit points of a parabolic trough prevents it<br>from being unintentionally moved.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel"};
+                    final String title = "<html>" + I18n.get(disabled ? "title.disable_edit_points" : "title.enable_edit_points", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.disable_edit_points_parabolic_trough") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), (disabled ? "Disable" : "Enable") + " Edit Points");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get(disabled ? "dialog.disable_edit_points" : "dialog.enable_edit_points"));
                     dialog.setVisible(true);
                     if (optionPane.getValue() == options[0]) {
                         if (rb1.isSelected()) {
@@ -264,7 +265,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiDrawSunBeams = new JCheckBoxMenuItem("Draw Sun Beams");
+            final JCheckBoxMenuItem cbmiDrawSunBeams = new JCheckBoxMenuItem(I18n.get("menu.draw_sun_beams"));
             cbmiDrawSunBeams.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof ParabolicTrough)) {
@@ -283,7 +284,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miTroughLength = new JMenuItem("Trough Length...");
+            final JMenuItem miTroughLength = new JMenuItem(I18n.get("menu.trough_length"));
             miTroughLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -300,16 +301,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Trough Length (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.trough_length_m")));
                     final JTextField lengthField = new JTextField(threeDecimalsFormat.format(t.getTroughLength()));
                     inputPanel.add(lengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -330,9 +331,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set assembly length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Assembly Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_assembly_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_assembly_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -345,12 +346,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 l = Double.parseDouble(lengthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (l < 1 || l > 1000) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough length must be between 1 and 1000 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(l - t.getTroughLength()) > 0.000001;
                                     final double l2 = l;
@@ -417,7 +418,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miApertureWidth = new JMenuItem("Aperture Width...");
+            final JMenuItem miApertureWidth = new JMenuItem(I18n.get("menu.aperture_width"));
             miApertureWidth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -434,16 +435,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Aperture Width (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.aperture_width_m")));
                     final JTextField widthField = new JTextField(threeDecimalsFormat.format(t.getApertureWidth()));
                     inputPanel.add(widthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -464,9 +465,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set aperture width for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Aperture Width");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_aperture_width_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_aperture_width"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -479,12 +480,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 w = Double.parseDouble(widthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (w < 1 || w > 20) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough aperture width must be between 1 and 20 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_aperture_width_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(w - t.getApertureWidth()) > 0.000001;
                                     final double w2 = w;
@@ -551,7 +552,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miModuleLength = new JMenuItem("Module Length...");
+            final JMenuItem miModuleLength = new JMenuItem(I18n.get("menu.module_length"));
             miModuleLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -568,16 +569,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Module Length (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.module_length_m")));
                     final JTextField moduleLengthField = new JTextField(threeDecimalsFormat.format(t.getModuleLength()));
                     inputPanel.add(moduleLengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -598,9 +599,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set module length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Module Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_module_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_module_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -613,12 +614,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 u = Double.parseDouble(moduleLengthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (u < 1 || u > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Solar collector module length must be between 1 and 100 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.module_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(u - t.getModuleLength()) > 0.000001;
                                     final double u2 = u;
@@ -685,7 +686,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miFocalLength = new JMenuItem("Focal Length...");
+            final JMenuItem miFocalLength = new JMenuItem(I18n.get("menu.focal_length"));
             miFocalLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -702,16 +703,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Focal Length (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.focal_length_m")));
                     final JTextField focalLengthField = new JTextField(threeDecimalsFormat.format(t.getSemilatusRectum() / 2));
                     inputPanel.add(focalLengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -732,9 +733,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set shape for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabola Shape");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_shape_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabola_shape"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -747,12 +748,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 f = Double.parseDouble(focalLengthField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (f < 0.5 || f > 5) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Focal length must be between 0.5 and 5 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.focal_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(2 * f - t.getSemilatusRectum()) > 0.000001;
                                     final double f2 = f;
@@ -818,7 +819,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleHeight = new JMenuItem("Pole Height...");
+            final JMenuItem miPoleHeight = new JMenuItem(I18n.get("menu.pole_height"));
             miPoleHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -838,10 +839,10 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -863,9 +864,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(t.getPoleHeight() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Pole Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_pole_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -880,12 +881,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText()) / Scene.getInstance().getScale();
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val * Scene.getInstance().getScale() > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height must be between 0 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val - t.getPoleHeight()) > 0.000001;
                                     final double poleHeight = val;
@@ -952,7 +953,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miAzimuth = new JMenuItem("Azimuth...");
+            final JMenuItem miAzimuth = new JMenuItem(I18n.get("menu.azimuth"));
             miAzimuth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -972,10 +973,10 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1001,9 +1002,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(a));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Azimuth");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_azimuth"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1018,7 +1019,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
@@ -1089,9 +1090,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
             miLabelNone.addActionListener(e -> {
                 if (miLabelNone.isSelected()) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -1111,7 +1112,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
             });
             labelMenu.add(miLabelNone);
 
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
             miLabelCustom.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicTrough) {
@@ -1119,7 +1120,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final SetParabolicTroughLabelCommand c = new SetParabolicTroughLabelCommand(t);
                     t.setLabelCustom(miLabelCustom.isSelected());
                     if (t.getLabelCustom()) {
-                        t.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", t.getLabelCustomText()));
+                        t.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), t.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         t.draw();
@@ -1132,7 +1133,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCustom);
 
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
             miLabelId.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicTrough) {
@@ -1150,7 +1151,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
             });
             labelMenu.add(miLabelId);
 
-            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem("Energy Output");
+            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem(I18n.get("label.energy_output"));
             miLabelEnergyOutput.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicTrough) {
@@ -1182,7 +1183,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 Util.selectSilently(cbmiDisableEditPoints, t.getLockEdit());
             });
 
-            final JMenuItem miReflectance = new JMenuItem("Mirror Reflectance...");
+            final JMenuItem miReflectance = new JMenuItem(I18n.get("menu.mirror_reflectance"));
             miReflectance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1195,16 +1196,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough t = (ParabolicTrough) selectedPart;
-                    final String title = "<html>Reflectance (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Reflectance can be affected by pollen and dust.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.reflectance_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.reflectance") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1226,9 +1227,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(t.getReflectance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Mirror Reflectance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_mirror_reflectance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1243,12 +1244,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 99) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough reflectance must be between 50% and 99%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_reflectance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - t.getReflectance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1303,7 +1304,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miAbsorptance = new JMenuItem("Receiver Absorptance...");
+            final JMenuItem miAbsorptance = new JMenuItem(I18n.get("menu.receiver_absorptance"));
             miAbsorptance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1316,16 +1317,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough t = (ParabolicTrough) selectedPart;
-                    final String title = "<html>Absorptance (%) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.absorptance_percent_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2><hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1347,9 +1348,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(t.getAbsorptance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Receiver Absorptance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_receiver_absorptance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1364,12 +1365,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 20 || val > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough absorptance must be between 20% and 100%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_absorptance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - t.getAbsorptance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1424,7 +1425,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miOpticalEfficiency = new JMenuItem("Optical Efficiency...");
+            final JMenuItem miOpticalEfficiency = new JMenuItem(I18n.get("menu.optical_efficiency"));
             miOpticalEfficiency.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1437,16 +1438,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough t = (ParabolicTrough) selectedPart;
-                    final String title = "<html>Opitical efficiency (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>For example, the percentage of the effective area for reflection after deducting<br>the area of facet gaps, module frames, absorber shadow, etc.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.optical_efficiency_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.optical_efficiency") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1468,9 +1469,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(t.getOpticalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Optical Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_optical_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1485,12 +1486,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough optical efficiency must be between 50% and 100%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_optical_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - t.getOpticalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1545,7 +1546,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miThermalEfficiency = new JMenuItem("Thermal Efficiency...");
+            final JMenuItem miThermalEfficiency = new JMenuItem(I18n.get("menu.thermal_efficiency"));
             miThermalEfficiency.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1558,16 +1559,16 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicTrough t = (ParabolicTrough) selectedPart;
-                    final String title = "<html>Thermal efficiency (%) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.thermal_efficiency_percent_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2><hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Trough", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Troughs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Troughs");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_trough"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_troughs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_troughs"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1589,9 +1590,9 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(t.getThermalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Trough Thermal Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_trough_thermal_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1606,12 +1607,12 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 5 || val > 80) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic trough thermal efficiency must be between 5% and 80%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_thermal_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - t.getThermalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1686,7 +1687,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
             popupMenuForParabolicTrough.add(miMesh);
             popupMenuForParabolicTrough.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Yield Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
@@ -1697,7 +1698,7 @@ class PopupMenuForParabolicTrough extends PopupMenuFactory {
             });
             popupMenuForParabolicTrough.add(mi);
 
-            mi = new JMenuItem("Annual Yield Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;

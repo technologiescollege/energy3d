@@ -57,6 +57,7 @@ import org.concord.energy3d.undo.SetSizeForAllFresnelReflectorsCommand;
 import org.concord.energy3d.undo.SetSizeForFresnelReflectorsOnFoundationCommand;
 import org.concord.energy3d.undo.ShowSunBeamCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 class PopupMenuForFresnelReflector extends PopupMenuFactory {
 
@@ -66,7 +67,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
 
         if (popupMenuForFresnelReflector == null) {
 
-            final JMenuItem miMesh = new JMenuItem("Mesh...");
+            final JMenuItem miMesh = new JMenuItem(I18n.get("menu.mesh"));
             miMesh.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -83,19 +84,19 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Length direction: "));
+                    inputPanel.add(new JLabel(I18n.get("label.length_direction")));
                     final JTextField nLengthField = new JTextField("" + r.getNSectionLength());
                     inputPanel.add(nLengthField);
-                    inputPanel.add(new JLabel("Width direction: "));
+                    inputPanel.add(new JLabel(I18n.get("label.width_direction")));
                     final JTextField nWidthField = new JTextField("" + r.getNSectionWidth());
                     inputPanel.add(nWidthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -116,9 +117,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set mesh for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Mesh");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_mesh_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_mesh"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -132,16 +133,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                                 nSectionLength = Integer.parseInt(nLengthField.getText());
                                 nSectionWidth = Integer.parseInt(nWidthField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (nSectionLength < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sections in the direction of length must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.length_sections_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (nSectionWidth < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sections in the direction of width must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.width_sections_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (!Util.isPowerOfTwo(nSectionLength) || !Util.isPowerOfTwo(nSectionWidth)) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Numbers of mesh sections must be power of two.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_mesh_power_of_two"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     if (rb1.isSelected()) {
                                         r.setNSectionLength(nSectionLength);
@@ -170,7 +171,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem("Disable Edit Points");
+            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
             cbmiDisableEditPoints.addItemListener(new ItemListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -188,10 +189,10 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -211,11 +212,11 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             break;
                     }
 
-                    final String title = "<html>" + (disabled ? "Disable" : "Enable") + " edit points for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Disable the edit points of a Fresnel reflector prevents it<br>from being unintentionally moved.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel"};
+                    final String title = "<html>" + I18n.get(disabled ? "title.disable_edit_points" : "title.enable_edit_points", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.disable_edit_points_fresnel") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), (disabled ? "Disable" : "Enable") + " Edit Points");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get(disabled ? "dialog.disable_edit_points" : "dialog.enable_edit_points"));
                     dialog.setVisible(true);
                     if (optionPane.getValue() == options[0]) {
                         if (rb1.isSelected()) {
@@ -242,7 +243,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiDrawBeam = new JCheckBoxMenuItem("Draw Sun Beam");
+            final JCheckBoxMenuItem cbmiDrawBeam = new JCheckBoxMenuItem(I18n.get("menu.draw_sun_beam"));
             cbmiDrawBeam.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof FresnelReflector)) {
@@ -261,7 +262,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miSetAbsorber = new JMenuItem("Set Absorber...");
+            final JMenuItem miSetAbsorber = new JMenuItem(I18n.get("menu.set_absorber"));
             miSetAbsorber.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -278,10 +279,10 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -306,7 +307,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     comboBox.addItemListener(event -> {
                         // TODO
                     });
-                    comboBox.addItem("None");
+                    comboBox.addItem(I18n.get("label.none"));
                     for (final Foundation x : foundations) {
                         if (!x.getChildren().isEmpty()) {
                             comboBox.addItem(x.getId() + "");
@@ -319,9 +320,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
 
                     final String title = "<html>Select the ID of the absorber<br>foundation for " + partInfo + "</html>";
                     final String footnote = "<html><hr><font size=2>The sunlight reflected by this Fresnel reflector will<br>focus on the top of the target, where the absorber<br>tube is located.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Absorber");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.absorber"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -336,7 +337,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                                 try {
                                     id = Integer.parseInt((String) comboBox.getSelectedItem());
                                 } catch (final NumberFormatException exception) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), comboBox.getSelectedItem() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", comboBox.getSelectedItem()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                     ok = false;
                                 }
                                 if (ok) {
@@ -344,7 +345,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                                     if (p instanceof Foundation) {
                                         absorber = (Foundation) p;
                                     } else {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "ID must be that of a foundation.", "ID Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.id_must_be_foundation"), I18n.get("msg.id_error"), JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                             }
@@ -421,7 +422,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miLength = new JMenuItem("Length...");
+            final JMenuItem miLength = new JMenuItem(I18n.get("menu.length"));
             miLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -438,16 +439,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Length: "));
+                    inputPanel.add(new JLabel(I18n.get("label.length")));
                     final JTextField lengthField = new JTextField(threeDecimalsFormat.format(r.getLength()));
                     inputPanel.add(lengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -468,9 +469,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -483,12 +484,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 length = Double.parseDouble(lengthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (length < 1 || length > 1000) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Length must be between 1 and 1000 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = length != r.getLength();
                                     final double length2 = length;
@@ -555,7 +556,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miModuleWidth = new JMenuItem("Module Width...");
+            final JMenuItem miModuleWidth = new JMenuItem(I18n.get("menu.module_width"));
             miModuleWidth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -572,16 +573,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Module Width: "));
+                    inputPanel.add(new JLabel(I18n.get("label.module_width")));
                     final JTextField moduleWidthField = new JTextField(threeDecimalsFormat.format(r.getModuleWidth()));
                     inputPanel.add(moduleWidthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -602,9 +603,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set module width for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Module Width");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_module_width_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_module_width"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -617,12 +618,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 moduleWidth = Double.parseDouble(moduleWidthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (moduleWidth < 0.1 || moduleWidth > 20) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Module width must be between 0.1 and 20 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_module_width_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = moduleWidth != r.getModuleWidth();
                                     final double moduleWidth2 = moduleWidth;
@@ -689,7 +690,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miModuleLength = new JMenuItem("Module Length...");
+            final JMenuItem miModuleLength = new JMenuItem(I18n.get("menu.module_length"));
             miModuleLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -706,16 +707,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Module Length: "));
+                    inputPanel.add(new JLabel(I18n.get("label.module_length")));
                     final JTextField moduleLengthField = new JTextField(threeDecimalsFormat.format(r.getModuleLength()));
                     inputPanel.add(moduleLengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -736,9 +737,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set module length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Module Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_module_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_module_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -751,12 +752,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 moduleLength = Double.parseDouble(moduleLengthField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (moduleLength < 1 || moduleLength > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Module length must be between 1 and 100 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.module_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = moduleLength != r.getModuleLength();
                                     final double moduleLength2 = moduleLength;
@@ -823,7 +824,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleHeight = new JMenuItem("Pole Height...");
+            final JMenuItem miPoleHeight = new JMenuItem(I18n.get("menu.pole_height"));
             miPoleHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -837,16 +838,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final FresnelReflector r = (FresnelReflector) selectedPart;
                     final Foundation foundation = r.getTopContainer();
-                    final String title = "<html>Pole Height (m) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.pole_height_m", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -868,9 +869,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(r.getPoleHeight() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Pole Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_pole_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -885,12 +886,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText()) / Scene.getInstance().getScale();
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val * Scene.getInstance().getScale() > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height must be between 0 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = val != r.getPoleHeight();
                                     final double height = val;
@@ -957,7 +958,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miAzimuth = new JMenuItem("Azimuth...");
+            final JMenuItem miAzimuth = new JMenuItem(I18n.get("menu.azimuth"));
             miAzimuth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -971,16 +972,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final FresnelReflector fresnel = (FresnelReflector) selectedPart;
                     final Foundation foundation = fresnel.getTopContainer();
-                    final String title = "<html>Azimuth Angle (&deg;) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The azimuth angle is measured clockwise from the true north.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.azimuth_angle_of", partInfo) + " (&deg;)</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.azimuth_angle") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1006,9 +1007,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(a));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Azimuth");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_azimuth"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1023,7 +1024,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
@@ -1094,9 +1095,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
             miLabelNone.addActionListener(e -> {
                 if (miLabelNone.isSelected()) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -1116,7 +1117,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
             });
             labelMenu.add(miLabelNone);
 
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
             miLabelCustom.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof FresnelReflector) {
@@ -1124,7 +1125,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final SetFresnelReflectorLabelCommand c = new SetFresnelReflectorLabelCommand(r);
                     r.setLabelCustom(miLabelCustom.isSelected());
                     if (r.getLabelCustom()) {
-                        r.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", r.getLabelCustomText()));
+                        r.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), r.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         r.draw();
@@ -1137,7 +1138,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCustom);
 
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
             miLabelId.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof FresnelReflector) {
@@ -1155,7 +1156,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
             });
             labelMenu.add(miLabelId);
 
-            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem("Energy Output");
+            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem(I18n.get("label.energy_output"));
             miLabelEnergyOutput.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof FresnelReflector) {
@@ -1187,7 +1188,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 Util.selectSilently(miLabelEnergyOutput, r.getLabelEnergyOutput());
             });
 
-            final JMenuItem miReflectance = new JMenuItem("Reflectance...");
+            final JMenuItem miReflectance = new JMenuItem(I18n.get("menu.reflectance"));
             miReflectance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1200,16 +1201,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final FresnelReflector r = (FresnelReflector) selectedPart;
-                    final String title = "<html>Reflectance (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Reflectance can be affected by pollen and dust.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.reflectance_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.reflectance") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1231,9 +1232,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(r.getReflectance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Fresnel Reflector Reflectance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.fresnel_reflector_reflectance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1248,12 +1249,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 99) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Fresnel reflector reflectance must be between 50% and 99%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_reflectance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - r.getReflectance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1308,7 +1309,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miApertureRatio = new JMenuItem("Aperture Ratio...");
+            final JMenuItem miApertureRatio = new JMenuItem(I18n.get("menu.aperture_ratio"));
             miApertureRatio.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1321,16 +1322,16 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final FresnelReflector r = (FresnelReflector) selectedPart;
-                    final String title = "<html>Aperture percentage of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The percentage of the effective area for reflection<br>after deducting the area of gaps, frames, etc.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.aperture_percentage_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.aperture_percentage") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflectors on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Fresnel Reflectors");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_reflector"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_fresnel_reflectors"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1352,9 +1353,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(r.getOpticalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Aperture Percentage of Fresnel Reflector Surface");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.aperture_percentage_fresnel"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1369,12 +1370,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 70 || val > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Fresnel reflector aperature percentage must be between 70% and 100%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_aperture_percentage_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - r.getOpticalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1429,7 +1430,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miConversionEfficiency = new JMenuItem("Absorber Conversion Efficiency...");
+            final JMenuItem miConversionEfficiency = new JMenuItem(I18n.get("menu.absorber_conversion_efficiency"));
             miConversionEfficiency.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1443,19 +1444,19 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final FresnelReflector r = (FresnelReflector) selectedPart;
                     final Foundation absorber = r.getReceiver();
                     if (absorber == null) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "This reflector does not link to an absorber.", "No Absorber", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.fresnel_no_absorber"), I18n.get("msg.no_absorber"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                    final String title = "<html>Light-electricity conversion efficiency (%) of " + partInfo + "'s absorber</html>";
+                    final String title = "<html>" + I18n.get("title.absorber_conversion_efficiency_percent", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2><hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Fresnel Reflector's Absorber", true);
-                    final JRadioButton rb2 = new JRadioButton("All Fresnel Reflector Absorbers");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_fresnel_absorber"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_fresnel_absorbers"));
                     panel.add(rb1);
                     panel.add(rb2);
                     final ButtonGroup bg = new ButtonGroup();
@@ -1472,9 +1473,9 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(absorber.getSolarReceiverEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Receiver Conversion Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.receiver_conversion_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1489,12 +1490,12 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 5 || val > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Light-electricity conversion efficiency must be between 5% and 50%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.receiver_conversion_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - absorber.getSolarReceiverEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1553,7 +1554,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
             popupMenuForFresnelReflector.add(miMesh);
             popupMenuForFresnelReflector.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Yield Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
@@ -1564,7 +1565,7 @@ class PopupMenuForFresnelReflector extends PopupMenuFactory {
             });
             popupMenuForFresnelReflector.add(mi);
 
-            mi = new JMenuItem("Annual Yield Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;

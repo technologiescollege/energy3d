@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
+import org.concord.energy3d.util.I18n;
 
 public class AdjustThermostatCommand extends MyAbstractUndoableEdit {
 
@@ -53,7 +54,7 @@ public class AdjustThermostatCommand extends MyAbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        return "Thermostat Adjustment";
+        return I18n.get("undo.thermostat_adjustment");
     }
 
 }

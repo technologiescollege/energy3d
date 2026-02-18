@@ -9,6 +9,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.EnergyAnnualAnalysis;
 import org.concord.energy3d.simulation.EnergyDailyAnalysis;
 import org.concord.energy3d.undo.*;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -27,8 +28,8 @@ class PopupMenuForWindow extends PopupMenuFactory {
 
         if (popupMenuForWindow == null) {
 
-            final JMenu muntinMenu = new JMenu("Muntins");
-            final JMenu shutterMenu = new JMenu("Shutters");
+            final JMenu muntinMenu = new JMenu(I18n.get("menu.muntins"));
+            final JMenu shutterMenu = new JMenu(I18n.get("menu.shutters"));
 
             popupMenuForWindow = createPopupMenu(true, true, () -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -37,7 +38,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
                 }
             });
 
-            final JCheckBoxMenuItem cbmiHorizontalBars = new JCheckBoxMenuItem("Horizontal Bars");
+            final JCheckBoxMenuItem cbmiHorizontalBars = new JCheckBoxMenuItem(I18n.get("menu.horizontal_bars"));
             cbmiHorizontalBars.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Window) {
@@ -53,7 +54,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
             });
             muntinMenu.add(cbmiHorizontalBars);
 
-            final JCheckBoxMenuItem cbmiVerticalBars = new JCheckBoxMenuItem("Vertical Bars");
+            final JCheckBoxMenuItem cbmiVerticalBars = new JCheckBoxMenuItem(I18n.get("menu.vertical_bars"));
             cbmiVerticalBars.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Window) {
@@ -72,7 +73,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
 
             final ButtonGroup muntinButtonGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem miMoreBars = new JRadioButtonMenuItem("More Bars");
+            final JRadioButtonMenuItem miMoreBars = new JRadioButtonMenuItem(I18n.get("menu.more_bars"));
             miMoreBars.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -91,7 +92,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
             muntinButtonGroup.add(miMoreBars);
             muntinMenu.add(miMoreBars);
 
-            final JRadioButtonMenuItem miMediumBars = new JRadioButtonMenuItem("Medium Bars");
+            final JRadioButtonMenuItem miMediumBars = new JRadioButtonMenuItem(I18n.get("menu.medium_bars"));
             miMediumBars.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -110,7 +111,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
             muntinButtonGroup.add(miMediumBars);
             muntinMenu.add(miMediumBars);
 
-            final JRadioButtonMenuItem miLessBars = new JRadioButtonMenuItem("Less Bars");
+            final JRadioButtonMenuItem miLessBars = new JRadioButtonMenuItem(I18n.get("menu.less_bars"));
             miLessBars.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -130,7 +131,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
             muntinMenu.add(miLessBars);
             muntinMenu.addSeparator();
 
-            final JMenuItem miMuntinColor = new JMenuItem("Color...");
+            final JMenuItem miMuntinColor = new JMenuItem(I18n.get("menu.color"));
             miMuntinColor.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -153,11 +154,11 @@ class PopupMenuForWindow extends PopupMenuFactory {
                         final ColorRGBA color12 = new ColorRGBA(newColor[0], newColor[1], newColor[2], 1);
                         final JPanel panel = new JPanel();
                         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                        final JRadioButton rb1 = new JRadioButton("Only this Window", true);
-                        final JRadioButton rb2 = new JRadioButton("All Windows on this " + (window.getContainer() instanceof Wall ? "Wall" : "Roof"));
-                        final JRadioButton rb3 = new JRadioButton("All Windows of this Building");
-                        final JRadioButton rb4 = new JRadioButton("All Windows");
+                        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window"), true);
+                        final JRadioButton rb2 = new JRadioButton(window.getContainer() instanceof Wall ? I18n.get("scope.all_windows_on_wall") : I18n.get("scope.all_windows_on_roof"));
+                        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_windows_of_building"));
+                        final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_windows"));
                         panel.add(rb1);
                         panel.add(rb2);
                         panel.add(rb3);
@@ -182,9 +183,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                                 break;
                         }
 
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Muntin Color");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.muntin_color"));
 
                         while (true) {
                             dialog.setVisible(true);
@@ -281,7 +282,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
                             }
                         }
                     };
-                    JColorChooser.createDialog(MainFrame.getInstance(), "Select Muntin Color", true, colorChooser, actionListener, null).setVisible(true);
+                    JColorChooser.createDialog(MainFrame.getInstance(), I18n.get("dialog.select_muntin_color"), true, colorChooser, actionListener, null).setVisible(true);
                 }
             });
             muntinMenu.add(miMuntinColor);
@@ -322,9 +323,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiBothShutters = new JCheckBoxMenuItem("Both Shutters");
-            final JCheckBoxMenuItem cbmiLeftShutter = new JCheckBoxMenuItem("Left Shutter");
-            final JCheckBoxMenuItem cbmiRightShutter = new JCheckBoxMenuItem("Right Shutter");
+            final JCheckBoxMenuItem cbmiBothShutters = new JCheckBoxMenuItem(I18n.get("menu.both_shutters"));
+            final JCheckBoxMenuItem cbmiLeftShutter = new JCheckBoxMenuItem(I18n.get("menu.left_shutter"));
+            final JCheckBoxMenuItem cbmiRightShutter = new JCheckBoxMenuItem(I18n.get("menu.right_shutter"));
 
             cbmiLeftShutter.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -376,7 +377,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
             shutterMenu.add(cbmiBothShutters);
             shutterMenu.addSeparator();
 
-            final JMenuItem miShutterColor = new JMenuItem("Color...");
+            final JMenuItem miShutterColor = new JMenuItem(I18n.get("menu.color"));
             miShutterColor.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -399,11 +400,11 @@ class PopupMenuForWindow extends PopupMenuFactory {
                         final ColorRGBA color13 = new ColorRGBA(newColor[0], newColor[1], newColor[2], 1);
                         final JPanel panel = new JPanel();
                         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                        final JRadioButton rb1 = new JRadioButton("Only this Window", true);
-                        final JRadioButton rb2 = new JRadioButton("All Windows on this " + (window.getContainer() instanceof Wall ? "Wall" : "Roof"));
-                        final JRadioButton rb3 = new JRadioButton("All Windows of this Building");
-                        final JRadioButton rb4 = new JRadioButton("All Windows");
+                        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window"), true);
+                        final JRadioButton rb2 = new JRadioButton(window.getContainer() instanceof Wall ? I18n.get("scope.all_windows_on_wall") : I18n.get("scope.all_windows_on_roof"));
+                        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_windows_of_building"));
+                        final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_windows"));
                         panel.add(rb1);
                         panel.add(rb2);
                         panel.add(rb3);
@@ -428,9 +429,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                                 break;
                         }
 
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Shutter Color");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.shutter_color"));
 
                         while (true) {
                             dialog.setVisible(true);
@@ -527,12 +528,12 @@ class PopupMenuForWindow extends PopupMenuFactory {
                             }
                         }
                     };
-                    JColorChooser.createDialog(MainFrame.getInstance(), "Select Shutter Color", true, colorChooser, actionListener, null).setVisible(true);
+                    JColorChooser.createDialog(MainFrame.getInstance(), I18n.get("dialog.select_shutter_color"), true, colorChooser, actionListener, null).setVisible(true);
                 }
             });
             shutterMenu.add(miShutterColor);
 
-            final JMenuItem miShutterLength = new JMenuItem("Relative Length...");
+            final JMenuItem miShutterLength = new JMenuItem(I18n.get("menu.relative_length"));
             miShutterLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -545,15 +546,15 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     }
                     final Window window = (Window) selectedPart;
                     final String partInfo = window.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                    final String title = "<html>Relative Length of Shutter for " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.relative_length_shutter", partInfo) + "</html>";
                     final String footnote = "<html><hr width=400></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Window Shutter", true);
-                    final JRadioButton rb2 = new JRadioButton("All Window Shutters on this Wall");
-                    final JRadioButton rb3 = new JRadioButton("All Window Shutters of this Building");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window_shutter"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_window_shutters_on_wall"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_window_shutters_of_building"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -576,9 +577,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(window.getShutterLength() + "");
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Shutter Length (Relative)");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.shutter_length_relative"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -593,12 +594,12 @@ class PopupMenuForWindow extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val <= 0 || val > 1) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Relative shutter length must be within (0, 1).", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.shutter_length_range"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val - window.getShutterLength()) > 0.000001;
                                     final double val2 = val;
@@ -698,7 +699,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
 
             });
 
-            final JMenuItem miShgc = new JMenuItem("Solar Heat Gain Coefficient...");
+            final JMenuItem miShgc = new JMenuItem(I18n.get("menu.solar_heat_gain_coefficient"));
             miShgc.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -711,15 +712,15 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Window window = (Window) selectedPart;
-                    final String title = "<html>Solar Heat Gain Coefficient of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Examples:<br><table><tr><td><font size=2>Single glass (clear)</td><td><font size=2>0.66</td></tr><tr><td><font size=2>Single glass (green tint)</td><td><font size=2>0.55</td></tr><tr><td><font size=2>Triple glass (air spaces)</td><td><font size=2>0.39</td></tr></table><hr></html>";
+                    final String title = "<html>" + I18n.get("title.solar_heat_gain_coefficient", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.shgc_examples") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Window", true);
-                    final JRadioButton rb2 = new JRadioButton("All Windows on this " + (selectedPart.getContainer() instanceof Wall ? "Wall" : "Roof"));
-                    final JRadioButton rb3 = new JRadioButton("All Windows of this Building");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window"), true);
+                    final JRadioButton rb2 = new JRadioButton(selectedPart.getContainer() instanceof Wall ? I18n.get("scope.all_windows_on_wall") : I18n.get("scope.all_windows_on_roof"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_windows_of_building"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -742,9 +743,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(window.getSolarHeatGainCoefficient() + "");
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Heat Gain Coefficient (SHGC)");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_heat_gain_coefficient"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -759,12 +760,12 @@ class PopupMenuForWindow extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val > 1) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Solar heat gain coefficient must be between 0 and 1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.shgc_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val - window.getSolarHeatGainCoefficient()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -830,7 +831,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miTint = new JMenuItem("Tint...");
+            final JMenuItem miTint = new JMenuItem(I18n.get("menu.tint"));
             miTint.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -853,10 +854,10 @@ class PopupMenuForWindow extends PopupMenuFactory {
                         final ColorRGBA color1 = new ColorRGBA(newColor[0], newColor[1], newColor[2], (float) (1.0 - window.getSolarHeatGainCoefficient()));
                         final JPanel panel = new JPanel();
                         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                        final JRadioButton rb1 = new JRadioButton("Only this Window", true);
-                        final JRadioButton rb2 = new JRadioButton("All Windows on this " + (window.getContainer() instanceof Wall ? "Wall" : "Roof"));
-                        final JRadioButton rb3 = new JRadioButton("All Windows of this Building");
+                        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window"), true);
+                        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_windows_on_container", window.getContainer() instanceof Wall ? I18n.get("label.wall") : I18n.get("label.roof")));
+                        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_windows_building"));
                         panel.add(rb1);
                         panel.add(rb2);
                         panel.add(rb3);
@@ -876,9 +877,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                                 break;
                         }
 
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Window Tint");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.window_tint"));
 
                         while (true) {
                             dialog.setVisible(true);
@@ -946,11 +947,11 @@ class PopupMenuForWindow extends PopupMenuFactory {
                             }
                         }
                     };
-                    JColorChooser.createDialog(MainFrame.getInstance(), "Select Tint", true, colorChooser, actionListener, null).setVisible(true);
+                    JColorChooser.createDialog(MainFrame.getInstance(), I18n.get("dialog.select_tint"), true, colorChooser, actionListener, null).setVisible(true);
                 }
             });
 
-            final JMenuItem miSize = new JMenuItem("Size...");
+            final JMenuItem miSize = new JMenuItem(I18n.get("menu.size"));
             miSize.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -968,19 +969,19 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Width (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.width_m")));
                     final JTextField widthField = new JTextField(threeDecimalsFormat.format(window.getWindowWidth()));
                     inputPanel.add(widthField);
-                    inputPanel.add(new JLabel("Height (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.height_m")));
                     final JTextField heightField = new JTextField(threeDecimalsFormat.format(window.getWindowHeight()));
                     inputPanel.add(heightField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Window", true);
-                    final JRadioButton rb2 = new JRadioButton("All Windows on this " + (window.getContainer() instanceof Wall ? "Wall" : "Roof"));
-                    final JRadioButton rb3 = new JRadioButton("All Windows of this Building");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_window"), true);
+                    final JRadioButton rb2 = new JRadioButton(window.getContainer() instanceof Wall ? I18n.get("scope.all_windows_on_wall") : I18n.get("scope.all_windows_on_roof"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_windows_of_building"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1001,9 +1002,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set Size for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Window Size");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_size_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.window_size"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1017,7 +1018,7 @@ class PopupMenuForWindow extends PopupMenuFactory {
                                 w = Double.parseDouble(widthField.getText());
                                 h = Double.parseDouble(heightField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
@@ -1030,9 +1031,9 @@ class PopupMenuForWindow extends PopupMenuFactory {
                                     hmax = ((Wall) container).getWallHeight() * 0.99;
                                 }
                                 if (w < 0.1 || w > wmax) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Width must be between 0.1 and " + (int) wmax + " m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.width_range", (int) wmax), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (h < 0.1 || h > hmax) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Height must be between 0.1 and " + (int) hmax + " m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.height_range", (int) hmax), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(w - window.getWindowWidth()) > 0.000001 || Math.abs(h - window.getWindowHeight()) > 0.000001;
                                     final double w2 = w;
@@ -1121,24 +1122,24 @@ class PopupMenuForWindow extends PopupMenuFactory {
             popupMenuForWindow.add(shutterMenu);
             popupMenuForWindow.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Energy Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Window) {
-                    new EnergyDailyAnalysis().show("Daily Energy for Window");
+                    new EnergyDailyAnalysis().show(I18n.get("title.daily_energy_for_window"));
                 }
             });
             popupMenuForWindow.add(mi);
 
-            mi = new JMenuItem("Annual Energy Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Window) {
-                    new EnergyAnnualAnalysis().show("Annual Energy for Window");
+                    new EnergyAnnualAnalysis().show(I18n.get("title.annual_energy_for_window"));
                 }
             });
             popupMenuForWindow.add(mi);

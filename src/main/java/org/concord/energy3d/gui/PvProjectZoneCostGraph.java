@@ -28,6 +28,7 @@ import org.concord.energy3d.simulation.PvDesignSpecs;
 import org.concord.energy3d.simulation.PvFinancialModel;
 import org.concord.energy3d.simulation.PvProjectCost;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -62,13 +63,13 @@ public class PvProjectZoneCostGraph extends JPanel {
         budgetPanel = new JPanel(new BorderLayout());
         budgetBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         budgetBar.setPreferredSize(new Dimension(100, 16));
-        budgetBar.setToolTipText("<html>The total project cost must not exceed the limit (if specified).</html>");
+        budgetBar.setToolTipText("<html>" + I18n.get("tooltip.project_cost_limit") + "</html>");
         budgetPanel.add(budgetBar, BorderLayout.CENTER);
 
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -97,7 +98,7 @@ public class PvProjectZoneCostGraph extends JPanel {
             }
 
         });
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(this));
         popupMenu.add(mi);
     }
@@ -143,7 +144,7 @@ public class PvProjectZoneCostGraph extends JPanel {
             final PvDesignSpecs pvSpecs = Scene.getInstance().getPvDesignSpecs();
             budgetBar.setEnabled(pvSpecs.isBudgetEnabled());
             budgetBar.setMaximum(pvSpecs.getMaximumBudget());
-            final String t = "Total (" + (pvSpecs.isBudgetEnabled() ? "\u2264 $" + noDecimal.format(pvSpecs.getMaximumBudget()) : "$") + ")";
+            final String t = I18n.get("cost.total") + " (" + (pvSpecs.isBudgetEnabled() ? "\u2264 $" + noDecimal.format(pvSpecs.getMaximumBudget()) : "$") + ")";
             budgetPanel.setBorder(EnergyPanel.createTitledBorder(t, true));
             budgetBar.setValue((float) totalCost);
             budgetBar.repaint();
@@ -163,10 +164,10 @@ public class PvProjectZoneCostGraph extends JPanel {
 
         final double[] data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, solarPanelCost};
         PvFinancialModel financialModel = Scene.getInstance().getPvFinancialModel();
-        final String years = "(" + financialModel.getLifespan() + " years)";
-        final String[] legends = new String[]{"Land Rental " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Solar Panels (One-Time)"};
+        final String years = "(" + financialModel.getLifespan() + " " + I18n.get("label.years") + ")";
+        final String[] legends = new String[]{I18n.get("cost.legend.land_rental") + " " + years, I18n.get("cost.legend.cleaning") + " " + years, I18n.get("cost.legend.maintenance") + " " + years, I18n.get("cost.legend.loan_interest") + " " + years, I18n.get("cost.legend.solar_panels_one_time")};
 
-        PieChart pie = new PieChart(data, colors, legends, "$", null, "Move mouse for more info", false);
+        PieChart pie = new PieChart(data, colors, legends, "$", null, I18n.get("chart.move_mouse_for_info"), false);
         pie.setBackground(Color.WHITE);
         pie.setPreferredSize(new Dimension(getWidth() - 5, getHeight() - budgetPanel.getHeight() - 5));
         pie.setBorder(BorderFactory.createEtchedBorder());

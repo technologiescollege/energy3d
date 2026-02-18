@@ -57,6 +57,7 @@ import org.concord.energy3d.undo.ChangePartUValueCommand;
 import org.concord.energy3d.undo.ChangeVolumetricHeatCapacityCommand;
 import org.concord.energy3d.util.BugReporter;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -168,7 +169,7 @@ public abstract class PopupMenuFactory {
     }
 
     static JMenuItem createInsulationMenuItem(final boolean useUValue) {
-        final JMenuItem mi = new JMenuItem("Insulation...");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.insulation") + "...");
         mi.addActionListener(new ActionListener() {
 
             private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -200,13 +201,13 @@ public abstract class PopupMenuFactory {
                 panel.add(Box.createVerticalStrut(15));
 
                 final String partName = selectedPart.getClass().getSimpleName();
-                final JRadioButton rb1 = new JRadioButton("Only this " + partName, true);
-                final JRadioButton rb2 = new JRadioButton("All " + partName + "s of this Building");
+                final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_part", partName), true);
+                final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parts_building", partName));
                 if (selectedPart instanceof Wall || selectedPart instanceof Window) {
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     final ButtonGroup bg = new ButtonGroup();
@@ -228,14 +229,14 @@ public abstract class PopupMenuFactory {
                 unitPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                 panel.add(unitPanel);
 
-                unitPanel.add(new JLabel("U-Value in SI Unit:"));
+                unitPanel.add(new JLabel(I18n.get("label.u_value_si_unit")));
                 final JTextField siField = new JTextField("" + t.getUValue(), 10);
                 unitPanel.add(siField);
                 unitPanel.add(new JLabel("<html>W/(m<sup>2</sup>&middot;&deg;C)</html>"));
 
                 if (useUValue) {
 
-                    unitPanel.add(new JLabel("U-Value in US Unit:"));
+                    unitPanel.add(new JLabel(I18n.get("label.u_value_us_unit")));
                     final JTextField uValueField = new JTextField(threeDecimalsFormat.format(Util.toUsUValue(t.getUValue())), 10);
                     uValueField.setAlignmentX(Component.LEFT_ALIGNMENT);
                     unitPanel.add(uValueField);
@@ -254,7 +255,7 @@ public abstract class PopupMenuFactory {
                             try {
                                 uValueField.setText(threeDecimalsFormat.format(Util.toUsUValue(Double.parseDouble(newValue))));
                             } catch (final Exception exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             }
                         }
 
@@ -286,7 +287,7 @@ public abstract class PopupMenuFactory {
                             try {
                                 siField.setText(threeDecimalsFormat.format(1.0 / (Util.toSiRValue(1.0 / Double.parseDouble(newValue)))));
                             } catch (final Exception exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             }
                         }
 
@@ -308,7 +309,7 @@ public abstract class PopupMenuFactory {
 
                 } else {
 
-                    unitPanel.add(new JLabel("R-Value in US Unit:"));
+                    unitPanel.add(new JLabel(I18n.get("label.r_value_us_unit")));
                     final JTextField rValueField = new JTextField(integerFormat.format(Util.toUsRValue(t.getUValue())), 10);
                     rValueField.setAlignmentX(Component.LEFT_ALIGNMENT);
                     unitPanel.add(rValueField);
@@ -327,7 +328,7 @@ public abstract class PopupMenuFactory {
                             try {
                                 rValueField.setText(integerFormat.format(Util.toUsRValue(Double.parseDouble(newValue))));
                             } catch (final Exception exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             }
                         }
 
@@ -359,7 +360,7 @@ public abstract class PopupMenuFactory {
                             try {
                                 siField.setText(threeDecimalsFormat.format(1.0 / Util.toSiRValue(Double.parseDouble(newValue))));
                             } catch (final Exception exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             }
                         }
 
@@ -382,12 +383,12 @@ public abstract class PopupMenuFactory {
                 }
 
                 while (true) {
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, "Input: " + partInfo, JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, I18n.get("dialog.input", partInfo), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                         final String newValue = siField.getText();
                         try {
                             final double val = Double.parseDouble(newValue);
                             if (val <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "U-value must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.uvalue_must_be_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 boolean changed = val != t.getUValue();
                                 if (rb1.isSelected()) {
@@ -420,7 +421,7 @@ public abstract class PopupMenuFactory {
                                 break;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         break;
@@ -434,7 +435,7 @@ public abstract class PopupMenuFactory {
     }
 
     static JMenuItem createVolumetricHeatCapacityMenuItem() {
-        final JMenuItem mi = new JMenuItem("Volumeric Heat Capacity...");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.volumetric_heat_capacity") + "...");
         mi.addActionListener(e -> {
             final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
             if (!(selectedPart instanceof Thermal)) {
@@ -442,17 +443,17 @@ public abstract class PopupMenuFactory {
             }
             final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
             final Thermal t = (Thermal) selectedPart;
-            final String title = "<html>Volumeric Heat Capacity of " + partInfo + " [kWh/(m<sup>3</sup>&middot;&deg;C)]<hr><font size=2>Examples:<br>0.03 (fiberglass), 0.18 (asphalt), 0.25(oak wood), 0.33 (concrete), 0.37 (brick), 0.58 (stone)</html>";
+            final String title = "<html>" + I18n.get("title.volumetric_heat_capacity_of", partInfo) + " [kWh/(m<sup>3</sup>&middot;&deg;C)]<hr><font size=2>" + I18n.get("footnote.volumetric_heat_capacity_examples") + "</html>";
             while (true) {
                 // final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), title, t.getVolumetricHeatCapacity());
-                final String newValue = (String) JOptionPane.showInputDialog(MainFrame.getInstance(), title, "Input: " + partInfo, JOptionPane.QUESTION_MESSAGE, null, null, t.getVolumetricHeatCapacity());
+                final String newValue = (String) JOptionPane.showInputDialog(MainFrame.getInstance(), title, I18n.get("dialog.input", partInfo), JOptionPane.QUESTION_MESSAGE, null, null, t.getVolumetricHeatCapacity());
                 if (newValue == null) {
                     break;
                 } else {
                     try {
                         final double val = Double.parseDouble(newValue);
                         if (val <= 0) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Volumeric heat capacity must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.volumetric_heat_capacity_must_be_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                         } else {
                             if (val != t.getVolumetricHeatCapacity()) {
                                 final ChangeVolumetricHeatCapacityCommand c = new ChangeVolumetricHeatCapacityCommand(selectedPart);
@@ -463,7 +464,7 @@ public abstract class PopupMenuFactory {
                             break;
                         }
                     } catch (final NumberFormatException exception) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -479,7 +480,7 @@ public abstract class PopupMenuFactory {
         miInfo.setBackground(Config.isMac() ? Color.DARK_GRAY : Color.GRAY);
         miInfo.setForeground(Color.WHITE);
 
-        final JMenuItem miCut = new JMenuItem(pastable ? "Cut" : "Delete");
+        final JMenuItem miCut = new JMenuItem(pastable ? I18n.get("menu.cut") : I18n.get("menu.delete"));
 
         final JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.setInvoker(MainPanel.getInstance().getCanvasPanel());
@@ -499,7 +500,7 @@ public abstract class PopupMenuFactory {
                     final SolarPanel sp = ((Rack) selectedPart).getSolarPanel();
                     miInfo.setText(s.substring(0, s.indexOf(')') + 1) + ": " + sp.getModelName() + " ($" + (int) ProjectCost.getCost(selectedPart) + ")");
                 } else if (selectedPart instanceof Mirror) {
-                    s = s.replace("Mirror", "Heliostat");
+                    s = s.replace(I18n.get("group.type.mirror"), I18n.get("part.heliostat"));
                     miInfo.setText(s.substring(0, s.indexOf(')') + 1) + " ($" + (int) ProjectCost.getCost(selectedPart) + ")");
                 } else {
                     miInfo.setText(s.substring(0, s.indexOf(')') + 1) + " ($" + (int) ProjectCost.getCost(selectedPart) + ")");
@@ -535,7 +536,7 @@ public abstract class PopupMenuFactory {
         popupMenu.add(miCut);
 
         if (hasCopyMenu) {
-            final JMenuItem miCopy = new JMenuItem("Copy");
+            final JMenuItem miCopy = new JMenuItem(I18n.get("menu.copy"));
             miCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miCopy.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();

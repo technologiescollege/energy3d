@@ -10,6 +10,7 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.PvModuleSpecs;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeSolarPanelModelForAllRacksCommand extends MyAbstractUndoableEdit {
 
@@ -77,7 +78,7 @@ public class ChangeSolarPanelModelForAllRacksCommand extends MyAbstractUndoableE
 
 	@Override
 	public String getPresentationName() {
-		return "Set Solar Panel Model for All Racks";
+		return I18n.get("undo.set_solar_panel_model_all_racks");
 	}
 
 }

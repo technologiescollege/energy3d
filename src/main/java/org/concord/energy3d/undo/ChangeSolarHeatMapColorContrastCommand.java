@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ChangeSolarHeatMapColorContrastCommand extends MyAbstractUndoableEdit {
@@ -38,7 +39,7 @@ public class ChangeSolarHeatMapColorContrastCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Change Solar Heat Map Color Contrast";
+		return I18n.get("undo.change_solar_heat_map_color_contrast");
 	}
 
 }

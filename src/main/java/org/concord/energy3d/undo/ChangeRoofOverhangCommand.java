@@ -6,6 +6,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Roof;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeRoofOverhangCommand extends MyAbstractUndoableEdit {
 
@@ -52,7 +53,7 @@ public class ChangeRoofOverhangCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Overhang Change for Selected Roof";
+		return I18n.get("undo.overhang_change_selected_roof");
 	}
 
 }

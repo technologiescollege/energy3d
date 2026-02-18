@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.SolarCollector;
+import org.concord.energy3d.util.I18n;
 
 public class ChangePoleHeightCommand extends MyAbstractUndoableEdit {
 
@@ -52,7 +53,7 @@ public class ChangePoleHeightCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Base Height for " + part.getClass().getSimpleName();
+		return I18n.get("undo.change_base_height_for") + " " + MyAbstractUndoableEdit.getPartDisplayName(part.getClass());
 	}
 
 }

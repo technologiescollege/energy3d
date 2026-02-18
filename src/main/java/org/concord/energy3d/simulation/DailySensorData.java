@@ -7,6 +7,7 @@ import java.util.List;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Sensor;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 /**
  * This calculates and visualizes the daily data of a sensor (e.g., light sensor and heat flux sensor).
@@ -24,7 +25,7 @@ public class DailySensorData extends EnergyDailyAnalysis {
         graph.instrumentType = Graph.SENSOR;
         graph.setPreferredSize(new Dimension(600, 400));
         graph.setBackground(Color.white);
-        graph.yAxisLabel = "Energy Density (kWh/m\u00B2)";
+        graph.yAxisLabel = I18n.get("axis.energy_density");
     }
 
     @Override
@@ -35,8 +36,8 @@ public class DailySensorData extends EnergyDailyAnalysis {
             if (p instanceof Sensor) {
                 final Sensor sensor = (Sensor) p;
                 String label = sensor.getLabelText() != null ? sensor.getLabelText() : sensor.getId() + "";
-                String lid = "Light: #" + label;
-                String hid = "Heat Flux: #" + label;
+                String lid = I18n.get("series.light") + ": #" + label;
+                String hid = I18n.get("series.heat_flux") + ": #" + label;
                 graph.hideData(lid, sensor.isLightOff());
                 graph.hideData(hid, sensor.isHeatFluxOff());
                 final double area = sensor.getArea();
@@ -71,7 +72,7 @@ public class DailySensorData extends EnergyDailyAnalysis {
                 s += "{\"ID\": " + id;
                 String label = sensor.getLabelText() != null ? sensor.getLabelText() : id + "";
                 if (!sensor.isLightOff()) {
-                    List<Double> lightData = graph.getData("Light: #" + label);
+                    List<Double> lightData = graph.getData(I18n.get("series.light") + ": #" + label);
                     s += ", \"Light\": [";
                     for (Double x : lightData) {
                         s += Graph.FIVE_DECIMALS.format(x) + ",";
@@ -80,7 +81,7 @@ public class DailySensorData extends EnergyDailyAnalysis {
                     s += "]\n";
                 }
                 if (!sensor.isHeatFluxOff()) {
-                    List<Double> heatData = graph.getData("Heat Flux: #" + label);
+                    List<Double> heatData = graph.getData(I18n.get("series.heat_flux") + ": #" + label);
                     s += ", \"HeatFlux\": [";
                     for (Double x : heatData) {
                         s += Graph.FIVE_DECIMALS.format(x) + ",";

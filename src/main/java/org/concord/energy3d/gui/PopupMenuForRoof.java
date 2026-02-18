@@ -8,6 +8,7 @@ import org.concord.energy3d.simulation.EnergyAnnualAnalysis;
 import org.concord.energy3d.simulation.EnergyDailyAnalysis;
 import org.concord.energy3d.undo.*;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
 
         if (popupMenuForRoof == null) {
 
-            final JMenuItem miPaste = new JMenuItem("Paste");
+            final JMenuItem miPaste = new JMenuItem(I18n.get("menu.paste"));
             miPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miPaste.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
@@ -44,7 +45,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miClear = new JMenuItem("Clear");
+            final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear"));
             miClear.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
                     Scene.getInstance().removeAllChildren(SceneManager.getInstance().getSelectedPart());
@@ -53,7 +54,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miOverhang = new JMenuItem("Overhang Length...");
+            final JMenuItem miOverhang = new JMenuItem(I18n.get("menu.overhang_length"));
             miOverhang.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof Roof)) {
@@ -62,7 +63,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
                 final Roof roof = (Roof) selectedPart;
                 while (true) {
                     SceneManager.getInstance().refresh(1);
-                    final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), "Overhang Length (m)", roof.getOverhangLength() * Scene.getInstance().getScale());
+                    final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.overhang_length_m"), roof.getOverhangLength() * Scene.getInstance().getScale());
                     if (newValue == null) {
                         break;
                     } else {
@@ -73,7 +74,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
                                 val = min;
                             }
                             if (val < 0 || val > 10) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Overhang value must be between " + min + " and 10.", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.overhang_range", min), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 if (Math.abs(val - roof.getOverhangLength() * Scene.getInstance().getScale()) > 0.000001) {
                                     final double val2 = val;
@@ -93,16 +94,16 @@ class PopupMenuForRoof extends PopupMenuFactory {
                             }
                         } catch (final NumberFormatException exception) {
                             exception.printStackTrace();
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
             });
 
-            final JMenu typeMenu = new JMenu("Type");
+            final JMenu typeMenu = new JMenu(I18n.get("menu.type"));
             final ButtonGroup typeGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem rbmiSolid = new JRadioButtonMenuItem("Solid");
+            final JRadioButtonMenuItem rbmiSolid = new JRadioButtonMenuItem(I18n.get("roof_type.solid"));
             rbmiSolid.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -123,7 +124,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
             typeMenu.add(rbmiSolid);
             typeGroup.add(rbmiSolid);
 
-            final JRadioButtonMenuItem rbmiTransparent = new JRadioButtonMenuItem("Transparent");
+            final JRadioButtonMenuItem rbmiTransparent = new JRadioButtonMenuItem(I18n.get("roof_type.transparent"));
             rbmiTransparent.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -174,7 +175,7 @@ class PopupMenuForRoof extends PopupMenuFactory {
 
             });
 
-            final JMenu textureMenu = new JMenu("Texture");
+            final JMenu textureMenu = new JMenu(I18n.get("menu.texture"));
             final ButtonGroup textureButtonGroup = new ButtonGroup();
             final JRadioButtonMenuItem rbmiTextureNone = createTextureMenuItem(Roof.TEXTURE_NONE, null);
             final JRadioButtonMenuItem rbmiTextureEdge = createTextureMenuItem(Roof.TEXTURE_EDGE, null);
@@ -276,24 +277,24 @@ class PopupMenuForRoof extends PopupMenuFactory {
             popupMenuForRoof.add(textureMenu);
             popupMenuForRoof.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Energy Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Roof) {
-                    new EnergyDailyAnalysis().show("Daily Energy for Roof");
+                    new EnergyDailyAnalysis().show(I18n.get("title.daily_energy_for_roof"));
                 }
             });
             popupMenuForRoof.add(mi);
 
-            mi = new JMenuItem("Annual Energy Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Roof) {
-                    new EnergyAnnualAnalysis().show("Annual Energy for Roof");
+                    new EnergyAnnualAnalysis().show(I18n.get("title.annual_energy_for_roof"));
                 }
             });
             popupMenuForRoof.add(mi);
@@ -308,12 +309,12 @@ class PopupMenuForRoof extends PopupMenuFactory {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
-            m = new JRadioButtonMenuItem("No Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.none"));
         } else if (type == HousePart.TEXTURE_EDGE) {
-            m = new JRadioButtonMenuItem("Edge Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.edge"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText("Texture #" + type);
+            m.setText(I18n.get("label.texture_number", Integer.toString(type)));
         }
 
         m.addItemListener(new ItemListener() {
@@ -333,10 +334,10 @@ class PopupMenuForRoof extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Roof", true);
-                    final JRadioButton rb2 = new JRadioButton("All Roofs on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Roofs");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_roof"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_roofs_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_roofs"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -357,9 +358,9 @@ class PopupMenuForRoof extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set Texture for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Roof Texture");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_texture_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.roof_texture"));
 
                     while (true) {
                         dialog.setVisible(true);

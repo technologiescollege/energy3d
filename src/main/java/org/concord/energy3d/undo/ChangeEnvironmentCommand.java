@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.type.ReadOnlyColorRGBA;
 
@@ -46,7 +47,7 @@ public class ChangeEnvironmentCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Environment Change";
+		return I18n.get("undo.environment_change");
 	}
 
 }

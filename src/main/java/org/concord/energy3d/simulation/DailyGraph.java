@@ -3,6 +3,8 @@ package org.concord.energy3d.simulation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.concord.energy3d.util.I18n;
+
 /**
  * Daily graph (24 hours)
  *
@@ -21,8 +23,8 @@ public abstract class DailyGraph extends Graph {
 
     DailyGraph() {
         super();
-        xAxisLabel = "Hour";
-        yAxisLabel = "Energy per Hour (kWh)";
+        xAxisLabel = I18n.get("axis.hour");
+        yAxisLabel = I18n.get("axis.energy_per_hour");
         xmin = 0;
         xmax = 23;
         numberOfTicks = 24;

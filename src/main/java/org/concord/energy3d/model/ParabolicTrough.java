@@ -13,6 +13,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Atmosphere;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -126,7 +127,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         }
         detailed = Scene.getInstance().countParts(this.getClass()) < 50;
 
-        mesh = new ParabolicCylinder("Parabolic Cylinder", nSectionParabola, semilatusRectum, apertureWidth, troughLength);
+        mesh = new ParabolicCylinder(I18n.get("node.parabolic_cylinder"), nSectionParabola, semilatusRectum, apertureWidth, troughLength);
         mesh.setDefaultColor(SKY_BLUE);
         mesh.setModelBound(new OrientedBoundingBox());
         mesh.setUserData(new UserData(this));
@@ -144,7 +145,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         root.attachChild(reflectorBack);
 
         final ColorRGBA tubeColor = new ColorRGBA(0.8f, 0.8f, 0.8f, 0.8f);
-        absorber = new MyCylinder("Absorber Tube", 2, detailed ? 10 : 4, 0.5, 0, true);
+        absorber = new MyCylinder(I18n.get("node.absorber_tube"), 2, detailed ? 10 : 4, 0.5, 0, true);
         final BlendState blend = new BlendState();
         blend.setBlendEnabled(true);
         absorber.setRenderState(blend);
@@ -153,14 +154,14 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         absorber.setModelBound(new OrientedBoundingBox());
         root.attachChild(absorber);
 
-        absorberEnd1 = new MyCylinder("Absorber End Tube 1", 2, detailed ? 10 : 4, 0.5, 0, true);
+        absorberEnd1 = new MyCylinder(I18n.get("node.absorber_end_tube_1"), 2, detailed ? 10 : 4, 0.5, 0, true);
         absorberEnd1.setRenderState(blend);
         absorberEnd1.getSceneHints().setRenderBucketType(RenderBucketType.Transparent);
         absorberEnd1.setDefaultColor(tubeColor);
         absorberEnd1.setModelBound(new OrientedBoundingBox());
         root.attachChild(absorberEnd1);
 
-        absorberEnd2 = new MyCylinder("Absorber End Tube 2", 2, detailed ? 10 : 4, 0.5, 0, true);
+        absorberEnd2 = new MyCylinder(I18n.get("node.absorber_end_tube_2"), 2, detailed ? 10 : 4, 0.5, 0, true);
         absorberEnd2.setRenderState(blend);
         absorberEnd2.getSceneHints().setRenderBucketType(RenderBucketType.Transparent);
         absorberEnd2.setDefaultColor(tubeColor);
@@ -168,15 +169,15 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         root.attachChild(absorberEnd2);
 
         if (detailed) {
-            absorberCore = new MyCylinder("Absorber Tube Core", 2, 4, 0.4, 0, true);
+            absorberCore = new MyCylinder(I18n.get("node.absorber_tube_core"), 2, 4, 0.4, 0, true);
             absorberCore.setDefaultColor(ColorRGBA.BROWN);
             absorberCore.setModelBound(new OrientedBoundingBox());
             root.attachChild(absorberCore);
-            absorberEnd1Core = new MyCylinder("Absorber End Tube 1 Core", 2, 4, 0.4, 0, true);
+            absorberEnd1Core = new MyCylinder(I18n.get("node.absorber_end_tube_1_core"), 2, 4, 0.4, 0, true);
             absorberEnd1Core.setDefaultColor(ColorRGBA.BROWN);
             absorberEnd1Core.setModelBound(new OrientedBoundingBox());
             root.attachChild(absorberEnd1Core);
-            absorberEnd2Core = new MyCylinder("Absorber End Tube 2 Core", 2, 4, 0.4, 0, true);
+            absorberEnd2Core = new MyCylinder(I18n.get("node.absorber_end_tube_2_core"), 2, 4, 0.4, 0, true);
             absorberEnd2Core.setDefaultColor(ColorRGBA.BROWN);
             absorberEnd2Core.setModelBound(new OrientedBoundingBox());
             root.attachChild(absorberEnd2Core);
@@ -200,7 +201,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         steelFrame.setStipplePattern((short) 0xffff);
         root.attachChild(steelFrame);
 
-        lightBeams = new Line("Light Beams");
+        lightBeams = new Line(I18n.get("node.light_beams"));
         lightBeams.setLineWidth(1f);
         lightBeams.setStipplePattern((short) 0xffff);
         lightBeams.setModelBound(null);
@@ -209,13 +210,13 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         lightBeams.setDefaultColor(new ColorRGBA(1f, 1f, 1f, 1f));
         root.attachChild(lightBeams);
 
-        label = new BMText("Label", "#" + id, FontManager.getInstance().getPartNumberFont(), Align.Center, Justify.Center);
+        label = new BMText(I18n.get("label.default"), "#" + id, FontManager.getInstance().getPartNumberFont(), Align.Center, Justify.Center);
         Util.initHousePartLabel(label);
         label.setFontScale(0.5);
         label.setVisible(false);
         root.attachChild(label);
 
-        modulesRoot = new Node("Modules Root");
+        modulesRoot = new Node(I18n.get("node.modules_root"));
         root.attachChild(modulesRoot);
         updateTextureAndColor();
 
@@ -551,7 +552,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
             text += (text.equals("") ? "" : "\n") + "#" + id;
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -564,7 +565,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
     }
 
     private void addPole(final Vector3 position, final double poleHeight, final double baseZ) {
-        final MyCylinder pole = new MyCylinder("Pole Cylinder", 2, detailed ? 10 : 2, 10, 0);
+        final MyCylinder pole = new MyCylinder(I18n.get("node.pole_cylinder"), 2, detailed ? 10 : 2, 10, 0);
         pole.setRadius(0.6);
         pole.setRenderState(offsetState);
         pole.setHeight(poleHeight - 0.5 * pole.getRadius()); // slightly shorter so that the pole won't penetrate the surface of the trough
@@ -738,7 +739,7 @@ public class ParabolicTrough extends HousePart implements SolarReflector, Labela
         copy.points.get(0).setY(newY);
         final double o = copy.checkCopyOverlap(inWidth);
         if (o >= 0) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new trough is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_trough_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

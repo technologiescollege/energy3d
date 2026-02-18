@@ -6,6 +6,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationSizeCommand extends MyAbstractUndoableEdit {
 
@@ -76,7 +77,7 @@ public class ChangeFoundationSizeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Size for Selected Foundation";
+		return I18n.get("undo.change_size_selected_foundation");
 	}
 
 }

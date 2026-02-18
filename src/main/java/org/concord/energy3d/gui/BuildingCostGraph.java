@@ -33,6 +33,7 @@ import org.concord.energy3d.simulation.BuildingCost;
 import org.concord.energy3d.simulation.DesignSpecs;
 import org.concord.energy3d.simulation.PieChart;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -40,7 +41,16 @@ import org.concord.energy3d.util.Util;
  */
 public class BuildingCostGraph extends JPanel {
 
-    public final static String[] legends = new String[]{"Walls", "Windows", "Roof", "Foundation", "Floors", "Doors", "Solar Panels", "Trees"};
+    public final static String[] legends = new String[]{
+            I18n.get("cost.legend.walls"),
+            I18n.get("cost.legend.windows"),
+            I18n.get("cost.legend.roof"),
+            I18n.get("cost.legend.foundation"),
+            I18n.get("cost.legend.floors"),
+            I18n.get("cost.legend.doors"),
+            I18n.get("cost.legend.solar_panels"),
+            I18n.get("cost.legend.trees")
+    };
     public final static Color[] colors = new Color[]{
             new Color(250, 128, 114),
             new Color(135, 206, 250),
@@ -76,13 +86,13 @@ public class BuildingCostGraph extends JPanel {
         budgetPanel = new JPanel(new BorderLayout());
         budgetBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         budgetBar.setPreferredSize(new Dimension(100, 16));
-        budgetBar.setToolTipText("<html>The total construction cost must not exceed the limit (if specified).</html>");
+        budgetBar.setToolTipText("<html>" + I18n.get("tooltip.project_cost_limit") + "</html>");
         budgetPanel.add(budgetBar, BorderLayout.CENTER);
 
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -111,10 +121,10 @@ public class BuildingCostGraph extends JPanel {
             }
 
         });
-        JMenuItem mi = new JMenuItem("View Itemized Cost...");
+        JMenuItem mi = new JMenuItem(I18n.get("menu.view_itemized_cost") + "...");
         mi.addActionListener(e -> BuildingCost.getInstance().showItemizedCost());
         popupMenu.add(mi);
-        mi = new JMenuItem("Copy Image");
+        mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(BuildingCostGraph.this));
         popupMenu.add(mi);
     }
@@ -175,7 +185,7 @@ public class BuildingCostGraph extends JPanel {
             final DesignSpecs specs = Scene.getInstance().getDesignSpecs();
             budgetBar.setEnabled(specs.isBudgetEnabled());
             budgetBar.setMaximum(specs.getMaximumBudget());
-            final String t = "Total (" + (specs.isBudgetEnabled() ? "\u2264 $" + noDecimals.format(specs.getMaximumBudget()) : "$") + ")";
+            final String t = I18n.get("cost.total") + " (" + (specs.isBudgetEnabled() ? "\u2264 $" + noDecimals.format(specs.getMaximumBudget()) : "$") + ")";
             budgetPanel.setBorder(EnergyPanel.createTitledBorder(t, true));
             budgetBar.setValue((float) totalCost);
             budgetBar.repaint();
@@ -195,7 +205,7 @@ public class BuildingCostGraph extends JPanel {
 
         final double[] data = new double[]{wallSum, windowSum, roofSum, foundationSum, floorSum, doorSum, solarPanelSum, treeSum};
 
-        PieChart pie = new PieChart(data, colors, legends, "$", null, "Move mouse for more info", false);
+        PieChart pie = new PieChart(data, colors, legends, "$", null, I18n.get("chart.move_mouse_for_info"), false);
         pie.setBackground(Color.WHITE);
         pie.setPreferredSize(new Dimension(getWidth() - 5, getHeight() - budgetPanel.getHeight() - 5));
         pie.setBorder(BorderFactory.createEtchedBorder());

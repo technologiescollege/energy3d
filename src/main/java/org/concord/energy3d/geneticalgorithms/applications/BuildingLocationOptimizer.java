@@ -13,6 +13,7 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.Vector3;
 
@@ -32,8 +33,8 @@ public class BuildingLocationOptimizer extends NetEnergyOptimizer {
 
     BuildingLocationOptimizer(final int populationSize, final int chromosomeLength, final int discretizationSteps) {
         super(populationSize, chromosomeLength, discretizationSteps);
-        setGeneName(0, "X");
-        setGeneName(1, "Y");
+        setGeneName(0, org.concord.energy3d.util.I18n.get("param.x"));
+        setGeneName(1, org.concord.energy3d.util.I18n.get("param.y"));
     }
 
     @Override
@@ -130,10 +131,10 @@ public class BuildingLocationOptimizer extends NetEnergyOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Energy Use: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness());
+                s = I18n.get("label.daily_energy_use") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Energy Use: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_energy_use") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);
@@ -146,10 +147,10 @@ public class BuildingLocationOptimizer extends NetEnergyOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Energy Use\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness()) + ", Top: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness());
+                s = I18n.get("label.daily_energy_use") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness()) + ", " + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Energy Use\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness() * 365.0 / 12.0) + "\nTop: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_energy_use") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness() * 365.0 / 12.0) + "\n" + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);

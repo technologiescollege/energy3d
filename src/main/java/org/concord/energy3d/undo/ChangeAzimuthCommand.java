@@ -9,6 +9,7 @@ import org.concord.energy3d.model.Mirror;
 import org.concord.energy3d.model.ParabolicTrough;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeAzimuthCommand extends MyAbstractUndoableEdit {
 
@@ -95,7 +96,7 @@ public class ChangeAzimuthCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Azimuth";
+		return I18n.get("undo.change_azimuth");
 	}
 
 }

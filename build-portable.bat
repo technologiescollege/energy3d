@@ -25,5 +25,9 @@ if errorlevel 1 (
 
 echo.
 echo Termine. Bundle portable dans : dist\Energy3D_portable\
-echo Lancez dist\Energy3D_portable\Energy3D.exe (aucun Java requis sur la machine).
+if exist "dist\Energy3D_portable\Energy3D.exe" (
+  echo Lancez dist\Energy3D_portable\Energy3D.exe
+) else (
+  echo Lancez dist\Energy3D_portable\Lancer Energy3D.bat ^(Launch4j a echoue, JRE inclus^)
+)
 pause

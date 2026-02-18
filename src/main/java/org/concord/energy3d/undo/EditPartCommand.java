@@ -12,6 +12,8 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Human;
 import org.concord.energy3d.model.Sensor;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.Vector3;
 
@@ -103,7 +105,7 @@ public class EditPartCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Edit " + part.getClass().getSimpleName();
+		return I18n.get("undo.edit") + " " + MyAbstractUndoableEdit.getPartDisplayName(part.getClass());
 	}
 
 }

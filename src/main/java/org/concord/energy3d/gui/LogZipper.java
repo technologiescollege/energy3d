@@ -20,6 +20,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 import org.concord.energy3d.logger.SnapshotLogger;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -36,7 +37,7 @@ class LogZipper implements PropertyChangeListener {
     void createDialog() {
 
         final JDialog dialog = new JDialog(MainFrame.getInstance(), true);
-        dialog.setTitle("Export log as a zip file");
+        dialog.setTitle(I18n.get("dialog.export_log"));
         dialog.setUndecorated(true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         JPanel panel = new JPanel(new BorderLayout(20, 20));
@@ -51,7 +52,7 @@ class LogZipper implements PropertyChangeListener {
 
         JPanel buttonPanel = new JPanel();
         panel.add(buttonPanel, BorderLayout.SOUTH);
-        final JButton closeButton = new JButton("Close");
+        final JButton closeButton = new JButton(I18n.get("common.close"));
         closeButton.setEnabled(false);
         closeButton.addActionListener(e -> dialog.dispose());
         buttonPanel.add(closeButton);

@@ -8,6 +8,7 @@ import org.concord.energy3d.undo.ChangePlantCommand;
 import org.concord.energy3d.undo.LockEditPointsCommand;
 import org.concord.energy3d.undo.SetTreeLabelCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -22,11 +23,11 @@ class PopupMenuForTree extends PopupMenuFactory {
 
         if (popupMenuForTree == null) {
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
-            final JCheckBoxMenuItem miPolygon = new JCheckBoxMenuItem("Show Polygon");
-            final JCheckBoxMenuItem miLock = new JCheckBoxMenuItem("Disable Edit Point");
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
+            final JCheckBoxMenuItem miPolygon = new JCheckBoxMenuItem(I18n.get("menu.show_polygon"));
+            final JCheckBoxMenuItem miLock = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
 
              popupMenuForTree = createPopupMenu(true, true, () -> {
                 final HousePart p = SceneManager.getInstance().getSelectedPart();
@@ -71,7 +72,7 @@ class PopupMenuForTree extends PopupMenuFactory {
             popupMenuForTree.add(miPolygon);
             popupMenuForTree.addSeparator();
 
-            final JMenu treeMenu = new JMenu("Select Tree");
+            final JMenu treeMenu = new JMenu(I18n.get("menu.select_tree"));
             popupMenuForTree.add(treeMenu);
 
             final ButtonGroup treeButtonGroup = new ButtonGroup();
@@ -105,7 +106,7 @@ class PopupMenuForTree extends PopupMenuFactory {
 
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
             popupMenuForTree.add(labelMenu);
 
             miLabelNone.addActionListener(e -> {
@@ -134,7 +135,7 @@ class PopupMenuForTree extends PopupMenuFactory {
                     final SetTreeLabelCommand c = new SetTreeLabelCommand(t);
                     t.setLabelCustom(miLabelCustom.isSelected());
                     if (t.getLabelCustom()) {
-                        t.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", t.getLabelCustomText()));
+                        t.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), t.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         t.draw();

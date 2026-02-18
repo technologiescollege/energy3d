@@ -16,6 +16,7 @@ import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.model.*;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -154,7 +155,7 @@ public class CspProjectCost extends ProjectCost {
             if (p instanceof Foundation) {
                 final Foundation foundation = (Foundation) p;
                 if (selectedFoundation == null) {
-                    String type = foundation.hasSolarReceiver() ? "Receiver" : "Field";
+                    String type = foundation.hasSolarReceiver() ? I18n.get("label.receiver") : I18n.get("label.field");
                     details += type + " #" + foundation.getId() + ": $" + Graph.TWO_DECIMALS.format(getCostByFoundation(foundation)) + " | ";
                 }
                 count++;
@@ -265,21 +266,21 @@ public class CspProjectCost extends ProjectCost {
         String years = "(" + model.getLifespan() + " years)";
         if (Util.isZero(receiverCost)) {
             data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, collectorCost};
-            legends = new String[]{"Land Rental " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Collectors (One-Time)"};
+            legends = new String[]{I18n.get("cost.land_rental", years), I18n.get("cost.cleaning", years), I18n.get("cost.maintenance", years), I18n.get("cost.loan_interest", years), I18n.get("cost.collectors_onetime")};
         } else {
             data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, collectorCost, receiverCost};
-            legends = new String[]{"Land Rental " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Collectors (One-Time)", "Receivers (One-Time)"};
+            legends = new String[]{I18n.get("cost.land_rental", years), I18n.get("cost.cleaning", years), I18n.get("cost.maintenance", years), I18n.get("cost.loan_interest", years), I18n.get("cost.collectors_onetime"), I18n.get("cost.receivers_onetime")};
         }
 
         // show them in a popup window
         final PieChart pie = new PieChart(data, CspProjectZoneCostGraph.colors, legends, "$", info, count > 1 ? details : null, true);
         pie.setBackground(Color.WHITE);
         pie.setBorder(BorderFactory.createEtchedBorder());
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Cost Breakdown", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.cost_breakdown"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.getContentPane().add(pie, BorderLayout.CENTER);
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        final JButton buttonClose = new JButton("Close");
+        final JButton buttonClose = new JButton(I18n.get("common.close"));
         buttonClose.addActionListener(e -> dialog.dispose());
         buttonPanel.add(buttonClose);
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);

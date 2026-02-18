@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeGroundThermalDiffusivityCommand extends MyAbstractUndoableEdit {
 
@@ -34,7 +35,7 @@ public class ChangeGroundThermalDiffusivityCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Change Ground Thermal Diffusivity";
+		return I18n.get("undo.change_ground_thermal_diffusivity");
 	}
 
 }

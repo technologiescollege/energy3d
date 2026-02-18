@@ -6,6 +6,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.simulation.LocationData;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ChangeCityCommand extends MyAbstractUndoableEdit {
@@ -52,7 +53,7 @@ public class ChangeCityCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change City";
+		return I18n.get("undo.change_city");
 	}
 
 }

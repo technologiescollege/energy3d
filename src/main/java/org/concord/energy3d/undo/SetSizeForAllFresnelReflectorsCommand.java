@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.FresnelReflector;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetSizeForAllFresnelReflectorsCommand extends MyAbstractUndoableEdit {
 
@@ -70,7 +71,7 @@ public class SetSizeForAllFresnelReflectorsCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Set Size for All Fresnel Reflectors";
+		return I18n.get("undo.set_size_all_fresnel_reflectors");
 	}
 
 }

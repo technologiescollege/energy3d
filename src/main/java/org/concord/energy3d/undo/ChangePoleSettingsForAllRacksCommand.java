@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangePoleSettingsForAllRacksCommand extends MyAbstractUndoableEdit {
 
@@ -70,7 +71,7 @@ public class ChangePoleSettingsForAllRacksCommand extends MyAbstractUndoableEdit
 
 	@Override
 	public String getPresentationName() {
-		return "Change Pole Settings for All Racks";
+		return I18n.get("undo.change_pole_settings_all_racks");
 	}
 
 }

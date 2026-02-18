@@ -11,6 +11,7 @@ import java.awt.geom.Path2D;
 
 import org.concord.energy3d.geneticalgorithms.Individual;
 import org.concord.energy3d.gui.EnergyPanel;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -68,7 +69,7 @@ class GeneTemporalGraph extends AbstractGraph {
 
         g2.setColor(dark ? Color.WHITE : Color.BLACK);
         g2.setFont(new Font("Arial", Font.BOLD, 12));
-        final String xLabel = "Generation";
+        final String xLabel = I18n.get("axis.generation");
         g2.drawString(xLabel, width / 2 - g2.getFontMetrics().stringWidth(xLabel) / 2, xAxisY + 30);
 
         // draw y axis
@@ -86,7 +87,7 @@ class GeneTemporalGraph extends AbstractGraph {
                 g2.drawString(tickmarkLabel, x0 - 10 - g2.getFontMetrics().stringWidth(tickmarkLabel), (int) (yTick + 4));
             }
         }
-        final String yLabel = "Gene Value";
+        final String yLabel = I18n.get("axis.gene_value");
         g2.setFont(new Font("Arial", Font.BOLD, 12));
         final int yLabelX = x0 - 30;
         final int yLabelY = height / 2 + g2.getFontMetrics().stringWidth(yLabel) / 2 - 8;

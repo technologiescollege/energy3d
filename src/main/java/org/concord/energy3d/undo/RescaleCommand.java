@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class RescaleCommand extends MyAbstractUndoableEdit {
 
@@ -36,7 +37,7 @@ public class RescaleCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Rescale";
+		return I18n.get("undo.rescale");
 	}
 
 }

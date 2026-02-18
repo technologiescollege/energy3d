@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.type.ReadOnlyColorRGBA;
 
@@ -70,7 +71,7 @@ public class ChangeBuildingColorCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Color Change for Whole Building";
+		return I18n.get("undo.color_change_whole_building");
 	}
 
 }

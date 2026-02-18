@@ -17,6 +17,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.simulation.CspFinancialModel;
 import org.concord.energy3d.simulation.CspDesignSpecs;
 import org.concord.energy3d.simulation.CspProjectCost;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -39,7 +40,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
         // mirror/trough/dish/Fresnel reflector count on the selected base
 
         countPanel = new JPanel(new BorderLayout());
-        countPanel.setBorder(EnergyPanel.createTitledBorder("Number of heliostats", true));
+        countPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_heliostats"), true));
         container.add(countPanel);
         countBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         countBar.setUnit("");
@@ -51,7 +52,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
         countPanel.add(countBar, BorderLayout.CENTER);
 
         moduleCountPanel = new JPanel(new BorderLayout());
-        moduleCountPanel.setBorder(EnergyPanel.createTitledBorder("Number of modules", true));
+        moduleCountPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_modules"), true));
         container.add(moduleCountPanel);
         moduleCountBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         moduleCountBar.setUnit("");
@@ -65,7 +66,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
         // total reflector area on the selected base
 
         packingDensityPanel = new JPanel(new BorderLayout());
-        packingDensityPanel.setBorder(EnergyPanel.createTitledBorder("<html>Packing density (reflecting area / field area)</html>", true));
+        packingDensityPanel.setBorder(EnergyPanel.createTitledBorder("<html>" + I18n.get("label.packing_density") + "</html>", true));
         container.add(packingDensityPanel);
         packingDensityBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         packingDensityBar.setUnit("");
@@ -79,7 +80,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
         // mirror/trough/dish cost on the selected base
 
         costPanel = new JPanel(new BorderLayout());
-        costPanel.setBorder(EnergyPanel.createTitledBorder("Total cost", true));
+        costPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.total_cost"), true));
         container.add(costPanel);
         costBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         costBar.setMaximum(10000000);
@@ -108,7 +109,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                 totalModules += t.getNumberOfModules();
             }
             moduleCountBar.setValue(totalModules);
-            countPanel.setBorder(EnergyPanel.createTitledBorder("Number of parabolic troughs", true));
+            countPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_parabolic_troughs"), true));
             double reflectingArea = 0;
             double troughArea;
             for (final ParabolicTrough t : troughs) {
@@ -118,7 +119,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
             packingDensityBar.setValue((float) (reflectingArea / foundation.getArea()));
             costBar.setValue(Math.round(CspProjectCost.getInstance().getCostByFoundation(foundation)));
             final CspDesignSpecs specs = Scene.getInstance().getCspDesignSpecs();
-            String t = "Total cost over " + model.getLifespan() + " years";
+            String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
             if (specs.isBudgetEnabled()) {
                 t += " (" + "<$" + specs.getMaximumBudget() + ")";
             }
@@ -128,7 +129,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
             if (!dishes.isEmpty()) {
                 countBar.setValue(dishes.size());
                 moduleCountBar.setValue(dishes.size());
-                countPanel.setBorder(EnergyPanel.createTitledBorder("Number of parabolic dishes", true));
+                countPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_parabolic_dishes"), true));
                 double reflectingArea = 0;
                 double rimArea;
                 for (final ParabolicDish d : dishes) {
@@ -138,7 +139,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                 packingDensityBar.setValue((float) (reflectingArea / foundation.getArea()));
                 costBar.setValue(Math.round(CspProjectCost.getInstance().getCostByFoundation(foundation)));
                 final CspDesignSpecs specs = Scene.getInstance().getCspDesignSpecs();
-                String t = "Total cost over " + model.getLifespan() + " years";
+                String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
                 if (specs.isBudgetEnabled()) {
                     t += " (" + "<$" + specs.getMaximumBudget() + ")";
                 }
@@ -149,7 +150,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                     final List<Mirror> heliostats = foundation.getHeliostats();
                     countBar.setValue(heliostats.size());
                     moduleCountBar.setValue(heliostats.size());
-                    countPanel.setBorder(EnergyPanel.createTitledBorder(heliostats.size() > 0 ? "Number of heliostats" : "------", true));
+                    countPanel.setBorder(EnergyPanel.createTitledBorder(heliostats.size() > 0 ? I18n.get("info.num_heliostats") : "------", true));
                     double reflectingArea = 0;
                     double apertureArea;
                     for (final Mirror m : heliostats) {
@@ -159,7 +160,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                     packingDensityBar.setValue((float) (reflectingArea / foundation.getArea()));
                     costBar.setValue(Math.round(CspProjectCost.getInstance().getCostByFoundation(foundation)));
                     final CspDesignSpecs specs = Scene.getInstance().getCspDesignSpecs();
-                    String t = "Total cost over " + model.getLifespan() + " years";
+                    String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
                     if (specs.isBudgetEnabled()) {
                         t += " (" + "<$" + specs.getMaximumBudget() + ")";
                     }
@@ -171,7 +172,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                         totalModules += r.getNumberOfModules();
                     }
                     moduleCountBar.setValue(totalModules);
-                    countPanel.setBorder(EnergyPanel.createTitledBorder("Number of Fresnel reflectors", true));
+                    countPanel.setBorder(EnergyPanel.createTitledBorder(I18n.get("info.num_fresnel_reflectors"), true));
                     double reflectingArea = 0;
                     double unitArea;
                     for (final FresnelReflector r : fresnels) {
@@ -181,7 +182,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
                     packingDensityBar.setValue((float) (reflectingArea / foundation.getArea()));
                     costBar.setValue(Math.round(CspProjectCost.getInstance().getCostByFoundation(foundation)));
                     final CspDesignSpecs specs = Scene.getInstance().getCspDesignSpecs();
-                    String t = "Total cost over " + model.getLifespan() + " years";
+                    String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
                     if (specs.isBudgetEnabled()) {
                         t += " (" + "<$" + specs.getMaximumBudget() + ")";
                     }
@@ -201,7 +202,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
         if (specs == null) {
             return;
         }
-        String t = "Total cost over " + model.getLifespan() + " years";
+        String t = I18n.get("part.total_cost_over_years", String.valueOf(model.getLifespan()));
         if (specs.isBudgetEnabled()) {
             t += " (" + "<$" + specs.getMaximumBudget() + ")";
         }
@@ -217,7 +218,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
             if (specs == null) {
                 return;
             }
-            String t = "Number of heliostats";
+            String t = I18n.get("info.num_heliostats");
             if (specs.isNumberOfMirrorsEnabled()) {
                 t += " (" + "<" + specs.getMaximumNumberOfMirrors() + ")";
             }
@@ -234,7 +235,7 @@ public class CspProjectZoneInfoPanel extends JPanel {
             if (specs == null) {
                 return;
             }
-            String t = "Number of parabolic troughs";
+            String t = I18n.get("info.num_parabolic_troughs");
             if (specs.isNumberOfParabolicTroughsEnabled()) {
                 t += " (" + "<" + specs.getMaximumNumberOfParabolicTroughs() + ")";
             }

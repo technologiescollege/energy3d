@@ -6,6 +6,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Thermal;
 import org.concord.energy3d.model.Wall;
+import org.concord.energy3d.util.I18n;
 
 public class ChangePartUValueCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class ChangePartUValueCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "U-Value Change for Selected Part";
+		return I18n.get("undo.u_value_change_selected_part");
 	}
 
 }

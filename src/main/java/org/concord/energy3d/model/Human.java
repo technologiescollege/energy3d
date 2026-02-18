@@ -2,6 +2,7 @@ package org.concord.energy3d.model;
 
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SelectUtil;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -156,7 +157,11 @@ public class Human extends HousePart {
     }
 
     public static String getHumanName(final int who) {
-        return FIGURES[who].getName();
+        if (who < 0 || who >= FIGURES.length) {
+            return "";
+        }
+        final String[] keys = {"human.jack", "human.jade", "human.jane", "human.jaye", "human.jean", "human.jedi", "human.jeff", "human.jena", "human.jeni", "human.jess", "human.jett", "human.jill", "human.joan", "human.joel", "human.john", "human.jose", "human.judd", "human.judy", "human.june", "human.juro"};
+        return I18n.get(keys[who]);
     }
 
     public void move(final Vector3 v, final double steplength) {

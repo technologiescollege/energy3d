@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class ChooseSolarPanelSizeCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +63,7 @@ public class ChooseSolarPanelSizeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Choose Size for Selected Solar Panel";
+		return I18n.get("undo.choose_size_selected_solar_panel");
 	}
 
 }

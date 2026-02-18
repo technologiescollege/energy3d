@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class SetSolarCellEfficiencyForAllRacksCommand extends MyAbstractUndoableEdit {
 
@@ -47,7 +48,7 @@ public class SetSolarCellEfficiencyForAllRacksCommand extends MyAbstractUndoable
 
 	@Override
 	public String getPresentationName() {
-		return "Set Solar Cell Efficiency for All Racks";
+		return I18n.get("undo.set_solar_cell_efficiency_all_racks");
 	}
 
 }

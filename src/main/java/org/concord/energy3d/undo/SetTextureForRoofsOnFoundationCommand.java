@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Roof;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetTextureForRoofsOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class SetTextureForRoofsOnFoundationCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Set Texture for All Roofs on Selected Foundation";
+		return I18n.get("undo.set_texture_all_roofs_foundation");
 	}
 
 }

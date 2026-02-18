@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import org.concord.energy3d.gui.MainFrame;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.undo.AddPartCommand;
 import org.concord.energy3d.undo.AdjustThermostatCommand;
 import org.concord.energy3d.undo.ChangeBuildingUValueCommand;
@@ -146,8 +147,8 @@ public class EventMinerSheet2 implements Agent {
 				}
 			}
 		}
-		final String msg = f == null ? "Oops, I am embarrassed, but I have no advice." : f.getCustomMessage();
-		JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + msg + "</html>", "Advice", f == null ? JOptionPane.PLAIN_MESSAGE : f.getType());
+		final String msg = f == null ? I18n.get("msg.no_advice") : f.getCustomMessage();
+		JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + msg + "</html>", I18n.get("title.advice"), f == null ? JOptionPane.PLAIN_MESSAGE : f.getType());
 	}
 
 	// This applies to only single-character indicators

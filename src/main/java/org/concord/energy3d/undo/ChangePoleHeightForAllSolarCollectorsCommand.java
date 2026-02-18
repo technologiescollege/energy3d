@@ -9,6 +9,7 @@ import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.SolarCollector;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangePoleHeightForAllSolarCollectorsCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +63,7 @@ public class ChangePoleHeightForAllSolarCollectorsCommand extends MyAbstractUndo
 
 	@Override
 	public String getPresentationName() {
-		return "Change Base Height for All " + collectors.get(0).getClass().getSimpleName() + "s";
+		return I18n.get("undo.change_base_height_all") + " " + MyAbstractUndoableEdit.getPartDisplayName(collectors.get(0).getClass()) + "s";
 	}
 
 }

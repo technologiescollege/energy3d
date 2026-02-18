@@ -21,6 +21,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.BugReporter;
+import org.concord.energy3d.util.I18n;
 
 /**
  * For fast feedback, only 12 days are calculated.
@@ -44,7 +45,7 @@ public class PvAnnualAnalysis extends AnnualAnalysis {
 
     @Override
     void runAnalysis(final JDialog parent) {
-        graph.info = "Calculating...";
+        graph.info = I18n.get("msg.calculating");
         graph.repaint();
         onStart();
         final EnergyPanel e = EnergyPanel.getInstance();
@@ -185,24 +186,24 @@ public class PvAnnualAnalysis extends AnnualAnalysis {
         final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
         String s = null;
         int cost = -1;
-        String title = "Annual Yield of All Solar Panels (" + Scene.getInstance().countSolarPanels() + " Panels)";
+        String title = I18n.get("title.annual_yield_all_solar_panels", Integer.toString(Scene.getInstance().countSolarPanels()));
         if (selectedPart != null) {
             if (selectedPart instanceof SolarPanel) {
                 cost = (int) ProjectCost.getCost(selectedPart);
                 s = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                title = "Annual Yield";
+                title = I18n.get("title.annual_yield");
             } else if (selectedPart instanceof Rack) {
                 final Rack rack = (Rack) selectedPart;
                 cost = (int) ProjectCost.getCost(rack);
                 s = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                title = "Annual Yield (" + rack.getNumberOfSolarPanels() + " Solar Panels)";
+                title = I18n.get("title.annual_yield_solar_panels", Integer.toString(rack.getNumberOfSolarPanels()));
             } else if (selectedPart instanceof Foundation) {
-                title = "Annual Yield on Selected Foundation (" + ((Foundation) selectedPart).getNumberOfSolarPanels() + " Solar Panels)";
+                title = I18n.get("title.annual_yield_foundation_solar_panels", Integer.toString(((Foundation) selectedPart).getNumberOfSolarPanels()));
             } else if (selectedPart.getTopContainer() != null) {
-                title = "Annual Yield on Selected Foundation (" + selectedPart.getTopContainer().getNumberOfSolarPanels() + " Solar Panels)";
+                title = I18n.get("title.annual_yield_foundation_solar_panels", Integer.toString(selectedPart.getTopContainer().getNumberOfSolarPanels()));
             }
         }
-        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + " (Cost: $" + cost + ")");
+        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + I18n.get("msg.cost_suffix", String.valueOf(cost)));
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
         menuBar.add(createOptionsMenu(dialog, null, true, true));

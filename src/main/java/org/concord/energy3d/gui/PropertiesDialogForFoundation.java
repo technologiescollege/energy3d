@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 import com.ardor3d.math.Vector3;
@@ -26,10 +27,10 @@ class PropertiesDialogForFoundation extends PropertiesDialogFactory {
 
     static JDialog getDialog(final Foundation foundation) {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Foundation", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("part.foundation"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         final String info = foundation.toString().substring(0, foundation.toString().indexOf(')') + 1);
-        dialog.setTitle("Properties - " + info);
+        dialog.setTitle(I18n.get("dialog.properties_part", info));
 
         dialog.getContentPane().setLayout(new BorderLayout());
         final JPanel panel = new JPanel(new SpringLayout());
@@ -52,30 +53,30 @@ class PropertiesDialogForFoundation extends PropertiesDialogFactory {
 
         int i = 0;
 
-        panel.add(new JLabel("Size: "));
+        panel.add(new JLabel(I18n.get("label.size")));
         final JTextField sizeField = new JTextField(PopupMenuFactory.threeDecimalsFormat.format(lx) + "\u00D7" +
                 PopupMenuFactory.threeDecimalsFormat.format(ly) + "\u00D7" + PopupMenuFactory.threeDecimalsFormat.format(lz) + " m");
         sizeField.setEditable(false);
         panel.add(sizeField);
         i++;
 
-        panel.add(new JLabel("Center: "));
+        panel.add(new JLabel(I18n.get("label.center")));
         final JTextField reflectanceField = new JTextField("(" + PopupMenuFactory.threeDecimalsFormat.format(cx) + ", " + PopupMenuFactory.threeDecimalsFormat.format(cy) + ") m");
         reflectanceField.setEditable(false);
         panel.add(reflectanceField);
         i++;
 
-        panel.add(new JLabel("Project Type: "));
-        String project = "Auto";
+        panel.add(new JLabel(I18n.get("label.project_type")));
+        String project = I18n.get("project_type.auto");
         switch (foundation.getProjectType()) {
             case Foundation.TYPE_BUILDING:
-                project = "Building";
+                project = I18n.get("project_type.building");
                 break;
             case Foundation.TYPE_PV_PROJECT:
-                project = "PV";
+                project = I18n.get("project_type.pv");
                 break;
             case Foundation.TYPE_CSP_PROJECT:
-                project = "CSP";
+                project = I18n.get("project_type.csp");
                 break;
         }
         final JTextField projectField = new JTextField(project);
@@ -83,8 +84,8 @@ class PropertiesDialogForFoundation extends PropertiesDialogFactory {
         panel.add(projectField);
         i++;
 
-        panel.add(new JLabel("Group Master: "));
-        final JTextField groupMasterField = new JTextField(foundation.isGroupMaster() ? "Yes" : "No");
+        panel.add(new JLabel(I18n.get("label.group_master")));
+        final JTextField groupMasterField = new JTextField(foundation.isGroupMaster() ? I18n.get("common.yes") : I18n.get("common.no"));
         groupMasterField.setEditable(false);
         panel.add(groupMasterField);
         i++;
@@ -94,7 +95,7 @@ class PropertiesDialogForFoundation extends PropertiesDialogFactory {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

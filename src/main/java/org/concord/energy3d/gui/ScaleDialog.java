@@ -3,6 +3,7 @@ package org.concord.energy3d.gui;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.RescaleCommand;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,7 +27,7 @@ class ScaleDialog extends JDialog {
     public ScaleDialog() {
         super(MainFrame.getInstance(), true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setTitle("Rescale Scene");
+        setTitle(I18n.get("dialog.rescale_scene"));
         setBounds(100, 100, 310, 215);
         super.setLocationRelativeTo(MainFrame.getInstance());
         getContentPane().setLayout(new BorderLayout());
@@ -39,7 +40,7 @@ class ScaleDialog extends JDialog {
         gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         contentPanel.setLayout(gbl_contentPanel);
         {
-            scaleByMeasurementRadioButton = new JRadioButton("Scale by Measurement");
+            scaleByMeasurementRadioButton = new JRadioButton(I18n.get("label.scale_by_measurement"));
             scaleByMeasurementRadioButton.setSelected(true);
             scaleByMeasurementRadioButton.addItemListener(e -> {
                 currentLegthLabel.setEnabled(e.getStateChange() == ItemEvent.SELECTED);
@@ -56,7 +57,7 @@ class ScaleDialog extends JDialog {
             contentPanel.add(scaleByMeasurementRadioButton, gbc_scaleByMeasurementRadioButton);
         }
         {
-            currentLegthLabel = new JLabel("Current Length: ");
+            currentLegthLabel = new JLabel(I18n.get("label.current_length") + ": ");
             final GridBagConstraints gbc_currentLegthLabel = new GridBagConstraints();
             gbc_currentLegthLabel.insets = new Insets(0, 0, 5, 5);
             gbc_currentLegthLabel.anchor = GridBagConstraints.EAST;
@@ -75,7 +76,7 @@ class ScaleDialog extends JDialog {
             currentTextField.setColumns(10);
         }
         {
-            newLegthLabel = new JLabel("New Length: ");
+            newLegthLabel = new JLabel(I18n.get("label.new_length") + ": ");
             final GridBagConstraints gbc_newLegthLabel = new GridBagConstraints();
             gbc_newLegthLabel.anchor = GridBagConstraints.EAST;
             gbc_newLegthLabel.insets = new Insets(0, 0, 5, 5);
@@ -94,7 +95,7 @@ class ScaleDialog extends JDialog {
             newTextField.setColumns(10);
         }
         {
-            final JRadioButton scaleManuallyRadioButton = new JRadioButton("Scale by Factor");
+            final JRadioButton scaleManuallyRadioButton = new JRadioButton(I18n.get("label.scale_by_factor"));
             scaleManuallyRadioButton.addItemListener(e -> {
                 scaleLabel.setEnabled(e.getStateChange() == ItemEvent.SELECTED);
                 scaleTextField.setEnabled(e.getStateChange() == ItemEvent.SELECTED);
@@ -108,7 +109,7 @@ class ScaleDialog extends JDialog {
             contentPanel.add(scaleManuallyRadioButton, gbc_scaleManuallyRadioButton);
         }
         {
-            scaleLabel = new JLabel("Scale Factor: ");
+            scaleLabel = new JLabel(I18n.get("label.scale_factor") + ": ");
             scaleLabel.setEnabled(false);
             final GridBagConstraints gbc_scaleLabel = new GridBagConstraints();
             gbc_scaleLabel.anchor = GridBagConstraints.EAST;
@@ -133,7 +134,7 @@ class ScaleDialog extends JDialog {
             buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
             getContentPane().add(buttonPane, BorderLayout.SOUTH);
             {
-                final JButton okButton = new JButton("OK");
+                final JButton okButton = new JButton(I18n.get("dialog.ok"));
                 okButton.addActionListener(e -> {
                     try {
                         final double scale;
@@ -151,7 +152,7 @@ class ScaleDialog extends JDialog {
                         EnergyPanel.getInstance().updateRadiationHeatMap();
                     } catch (final NumberFormatException err) {
                         err.printStackTrace();
-                        JOptionPane.showMessageDialog(ScaleDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(ScaleDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     }
                 });
                 okButton.setActionCommand("OK");
@@ -159,7 +160,7 @@ class ScaleDialog extends JDialog {
                 getRootPane().setDefaultButton(okButton);
             }
             {
-                final JButton cancelButton = new JButton("Cancel");
+                final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
                 cancelButton.addActionListener(e -> ScaleDialog.this.dispose());
                 cancelButton.setActionCommand("Cancel");
                 buttonPane.add(cancelButton);

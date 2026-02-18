@@ -16,6 +16,7 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.Vector3;
 
@@ -43,9 +44,9 @@ public class SolarPanelArrayOptimizer extends SolarOutputOptimizer {
 
     SolarPanelArrayOptimizer(final int populationSize, final int chromosomeLength, final int discretizationSteps) {
         super(populationSize, chromosomeLength, discretizationSteps);
-        setGeneName(0, "Inter-Row Spacing");
-        setGeneName(1, "Tilt Angle");
-        setGeneName(2, "Solar Panel Rows per Rack");
+        setGeneName(0, I18n.get("param.inter_row_spacing"));
+        setGeneName(1, I18n.get("param.tilt_angle"));
+        setGeneName(2, I18n.get("param.solar_panel_rows_per_rack"));
     }
 
     @Override
@@ -216,24 +217,24 @@ public class SolarPanelArrayOptimizer extends SolarOutputOptimizer {
     public void displayFittest() {
         final Individual best = population.getIndividual(0);
         String s = null;
-        switch (objectiveFunction.getType()) {
+            switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
                 if (netProfit) {
-                    s = "Daily Profit";
+                    s = I18n.get("label.daily_profit");
                 } else if (outputPerSolarPanel) {
-                    s = "Daily Output per Solar Panel";
+                    s = I18n.get("label.daily_output_per_solar_panel");
                 } else {
-                    s = "Total Daily Output";
+                    s = I18n.get("label.total_daily_output");
                 }
                 s += ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
                 if (netProfit) {
-                    s = "Annual Profit";
+                    s = I18n.get("label.annual_profit");
                 } else if (outputPerSolarPanel) {
-                    s = "Annual Output per Solar Panel";
+                    s = I18n.get("label.annual_output_per_solar_panel");
                 } else {
-                    s = "Total Annual Output";
+                    s = I18n.get("label.total_annual_output");
                 }
                 s += ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                 break;
@@ -251,23 +252,23 @@ public class SolarPanelArrayOptimizer extends SolarOutputOptimizer {
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
                 if (netProfit) {
-                    s = "Daily Profit";
+                    s = I18n.get("label.daily_profit");
                 } else if (outputPerSolarPanel) {
-                    s = "Daily Output per Solar Panel";
+                    s = I18n.get("label.daily_output_per_solar_panel");
                 } else {
-                    s = "Total Daily Output";
+                    s = I18n.get("label.total_daily_output");
                 }
-                s += "\nCurrent: " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", Top: " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
+                s += "\n" + I18n.get("label.current") + ": " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", " + I18n.get("label.top") + ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
                 if (netProfit) {
-                    s = "Annual Profit";
+                    s = I18n.get("label.annual_profit");
                 } else if (outputPerSolarPanel) {
-                    s = "Annual Output per Solar Panel";
+                    s = I18n.get("label.annual_output_per_solar_panel");
                 } else {
-                    s = "Total Annual Output";
+                    s = I18n.get("label.total_annual_output");
                 }
-                s += "\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0) + ", Top: " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
+                s += "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0) + ", " + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);
@@ -316,10 +317,10 @@ public class SolarPanelArrayOptimizer extends SolarOutputOptimizer {
     public String toJson() {
         String json = super.toJson();
         json = json.substring(0, json.length() - 1);
-        json += ", \"Profit\": " + netProfit;
-        json += ", \"Solar Panel Average\": " + outputPerSolarPanel;
-        json += ", \"Price per KWh\": " + pricePerKWh;
-        json += ", \"Daily Cost per Solar Panel\": " + dailyCostPerSolarPanel;
+        json += ", \"" + I18n.get("json.profit") + "\": " + netProfit;
+        json += ", \"" + I18n.get("json.solar_panel_average") + "\": " + outputPerSolarPanel;
+        json += ", \"" + I18n.get("json.price_per_kwh") + "\": " + pricePerKWh;
+        json += ", \"" + I18n.get("json.daily_cost_per_solar_panel") + "\": " + dailyCostPerSolarPanel;
         json += "}";
         return json;
     }

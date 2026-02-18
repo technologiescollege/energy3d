@@ -48,6 +48,7 @@ import org.concord.energy3d.undo.ChangePoleHeightForAllSolarCollectorsCommand;
 import org.concord.energy3d.undo.ChangeReflectanceForAllSolarReflectorsCommand;
 import org.concord.energy3d.undo.ChangeSolarReceiverEfficiencyCommand;
 import org.concord.energy3d.undo.ChangeSolarReflectorOpticalEfficiencyCommand;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.undo.ChangeSolarReflectorReflectanceCommand;
 import org.concord.energy3d.undo.ChangeTargetForAllHeliostatsCommand;
 import org.concord.energy3d.undo.ChangeTiltAngleCommand;
@@ -70,7 +71,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
 
         if (popupMenuForHeliostat == null) {
 
-            final JCheckBoxMenuItem cbmiDisableEditPoint = new JCheckBoxMenuItem("Disable Edit Point");
+            final JCheckBoxMenuItem cbmiDisableEditPoint = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
             cbmiDisableEditPoint.addItemListener(new ItemListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -88,10 +89,10 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -111,11 +112,11 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             break;
                     }
 
-                    final String title = "<html>" + (disabled ? "Disable" : "Enable") + " edit point for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Disable the edit point of a heliostat prevents it from<br>being unintentionally moved.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel"};
+                    final String title = "<html>" + I18n.get(disabled ? "title.disable_edit_point" : "title.enable_edit_point", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.disable_edit_point_heliostat") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), (disabled ? "Disable" : "Enable") + " Edit Point");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get(disabled ? "dialog.disable_edit_point" : "dialog.enable_edit_point"));
                     dialog.setVisible(true);
                     if (optionPane.getValue() == options[0]) {
                         if (rb1.isSelected()) {
@@ -142,7 +143,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiDrawSunBeam = new JCheckBoxMenuItem("Draw Sun Beam");
+            final JCheckBoxMenuItem cbmiDrawSunBeam = new JCheckBoxMenuItem(I18n.get("menu.draw_sun_beam"));
             cbmiDrawSunBeam.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof Mirror)) {
@@ -160,7 +161,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miSetHeliostat = new JMenuItem("Set Target Tower...");
+            final JMenuItem miSetHeliostat = new JMenuItem(I18n.get("menu.set_target_tower"));
             miSetHeliostat.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -177,10 +178,10 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -205,7 +206,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     comboBox.addItemListener(event -> {
                         // TODO
                     });
-                    comboBox.addItem("None");
+                    comboBox.addItem(I18n.get("label.none"));
                     for (final Foundation x : foundations) {
                         if (!x.getChildren().isEmpty()) {
                             comboBox.addItem(x.getId() + "");
@@ -216,11 +217,11 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     }
                     gui.add(comboBox, BorderLayout.CENTER);
 
-                    final String title = "<html>Select the ID of the foundation<br>of the target tower for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The sunlight reflected by the mirror(s) of this heliostat will<br>focus on the top of the target tower.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final String title = "<html>" + I18n.get("title.select_target_tower_id", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.heliostat_target") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Target");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_target"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -235,7 +236,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                                 try {
                                     id = Integer.parseInt((String) comboBox.getSelectedItem());
                                 } catch (final NumberFormatException exception) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), comboBox.getSelectedItem() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", comboBox.getSelectedItem()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                     ok = false;
                                 }
                                 if (ok) {
@@ -243,7 +244,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                                     if (p instanceof Foundation) {
                                         target = (Foundation) p;
                                     } else {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "ID must be that of a foundation.", "ID Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.id_must_be_foundation"), I18n.get("msg.id_error"), JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                             }
@@ -320,7 +321,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miZenith = new JMenuItem("Tilt Angle...");
+            final JMenuItem miZenith = new JMenuItem(I18n.get("menu.tilt_angle"));
             miZenith.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -333,16 +334,16 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     }
                     final Mirror m = (Mirror) selectedPart;
                     final String partInfo = m.toString().substring(0, m.toString().indexOf(')') + 1);
-                    final String title = "<html>Tilt Angle of " + partInfo + " (&deg;)</html>";
-                    final String footnote = "<html><hr><font size=2>The tilt angle of the mirror of a heliostat is the angle between its surface and the base surface.<br>The tilt angle must be between -90&deg; and 90&deg;.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.tilt_angle_of", partInfo) + " (&deg;)</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.heliostat_tilt_angle") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -364,9 +365,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(m.getTiltAngle()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Mirror Tilt Angle");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_mirror_tilt_angle"));
 
                     while (true) {
                         inputField.selectAll();
@@ -381,12 +382,12 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < -90 || val > 90) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The tilt angle must be between -90 and 90 degrees.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_tilt_angle_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     if (Util.isZero(val - 90)) {
                                         val = 89.999;
@@ -458,7 +459,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miAzimuth = new JMenuItem("Azimuth...");
+            final JMenuItem miAzimuth = new JMenuItem(I18n.get("menu.azimuth"));
             miAzimuth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -472,16 +473,16 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Mirror mirror = (Mirror) selectedPart;
                     final Foundation foundation = mirror.getTopContainer();
-                    final String title = "<html>Azimuth Angle (&deg;) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The azimuth angle is measured clockwise from the true north.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.azimuth_angle_of", partInfo) + " (&deg;)</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.azimuth_angle") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -507,9 +508,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(a));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Azimuth");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_azimuth"));
 
                     while (true) {
                         inputField.selectAll();
@@ -524,7 +525,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
@@ -595,7 +596,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSize = new JMenuItem("Size...");
+            final JMenuItem miSize = new JMenuItem(I18n.get("menu.size"));
             miSize.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -612,19 +613,19 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Width: "));
+                    inputPanel.add(new JLabel(I18n.get("label.width")));
                     final JTextField widthField = new JTextField(threeDecimalsFormat.format(m.getApertureWidth()));
                     inputPanel.add(widthField);
-                    inputPanel.add(new JLabel("Length: "));
+                    inputPanel.add(new JLabel(I18n.get("label.length")));
                     final JTextField heightField = new JTextField(threeDecimalsFormat.format(m.getApertureHeight()));
                     inputPanel.add(heightField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -645,9 +646,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set size for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Size");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_size_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_size"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -661,14 +662,14 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                                 w = Double.parseDouble(widthField.getText());
                                 h = Double.parseDouble(heightField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (w < 1 || w > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Width must be between 1 and 50 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_width_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (h < 1 || h > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Height must be between 1 and 50 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(w - m.getApertureWidth()) > 0.000001 || Math.abs(h - m.getApertureHeight()) > 0.000001;
                                     final double w2 = w;
@@ -736,7 +737,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleHeight = new JMenuItem("Pole Height...");
+            final JMenuItem miPoleHeight = new JMenuItem(I18n.get("menu.pole_height"));
             miPoleHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -756,10 +757,10 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -781,9 +782,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(m.getPoleHeight() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Pole Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_pole_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -798,12 +799,12 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText()) / Scene.getInstance().getScale();
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val * Scene.getInstance().getScale() > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height must be between 0 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val - m.getPoleHeight()) > 0.000001;
                                     final double poleHeight = val;
@@ -870,9 +871,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
             miLabelNone.addActionListener(e -> {
                 if (miLabelNone.isSelected()) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -892,7 +893,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             });
             labelMenu.add(miLabelNone);
 
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
             miLabelCustom.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Mirror) {
@@ -900,7 +901,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final SetHeliostatLabelCommand c = new SetHeliostatLabelCommand(m);
                     m.setLabelCustom(miLabelCustom.isSelected());
                     if (m.getLabelCustom()) {
-                        m.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", m.getLabelCustomText()));
+                        m.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), m.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         m.draw();
@@ -913,7 +914,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCustom);
 
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
             miLabelId.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Mirror) {
@@ -931,7 +932,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             });
             labelMenu.add(miLabelId);
 
-            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem("Energy Output");
+            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem(I18n.get("label.energy_output"));
             miLabelEnergyOutput.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Mirror) {
@@ -949,11 +950,11 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             });
             labelMenu.add(miLabelEnergyOutput);
 
-            final JMenu textureMenu = new JMenu("Texture");
+            final JMenu textureMenu = new JMenu(I18n.get("menu.texture"));
 
             final ButtonGroup textureButtonGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem texture1MenuItem = new JRadioButtonMenuItem("Whole Mirror");
+            final JRadioButtonMenuItem texture1MenuItem = new JRadioButtonMenuItem(I18n.get("texture.whole_mirror"));
             texture1MenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeHeliostatTextureCommand c = new ChangeHeliostatTextureCommand();
@@ -972,7 +973,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             textureButtonGroup.add(texture1MenuItem);
             textureMenu.add(texture1MenuItem);
 
-            final JRadioButtonMenuItem texture2MenuItem = new JRadioButtonMenuItem("2 \u00D7 1 Mirrors");
+            final JRadioButtonMenuItem texture2MenuItem = new JRadioButtonMenuItem(I18n.get("texture.2x1_mirrors"));
             texture2MenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeHeliostatTextureCommand c = new ChangeHeliostatTextureCommand();
@@ -991,7 +992,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             textureButtonGroup.add(texture2MenuItem);
             textureMenu.add(texture2MenuItem);
 
-            final JRadioButtonMenuItem texture3MenuItem = new JRadioButtonMenuItem("1 \u00D7 2 Mirrors");
+            final JRadioButtonMenuItem texture3MenuItem = new JRadioButtonMenuItem(I18n.get("texture.1x2_mirrors"));
             texture3MenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeHeliostatTextureCommand c = new ChangeHeliostatTextureCommand();
@@ -1010,7 +1011,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             textureButtonGroup.add(texture3MenuItem);
             textureMenu.add(texture3MenuItem);
 
-            final JRadioButtonMenuItem texture4MenuItem = new JRadioButtonMenuItem("7 \u00D7 5 Mirrors");
+            final JRadioButtonMenuItem texture4MenuItem = new JRadioButtonMenuItem(I18n.get("texture.7x5_mirrors"));
             texture4MenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeHeliostatTextureCommand c = new ChangeHeliostatTextureCommand();
@@ -1080,7 +1081,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 Util.selectSilently(miLabelEnergyOutput, m.getLabelEnergyOutput());
             });
 
-            final JMenuItem miReflectance = new JMenuItem("Reflectance...");
+            final JMenuItem miReflectance = new JMenuItem(I18n.get("menu.reflectance"));
             miReflectance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1093,16 +1094,16 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Mirror m = (Mirror) selectedPart;
-                    final String title = "<html>Reflectance (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Reflectance can be affected by pollen and dust.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.reflectance_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.reflectance") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1124,9 +1125,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(m.getReflectance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Heliostat Mirror Reflectance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.heliostat_mirror_reflectance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1141,12 +1142,12 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 99) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Heliostat mirror reflectance must be between 50% and 99%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_reflectance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - m.getReflectance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1201,7 +1202,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miApertureRatio = new JMenuItem("Aperture Ratio...");
+            final JMenuItem miApertureRatio = new JMenuItem(I18n.get("menu.aperture_ratio"));
             miApertureRatio.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1214,16 +1215,16 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final Mirror m = (Mirror) selectedPart;
-                    final String title = "<html>Aperture percentage of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The percentage of the effective area for reflection<br>after deducting the area of gaps, frames, etc.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.aperture_percentage_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.aperture_percentage") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Heliostat", true);
-                    final JRadioButton rb2 = new JRadioButton("All Heliostats on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Heliostats");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_heliostat"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_heliostats_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_heliostats"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1245,9 +1246,9 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(m.getOpticalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Aperture Percentage of Heliostat Surface");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.aperture_percentage_heliostat"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1262,12 +1263,12 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 70 || val > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Heliostat aperature percentage must be between 70% and 100%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_aperture_percentage_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - m.getOpticalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1322,7 +1323,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miConversionEfficiency = new JMenuItem("Central Receiver Conversion Efficiency...");
+            final JMenuItem miConversionEfficiency = new JMenuItem(I18n.get("menu.central_receiver_conversion_efficiency"));
             miConversionEfficiency.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof Mirror)) {
@@ -1331,19 +1332,19 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                 final Mirror m = (Mirror) selectedPart;
                 final Foundation receiver = m.getReceiver();
                 if (receiver == null) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "This heliostat does not link to a receiver.", "No Receiver", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_no_receiver"), I18n.get("msg.no_receiver"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                final String title = "<html>Light-electricity conversion efficiency (%) of " + partInfo + "'s central receiver</html>";
+                final String title = "<html>" + I18n.get("title.receiver_conversion_efficiency_percent", partInfo) + "</html>";
                 final String footnote = "<html><hr><font size=2><hr></html>";
                 final JPanel gui = new JPanel(new BorderLayout());
                 final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(receiver.getSolarReceiverEfficiency() * 100));
                 gui.add(inputField, BorderLayout.SOUTH);
 
-                final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                 final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Receiver Conversion Efficiency");
+                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.receiver_conversion_efficiency"));
 
                 while (true) {
                     inputField.selectAll();
@@ -1358,12 +1359,12 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
                         try {
                             val = Double.parseDouble(inputField.getText());
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             ok = false;
                         }
                         if (ok) {
                             if (val < 5 || val > 50) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Light-electricity conversion efficiency must be between 5% and 50%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.receiver_conversion_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 final boolean changed = Math.abs(val * 0.01 - receiver.getSolarReceiverEfficiency()) > 0.000001;
                                 if (changed) {
@@ -1398,7 +1399,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             popupMenuForHeliostat.add(textureMenu);
             popupMenuForHeliostat.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Yield Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
@@ -1409,7 +1410,7 @@ class PopupMenuForHeliostat extends PopupMenuFactory {
             });
             popupMenuForHeliostat.add(mi);
 
-            mi = new JMenuItem("Annual Yield Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;

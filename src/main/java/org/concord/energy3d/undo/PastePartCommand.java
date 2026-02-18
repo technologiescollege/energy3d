@@ -11,6 +11,8 @@ import org.concord.energy3d.model.Human;
 import org.concord.energy3d.model.Sensor;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
+import org.concord.energy3d.util.I18n;
 
 public class PastePartCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +64,7 @@ public class PastePartCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Paste " + part.getClass().getSimpleName();
+		return I18n.get("undo.paste") + " " + MyAbstractUndoableEdit.getPartDisplayName(part.getClass());
 	}
 
 }

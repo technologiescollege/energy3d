@@ -27,6 +27,7 @@ import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.util.BugReporter;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -43,7 +44,7 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
 
     @Override
     void runAnalysis(final JDialog parent) {
-        graph.info = "Calculating...";
+        graph.info = I18n.get("msg.calculating");
         graph.repaint();
         onStart();
         SceneManager.getTaskManager().update(() -> {
@@ -63,10 +64,10 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
                         for (int i = n - 1; i >= 0; i--) {
                             previousRuns += keys[i] + " : " + Graph.TWO_DECIMALS.format(recordedResults.get(keys[i])) + " kWh<br>";
                         }
-                        final Object[] options = new Object[]{"OK", "Copy Data"};
-                        final String msg = "<html>The calculated daily net energy is <b>" + net + " kWh</b>.<br><hr>Results from previously recorded tests:<br>" + previousRuns + "</html>";
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data")};
+                        final String msg = "<html>" + I18n.get("msg.calculated_daily_net_energy", net) + "<br><hr>" + I18n.get("msg.results_from_previously_recorded_tests") + "<br>" + previousRuns + "</html>";
                         final JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Daily Net Energy");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("title.daily_net_energy"));
                         dialog.setVisible(true);
                         final Object choice = optionPane.getValue();
                         if (choice == options[1]) {
@@ -77,11 +78,11 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
                             output += Graph.TWO_DECIMALS.format(getResult("Net"));
                             final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                             clpbrd.setContents(new StringSelection(output), null);
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + (n + 1) + " data points copied to system clipboard.<br><hr>" + output,
-                                    "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n + 1)) + "<br><hr>" + output + "</html>",
+                                    I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(parent, "<html>The calculated daily net energy is <b>" + net + " kWh</b>.</html>", "Daily Net Energy", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(parent, "<html>" + I18n.get("msg.calculated_daily_net_energy", net) + "</html>", I18n.get("title.daily_net_energy"), JOptionPane.INFORMATION_MESSAGE);
                     }
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                     if (selectedPart instanceof Foundation) {
@@ -159,22 +160,22 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
                     cost = (int) BuildingCost.getInstance().getCostByFoundation((Foundation) selectedPart);
                     s = s.replaceAll("Foundation", "Building");
                     if (selectedPart.getChildren().isEmpty()) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no building on this foundation.", "No Building", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_building_on_foundation"), I18n.get("title.no_building"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (!isBuildingAcceptable((Foundation) selectedPart)) {
-                        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>The selected building cannot be accepted for this analysis.<br>Are you sure to continue?</html>",
-                                "Unacceptable Building", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+                        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.building_not_accepted") + "</html>",
+                                I18n.get("title.unacceptable_building"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
                             return;
                         }
                     }
                 } else if (selectedPart instanceof Tree) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Energy analysis is not applicable to a tree.", "Not Applicable", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.energy_analysis_not_applicable_tree"), I18n.get("title.not_applicable"), JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
         }
-        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + " (Construction cost: $" + cost + ")");
+        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + I18n.get("msg.construction_cost_suffix", String.valueOf(cost)));
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
         menuBar.add(createOptionsMenu(dialog, null, false));
@@ -190,10 +191,10 @@ public class EnergyDailyAnalysis extends DailyAnalysis {
         String[] names;
         if (selectedPart instanceof Foundation) {
             s += "\"Building\": " + selectedPart.getId();
-            names = new String[]{"Net", "AC", "Heater", "Windows", "Solar Panels"};
+            names = new String[]{I18n.get("chart.series.net"), I18n.get("chart.series.ac"), I18n.get("chart.series.heater"), I18n.get("chart.series.windows"), I18n.get("chart.series.solar_panels")};
         } else {
             s += "\"Part\": \"" + selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1) + "\"";
-            names = new String[]{"Solar", "Heat Gain"};
+            names = new String[]{I18n.get("chart.series.solar"), I18n.get("series.heat_gain")};
         }
         for (final String name : names) {
             final List<Double> data = graph.getData(name);

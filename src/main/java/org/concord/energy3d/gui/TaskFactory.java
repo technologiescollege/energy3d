@@ -8,6 +8,7 @@ import com.ardor3d.math.Vector3;
 import com.ardor3d.math.type.ReadOnlyVector3;
 import org.concord.energy3d.geneticalgorithms.applications.SolarPanelArrayOptimizer;
 import org.concord.energy3d.geneticalgorithms.applications.SolarPanelTiltAngleOptimizer;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.model.*;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
@@ -46,9 +47,9 @@ public final class TaskFactory {
             if (EnergyPanel.getInstance().adjustCellSize()) {
                 return;
             }
-            new DailySensorData().show("Daily Sensor Data");
+            new DailySensorData().show(I18n.get("title.daily_sensor_data"));
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no sensor.", "No sensor", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_sensor"), I18n.get("title.no_sensor"), JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -57,9 +58,9 @@ public final class TaskFactory {
             if (EnergyPanel.getInstance().adjustCellSize()) {
                 return;
             }
-            new AnnualSensorData().show("Annual Sensor Data");
+            new AnnualSensorData().show(I18n.get("title.annual_sensor_data"));
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no sensor.", "No sensor", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_sensor"), I18n.get("title.no_sensor"), JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -68,7 +69,7 @@ public final class TaskFactory {
         if (EnergyPanel.getInstance().checkRegion()) {
             int n = Scene.getInstance().countParts(new Class[]{SolarPanel.class, Rack.class});
             if (n <= 0) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no solar panel to analyze.", "No Solar Panel", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_solar_panel_to_analyze"), I18n.get("title.no_solar_panel"), JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -85,7 +86,7 @@ public final class TaskFactory {
                 if (foundation != null) {
                     n = foundation.countParts(new Class[]{SolarPanel.class, Rack.class});
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no solar panel on this foundation to analyze.", "No Solar Panel", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_solar_panel_on_foundation"), I18n.get("title.no_solar_panel"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                 }
@@ -103,7 +104,7 @@ public final class TaskFactory {
         if (EnergyPanel.getInstance().checkRegion()) {
             int n = Scene.getInstance().countParts(new Class[]{SolarPanel.class, Rack.class});
             if (n <= 0) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no solar panel to analyze.", "No Solar Panel", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_solar_panel_to_analyze"), I18n.get("title.no_solar_panel"), JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -128,7 +129,7 @@ public final class TaskFactory {
                 if (foundation != null) {
                     n = foundation.countParts(new Class[]{SolarPanel.class, Rack.class});
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no solar panel on this foundation to analyze.", "No Solar Panel", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_solar_panel_on_foundation"), I18n.get("title.no_solar_panel"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     a.setUtilityBill(foundation.getUtilityBill());
@@ -158,8 +159,8 @@ public final class TaskFactory {
                             }
                         }
                     } catch (final Exception e) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                                "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                                I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                         g = null;
                     }
                     break;
@@ -197,8 +198,8 @@ public final class TaskFactory {
                             }
                         }
                     } catch (final Exception e) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                                "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                                I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                         g = null;
                     }
                     break;
@@ -274,12 +275,12 @@ public final class TaskFactory {
                         SolarPanelTiltAngleOptimizer.make((Foundation) p);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                            "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                            I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             } catch (final Exception e) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                        "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                        I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -340,12 +341,12 @@ public final class TaskFactory {
                         SolarPanelArrayOptimizer.make((Foundation) p);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                            "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                            I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             } catch (final Exception e) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + taskName + "</i>.<br>Please select the IDs manually.</html>",
-                        "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", taskName) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>",
+                        I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -368,12 +369,12 @@ public final class TaskFactory {
                     SceneManager.getInstance().setSelectedPart(p);
                     new PopupMenuForFoundation.SolarPanelArrayLayoutManager().open(operationType);
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + options + "</i>.<br>Please select the ID of the solar array foundation manually.</html>",
-                            "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", options) + "<br>" + I18n.get("msg.select_solar_array_foundation_id") + "</html>",
+                            I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (final Exception e) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + options + "</i>.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", options) + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -400,7 +401,7 @@ public final class TaskFactory {
                 Scene.getInstance().setEdited(true);
             }
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + command + "</i>.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", command) + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -464,10 +465,10 @@ public final class TaskFactory {
                     Scene.getInstance().setEdited(true);
                 }
             } else {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + command + "</i>.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", command) + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
             }
         } catch (final Exception e) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + command + "</i>.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", command) + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

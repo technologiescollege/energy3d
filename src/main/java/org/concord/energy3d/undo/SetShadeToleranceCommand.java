@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class SetShadeToleranceCommand extends MyAbstractUndoableEdit {
 
@@ -42,11 +43,11 @@ public class SetShadeToleranceCommand extends MyAbstractUndoableEdit {
 	public String getPresentationName() {
 		switch (oldValue) {
 		case SolarPanel.NO_SHADE_TOLERANCE:
-			return "Choose No Shade Tolerance";
+			return I18n.get("undo.choose_no_shade_tolerance");
 		case SolarPanel.HIGH_SHADE_TOLERANCE:
-			return "Choose High Shade Tolerance";
+			return I18n.get("undo.choose_high_shade_tolerance");
 		default:
-			return "Choose Partial Shade Tolerance";
+			return I18n.get("undo.choose_partial_shade_tolerance");
 		}
 	}
 

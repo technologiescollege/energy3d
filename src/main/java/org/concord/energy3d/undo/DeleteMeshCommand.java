@@ -12,6 +12,7 @@ import org.concord.energy3d.model.NodeState;
 import org.concord.energy3d.model.UserData;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.scenegraph.Mesh;
 import com.ardor3d.scenegraph.Node;
@@ -75,7 +76,7 @@ public class DeleteMeshCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Delete Mesh";
+		return I18n.get("undo.delete_mesh");
 	}
 
 }

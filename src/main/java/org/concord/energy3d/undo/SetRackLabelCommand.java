@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
+import org.concord.energy3d.util.I18n;
 
 public class SetRackLabelCommand extends MyAbstractUndoableEdit {
 
@@ -76,7 +77,7 @@ public class SetRackLabelCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Label of Rack";
+		return I18n.get("undo.change_label_rack");
 	}
 
 }

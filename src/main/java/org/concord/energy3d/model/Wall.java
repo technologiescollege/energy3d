@@ -9,6 +9,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.AngleAnnotation;
 import org.concord.energy3d.shapes.SizeAnnotation;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.MeshLib;
 import org.concord.energy3d.util.PolygonWithHoles;
 import org.concord.energy3d.util.SelectUtil;
@@ -142,7 +143,7 @@ public class Wall extends HousePart implements Thermal {
         mesh.setModelBound(new BoundingBox());
         root.attachChild(mesh);
 
-        backMesh = new Mesh("Wall (Back)");
+        backMesh = new Mesh(I18n.get("node.wall_back"));
         backMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(1));
         backMesh.setDefaultColor(ColorRGBA.LIGHT_GRAY);
         backMesh.getSceneHints().setPickingHint(PickingHint.Pickable, false);
@@ -150,7 +151,7 @@ public class Wall extends HousePart implements Thermal {
         backMesh.setModelBound(new BoundingBox());
         root.attachChild(backMesh);
 
-        surroundMesh = new Mesh("Wall (Surround)");
+        surroundMesh = new Mesh(I18n.get("node.wall_surround"));
         surroundMesh.getMeshData().setIndexMode(IndexMode.Quads);
         surroundMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(12));
         surroundMesh.getMeshData().setNormalBuffer(BufferUtils.createVector3Buffer(12));
@@ -159,7 +160,7 @@ public class Wall extends HousePart implements Thermal {
         surroundMesh.setModelBound(new BoundingBox());
         root.attachChild(surroundMesh);
 
-        invisibleMesh = new Mesh("Wall (Invisible)");
+        invisibleMesh = new Mesh(I18n.get("node.wall_invisible"));
         invisibleMesh.getMeshData().setIndexMode(IndexMode.Quads);
         invisibleMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(4));
         invisibleMesh.getSceneHints().setCullHint(CullHint.Always);
@@ -167,7 +168,7 @@ public class Wall extends HousePart implements Thermal {
         invisibleMesh.setModelBound(new BoundingBox());
         root.attachChild(invisibleMesh);
 
-        windowsSurroundMesh = new Mesh("Wall (Windows Surround)");
+        windowsSurroundMesh = new Mesh(I18n.get("node.wall_windows_surround"));
         windowsSurroundMesh.getMeshData().setIndexMode(IndexMode.Quads);
         windowsSurroundMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(1));
         windowsSurroundMesh.getMeshData().setNormalBuffer(BufferUtils.createVector3Buffer(1));
@@ -178,7 +179,7 @@ public class Wall extends HousePart implements Thermal {
         windowsSurroundMesh.setModelBound(null);
         root.attachChild(windowsSurroundMesh);
 
-        outlineMesh = new Line("Wall (Outline)");
+        outlineMesh = new Line(I18n.get("node.wall_outline"));
         outlineMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(8));
         outlineMesh.setDefaultColor(ColorRGBA.BLACK);
         outlineMesh.setModelBound(null);

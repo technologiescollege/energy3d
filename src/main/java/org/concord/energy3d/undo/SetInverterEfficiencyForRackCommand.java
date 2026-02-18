@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
+import org.concord.energy3d.util.I18n;
 
 public class SetInverterEfficiencyForRackCommand extends MyAbstractUndoableEdit {
 
@@ -40,7 +41,7 @@ public class SetInverterEfficiencyForRackCommand extends MyAbstractUndoableEdit 
 
 	@Override
 	public String getPresentationName() {
-		return "Set Inverter Efficiency for Selected Rack";
+		return I18n.get("undo.set_inverter_efficiency_selected_rack");
 	}
 
 }

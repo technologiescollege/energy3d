@@ -1,6 +1,7 @@
 package org.concord.energy3d.undo;
 
 import org.concord.energy3d.model.Floor;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -42,7 +43,7 @@ public class ChangeFloorTypeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Type Change of Floor";
+		return I18n.get("undo.type_change_floor");
 	}
 
 }

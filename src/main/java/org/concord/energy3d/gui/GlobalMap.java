@@ -2,6 +2,7 @@ package org.concord.energy3d.gui;
 
 import org.concord.energy3d.simulation.LocationData;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,18 +27,18 @@ class GlobalMap extends JDialog {
     GlobalMap(final JFrame owner) {
 
         super(owner);
-        setTitle("Total Supported Regions: " + (LocationData.getInstance().getCities().length - 1));
+        setTitle(I18n.get("dialog.total_supported_regions", Integer.toString(LocationData.getInstance().getCities().length - 1)));
         setResizable(false);
         mapImageView = new MapImageViewWithLocations();
         final int m = 1;
         mapImageView.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(m, m, m, m), BorderFactory.createLineBorder(Color.LIGHT_GRAY)));
         mapImageView.setAlignmentX(0.5f);
-        mapImageView.setText("Loading...");
+        mapImageView.setText(I18n.get("msg.loading"));
         mapImageView.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(mapImageView, BorderLayout.CENTER);
         final JPanel bottomPanel = new JPanel();
-        final JButton closeButton = new JButton("Close");
+        final JButton closeButton = new JButton(I18n.get("common.close"));
         closeButton.addActionListener(e -> GlobalMap.this.dispose());
         bottomPanel.add(closeButton);
         getContentPane().add(bottomPanel, BorderLayout.SOUTH);
@@ -48,7 +49,8 @@ class GlobalMap extends JDialog {
                 final String[] t = s.split(",");
                 t[0] = t[0].trim();
                 if (t[0].equals("Amundsen-Scott Station")) { // special case
-                    final ArrayList<String> list = countries.get("United States");
+                    final String unitedStates = I18n.get("country.united_states");
+                    final ArrayList<String> list = countries.get(unitedStates);
                     list.add(s);
                 } else {
                     if (t.length == 1) {
@@ -58,10 +60,11 @@ class GlobalMap extends JDialog {
                     } else {
                         t[1] = t[1].trim();
                         if (t[1].length() == 2) {
-                            if (!countries.keySet().contains("United States")) {
-                                countries.put("United States", new ArrayList<>());
+                            final String unitedStates = I18n.get("country.united_states");
+                            if (!countries.keySet().contains(unitedStates)) {
+                                countries.put(unitedStates, new ArrayList<>());
                             }
-                            final ArrayList<String> list = countries.get("United States");
+                            final ArrayList<String> list = countries.get(unitedStates);
                             list.add(s);
                         } else {
                             if (!countries.keySet().contains((t[1]))) {
@@ -80,7 +83,7 @@ class GlobalMap extends JDialog {
 
         final JComboBox<String> regionsComboBox = new JComboBox<>();
         final JComboBox<String> countriesComboBox = new JComboBox<>();
-        final JLabel regionsLabel = new JLabel("Regions:");
+        final JLabel regionsLabel = new JLabel(I18n.get("label.regions"));
         if (Config.isMac()) {
             regionsLabel.setFont(new Font(regionsLabel.getFont().getName(), Font.PLAIN, regionsLabel.getFont().getSize() - 2));
             regionsComboBox.setFont(new Font(regionsComboBox.getFont().getName(), Font.PLAIN, regionsComboBox.getFont().getSize() - 3));
@@ -89,7 +92,7 @@ class GlobalMap extends JDialog {
         final ItemListener listener = e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (regionsComboBox.getSelectedItem() != null) {
-                    if ("United States".equals(countriesComboBox.getSelectedItem())) {
+                    if (I18n.get("country.united_states").equals(countriesComboBox.getSelectedItem())) {
                         EnergyPanel.getInstance().getRegionComboBox().setSelectedItem(regionsComboBox.getSelectedItem());
                     } else {
                         if (regionsComboBox.getSelectedItem().equals(countriesComboBox.getSelectedItem())) {
@@ -103,7 +106,7 @@ class GlobalMap extends JDialog {
             }
         };
 
-        final JLabel countriesLabel = new JLabel("<html><font color=blue size=2><u>" + countries.size() + " Countries</u>:</html>");
+        final JLabel countriesLabel = new JLabel("<html><font color=blue size=2><u>" + I18n.get("label.countries_count", Integer.toString(countries.size())) + "</u>:</html>");
         countriesLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         countriesLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -132,7 +135,7 @@ class GlobalMap extends JDialog {
                 textPane.setText(s.toString());
                 final JScrollPane scroller = new JScrollPane(textPane);
                 scroller.setPreferredSize(new Dimension(400, 400));
-                JOptionPane.showMessageDialog(GlobalMap.this, scroller, "Numbers of Supported Regions in Each Country", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(GlobalMap.this, scroller, I18n.get("dialog.total_supported_regions", Integer.toString(LocationData.getInstance().getCities().length - 1)), JOptionPane.INFORMATION_MESSAGE);
             }
         });
         topPanel.add(countriesLabel);
@@ -145,7 +148,7 @@ class GlobalMap extends JDialog {
             for (final String s : locationsInCountry) {
                 regionsComboBox.addItem(s);
             }
-            regionsLabel.setText("<html><font size=2>Regions (" + locationsInCountry.size() + "):</html>");
+            regionsLabel.setText("<html><font size=2>" + I18n.get("label.regions_count", Integer.toString(locationsInCountry.size())) + "</html>");
         });
         topPanel.add(countriesComboBox);
 
@@ -168,7 +171,7 @@ class GlobalMap extends JDialog {
                 } else {
                     t[1] = t[1].trim();
                     if (t[1].length() == 2) {
-                        countriesComboBox.setSelectedItem("United States");
+                        countriesComboBox.setSelectedItem(I18n.get("country.united_states"));
                         regionsComboBox.setSelectedItem(current);
                     } else {
                         countriesComboBox.setSelectedItem(t[1]);
@@ -210,7 +213,7 @@ class GlobalMap extends JDialog {
                     return;
                 }
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(GlobalMap.this, "Couldn't download map from Google!\nPlease check your internet connection and try again.", getTitle(), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(GlobalMap.this, I18n.get("msg.couldnt_download_map"), getTitle(), JOptionPane.WARNING_MESSAGE);
             }
 
         }.execute();

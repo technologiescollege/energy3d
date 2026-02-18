@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.ParabolicDish;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeStructureTypeForAllParabolicDishesCommand extends MyAbstractUndoableEdit {
 
@@ -53,7 +54,7 @@ public class ChangeStructureTypeForAllParabolicDishesCommand extends MyAbstractU
 
 	@Override
 	public String getPresentationName() {
-		return "Change Structure Type for All Parabolic Dishes";
+		return I18n.get("undo.change_structure_type_all_parabolic_dishes");
 	}
 
 }

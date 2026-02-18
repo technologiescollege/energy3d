@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileFilter;
 import org.concord.energy3d.MainApplication;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 /**
  * This is a file chooser that remembers the latest path and files.
@@ -22,11 +23,61 @@ import org.concord.energy3d.scene.Scene;
 
 public class FileChooser {
 
-    public static final ExtensionFileFilter pngFilter = new ExtensionFileFilter("Image (*.png)", "png");
-    public static final ExtensionFileFilter daeFilter = new ExtensionFileFilter("Collada (*.dae)", "dae");
-    public static final ExtensionFileFilter objFilter = new ExtensionFileFilter("Wavefront (*.obj)", "obj");
-    public static final ExtensionFileFilter ng3Filter = new ExtensionFileFilter("Energy3D (*.ng3)", "ng3");
-    public static final ExtensionFileFilter zipFilter = new ExtensionFileFilter("Zip (*.zip)", "zip");
+    private static ExtensionFileFilter pngFilterInstance;
+    private static ExtensionFileFilter daeFilterInstance;
+    private static ExtensionFileFilter objFilterInstance;
+    private static ExtensionFileFilter ng3FilterInstance;
+    private static ExtensionFileFilter zipFilterInstance;
+    
+    public static ExtensionFileFilter getPngFilter() {
+        if (pngFilterInstance == null) {
+            pngFilterInstance = new ExtensionFileFilter(I18n.get("filefilter.image_png"), "png");
+        }
+        return pngFilterInstance;
+    }
+    public static ExtensionFileFilter getDaeFilter() {
+        if (daeFilterInstance == null) {
+            daeFilterInstance = new ExtensionFileFilter(I18n.get("filefilter.collada_dae"), "dae");
+        }
+        return daeFilterInstance;
+    }
+    public static ExtensionFileFilter getObjFilter() {
+        if (objFilterInstance == null) {
+            objFilterInstance = new ExtensionFileFilter(I18n.get("filefilter.wavefront_obj"), "obj");
+        }
+        return objFilterInstance;
+    }
+    public static ExtensionFileFilter getNg3Filter() {
+        if (ng3FilterInstance == null) {
+            ng3FilterInstance = new ExtensionFileFilter(I18n.get("filefilter.energy3d_ng3"), "ng3");
+        }
+        return ng3FilterInstance;
+    }
+    public static ExtensionFileFilter getZipFilter() {
+        if (zipFilterInstance == null) {
+            zipFilterInstance = new ExtensionFileFilter(I18n.get("filefilter.zip"), "zip");
+        }
+        return zipFilterInstance;
+    }
+    
+    public static void invalidateFileFilterCache() {
+        pngFilterInstance = null;
+        daeFilterInstance = null;
+        objFilterInstance = null;
+        ng3FilterInstance = null;
+        zipFilterInstance = null;
+    }
+    
+    @Deprecated
+    public static final ExtensionFileFilter pngFilter = getPngFilter();
+    @Deprecated
+    public static final ExtensionFileFilter daeFilter = getDaeFilter();
+    @Deprecated
+    public static final ExtensionFileFilter objFilter = getObjFilter();
+    @Deprecated
+    public static final ExtensionFileFilter ng3Filter = getNg3Filter();
+    @Deprecated
+    public static final ExtensionFileFilter zipFilter = getZipFilter();
 
     private static final int MAX = 4;
     private static FileChooser instance;
@@ -101,7 +152,7 @@ public class FileChooser {
     public File showDialog(final String dotExtension, final FileFilter filter, final boolean isSaveDialog) {
         if (Config.isMac() && filter != null) {
             fileDialog.setMode(isSaveDialog ? FileDialog.SAVE : FileDialog.LOAD);
-            fileDialog.setTitle(isSaveDialog ? "Save" : "Open");
+            fileDialog.setTitle(isSaveDialog ? I18n.get("menu.save") : I18n.get("menu.open"));
             fileDialog.setFilenameFilter((dir, name) -> name.toLowerCase().endsWith(dotExtension));
 
             if (isSaveDialog && dotExtension.equals(".ng3") && Scene.getURL() != null) {
@@ -150,7 +201,7 @@ public class FileChooser {
                 if (!file.toString().toLowerCase().endsWith(dotExtension)) {
                     file = new File(file.getParentFile(), Util.getFileName(file.toString()) + dotExtension);
                 }
-                if (!isSaveDialog || !file.exists() || JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent, "File \"" + file.getName() + "\" already exists. Overwrite?", "Save File", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
+                if (!isSaveDialog || !file.exists() || JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent, I18n.get("msg.file_already_exists", file.getName()), I18n.get("title.save_file"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
                     if (!MainApplication.runFromOnlyJar()) {
                         Preferences.userNodeForPackage(MainApplication.class).put("dir", fileChooser.getCurrentDirectory().toString());
                     }

@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.ParabolicDish;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetFocalLengthForParabolicDishesOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class SetFocalLengthForParabolicDishesOnFoundationCommand extends MyAbstr
 
 	@Override
 	public String getPresentationName() {
-		return "Set Focal Length for All Parabolic Dishes on Selected Foundation";
+		return I18n.get("undo.set_focal_length_all_parabolic_dishes_foundation");
 	}
 
 }

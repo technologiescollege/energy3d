@@ -9,6 +9,7 @@ import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.NodeState;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.scenegraph.Node;
 
@@ -63,7 +64,7 @@ public class AddNodeCommand extends MyAbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        return "Add Node";
+        return I18n.get("undo.add_node");
     }
 
 }

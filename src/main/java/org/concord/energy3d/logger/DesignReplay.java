@@ -123,7 +123,7 @@ public class DesignReplay extends PlayControl {
                     forward = false;
                     if (i >= n - 1) { // don't break out from the loop, keep it alive so that the user can go back; for exiting the loop, user should press the space key
                         i = n - 1;
-                        EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), "This is the end of the replay. Press the left arrow key to go back or the space key to exit.", "End of Design Replay", JOptionPane.INFORMATION_MESSAGE));
+                        EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), org.concord.energy3d.util.I18n.get("msg.end_of_replay"), org.concord.energy3d.util.I18n.get("title.end_of_replay"), JOptionPane.INFORMATION_MESSAGE));
                     }
                 }
             }

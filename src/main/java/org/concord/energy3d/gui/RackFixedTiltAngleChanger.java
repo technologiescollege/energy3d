@@ -6,6 +6,7 @@ import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.*;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -35,20 +36,20 @@ public class RackFixedTiltAngleChanger {
         }
         final Rack rack = (Rack) selectedPart;
         if (rack.areMonthlyTiltAnglesSet()) {
-            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>Choosing the fixed tilt angle will remove existing settings for seasonal tilt angles.<br>Are you sure?", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
+            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.fixed_tilt_remove_seasonal") + "</html>", I18n.get("dialog.confirmation"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
                 return;
             }
         }
         final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-        final String title = "<html>Tilt Angle of " + partInfo + " (&deg;)</html>";
-        final String footnote = "<html><hr><font size=2>The tilt angle of a rack is the angle between its surface and the ground surface.<br>The tilt angle must be between -90&deg; and 90&deg;.<hr></html>";
+        final String title = "<html>" + I18n.get("title.tilt_angle_of", partInfo) + " (&deg;)</html>";
+        final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.tilt_angle_rack") + "<hr></html>";
         final JPanel gui = new JPanel(new BorderLayout());
         final JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-        final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-        final JRadioButton rb2 = new JRadioButton("All Racks on This Foundation");
-        final JRadioButton rb3 = new JRadioButton("All Racks");
+        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
         panel.add(rb1);
         panel.add(rb2);
         panel.add(rb3);
@@ -71,9 +72,9 @@ public class RackFixedTiltAngleChanger {
         final JTextField inputField = new JTextField(rack.getTiltAngle() + "");
         gui.add(inputField, BorderLayout.SOUTH);
 
-        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
         final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Tilt Angle");
+        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.tilt_angle"));
 
         while (true) {
             inputField.selectAll();
@@ -88,12 +89,12 @@ public class RackFixedTiltAngleChanger {
                 try {
                     val = Double.parseDouble(inputField.getText());
                 } catch (final NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                     ok = false;
                 }
                 if (ok) {
                     if (val < -90 || val > 90) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "The tilt angle must be between -90 and 90 degrees.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.tilt_angle_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else {
                         if (Util.isZero(val - 90)) {
                             val = 89.999;
@@ -110,8 +111,8 @@ public class RackFixedTiltAngleChanger {
                                     rack.draw();
                                     if (rack.checkContainerIntersection()) {
                                         EventQueue.invokeLater(() -> {
-                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "The rack cannot be tilted at such an angle as it would cut into the underlying surface.",
-                                                    "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.rack_tilt_illegal"),
+                                                    I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {
@@ -138,7 +139,7 @@ public class RackFixedTiltAngleChanger {
                                     foundation.setTiltAngleForRacks(tiltAngle);
                                     if (foundation.checkContainerIntersectionForRacks()) {
                                         EventQueue.invokeLater(() -> {
-                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Racks cannot be tilted at such an angle as one or more would cut into the underlying surface.", "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.racks_tilt_illegal"), I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {
@@ -163,7 +164,7 @@ public class RackFixedTiltAngleChanger {
                                     Scene.getInstance().setTiltAngleForAllRacks(tiltAngle);
                                     if (Scene.getInstance().checkContainerIntersectionForAllRacks()) {
                                         EventQueue.invokeLater(() -> {
-                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Racks cannot be tilted at such an angle as one or more would cut into the underlying surface.", "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.racks_tilt_illegal"), I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {

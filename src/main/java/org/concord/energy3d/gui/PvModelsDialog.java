@@ -7,6 +7,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.simulation.PvFinancialModel;
 import org.concord.energy3d.simulation.PvModuleSpecs;
 import org.concord.energy3d.simulation.PvModulesData;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 import javax.swing.*;
@@ -30,13 +31,13 @@ class PvModelsDialog extends JDialog {
 
         super(MainFrame.getInstance(), true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setTitle("Available PV Models");
+        setTitle(I18n.get("dialog.pv_models"));
 
         getContentPane().setLayout(new BorderLayout());
 
         final JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 4, 8));
-        titlePanel.add(new JLabel("<html><font size=2>Set the prices for the following solar panel models.<br>Currently used ones are highlighted.</html>"));
+        titlePanel.add(new JLabel("<html><font size=2>" + I18n.get("msg.pv_models_info") + "</html>"));
         getContentPane().add(titlePanel, BorderLayout.NORTH);
 
         final JPanel pvModelPanel = new JPanel(new SpringLayout());
@@ -51,15 +52,15 @@ class PvModelsDialog extends JDialog {
 
         List<String> selectedSolarPanelBrands = Scene.getInstance().getSolarPanelBrandNames();
 
-        JLabel label = FinancialSettingsDialog.createPvLabel("Custom: ");
-        if (selectedSolarPanelBrands.contains("Custom")) {
+        JLabel label = FinancialSettingsDialog.createPvLabel(I18n.get("label.custom") + ": ");
+        if (selectedSolarPanelBrands.contains(I18n.get("label.custom"))) {
             label.setBackground(Color.YELLOW);
         }
         pvModelPanel.add(label);
         pvModelPanel.add(new JLabel("$"));
         customSolarPanelPriceField = new JTextField(FORMAT.format(pvFinance.getCustomSolarPanelCost()), 6);
         pvModelPanel.add(customSolarPanelPriceField);
-        pvModelPanel.add(new JLabel("Custom"));
+        pvModelPanel.add(new JLabel(I18n.get("label.custom")));
         int i = 0;
         for (final String key : modules.keySet()) {
             label = FinancialSettingsDialog.createPvLabel(key + ": ");
@@ -79,7 +80,7 @@ class PvModelsDialog extends JDialog {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
             double customSolarPanelCost = 0;
             final double[] pvModelCosts = new double[priceFields.length];
@@ -90,16 +91,16 @@ class PvModelsDialog extends JDialog {
                 }
             } catch (final NumberFormatException err) {
                 err.printStackTrace();
-                JOptionPane.showMessageDialog(PvModelsDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(PvModelsDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (customSolarPanelCost < 0 || customSolarPanelCost > 10000) {
-                JOptionPane.showMessageDialog(PvModelsDialog.this, "Your solar panel price is out of range.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(PvModelsDialog.this, I18n.get("msg.solar_panel_price_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             for (double pvModelPrice : pvModelCosts) {
                 if (pvModelPrice < 0 || pvModelPrice > 10000) {
-                    JOptionPane.showMessageDialog(PvModelsDialog.this, "Your solar panel price is out of range.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(PvModelsDialog.this, I18n.get("msg.solar_panel_price_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -126,7 +127,7 @@ class PvModelsDialog extends JDialog {
         buttonPanel.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> dispose());
         cancelButton.setActionCommand("Cancel");
         buttonPanel.add(cancelButton);

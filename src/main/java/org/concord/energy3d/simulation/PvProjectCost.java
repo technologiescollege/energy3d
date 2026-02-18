@@ -20,6 +20,7 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.model.Tree;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 /**
  * Calculate the cost of a PV project, be it a ground-mounted solar farm or a rooftop system.
@@ -199,17 +200,17 @@ public class PvProjectCost extends ProjectCost {
 
         final double[] data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, solarPanelCost};
         final String years = "(" + financialModel.getLifespan() + " years)";
-        final String[] legends = new String[]{"Land Rental " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Solar Panels (One-Time)"};
+        final String[] legends = new String[]{I18n.get("cost.land_rental", years), I18n.get("cost.cleaning", years), I18n.get("cost.maintenance", years), I18n.get("cost.loan_interest", years), I18n.get("cost.solar_panels_onetime")};
 
         // show them in a popup window
         final PieChart pie = new PieChart(data, PvProjectZoneCostGraph.colors, legends, "$", info, count > 1 ? details : null, true);
         pie.setBackground(Color.WHITE);
         pie.setBorder(BorderFactory.createEtchedBorder());
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Cost Breakdown", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.cost_breakdown"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.getContentPane().add(pie, BorderLayout.CENTER);
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        final JButton buttonClose = new JButton("Close");
+        final JButton buttonClose = new JButton(I18n.get("common.close"));
         buttonClose.addActionListener(e -> dialog.dispose());
         buttonPanel.add(buttonClose);
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);

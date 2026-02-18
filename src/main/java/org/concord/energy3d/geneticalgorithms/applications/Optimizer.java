@@ -30,6 +30,7 @@ import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.math.Vector3;
@@ -437,14 +438,14 @@ public abstract class Optimizer {
             final JTabbedPane tabbedPane = new JTabbedPane();
 
             final int n = population.getChromosomeLength();
-            final String[] header = new String[]{"", "Initial", "Final"};
+            final String[] header = new String[]{"", I18n.get("table.initial"), I18n.get("table.final")};
             final Object[][] data = new Object[n + 1][3];
             for (int i = 0; i < n; i++) {
                 data[i][0] = geneNames[i];
                 data[i][1] = EnergyPanel.FIVE_DECIMALS.format(initialGene[i]);
                 data[i][2] = EnergyPanel.FIVE_DECIMALS.format(finalGene[i]);
             }
-            data[n][0] = "Objective";
+            data[n][0] = I18n.get("tab.objective");
             data[n][1] = EnergyPanel.FIVE_DECIMALS.format(initialFitness);
             data[n][2] = EnergyPanel.FIVE_DECIMALS.format(finalFitness);
             final JTable table = new JTable(data, header);
@@ -458,7 +459,7 @@ public abstract class Optimizer {
             ui.add(scrollPane, BorderLayout.CENTER);
 
             tabbedPane.setFont(new Font(null, Font.PLAIN, 8));
-            tabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Intermediates", TitledBorder.CENTER, TitledBorder.TOP));
+            tabbedPane.setBorder(BorderFactory.createTitledBorder(null, I18n.get("tab.intermediates"), TitledBorder.CENTER, TitledBorder.TOP));
             ui.add(tabbedPane, BorderLayout.SOUTH);
 
             for (int i = 0; i < n; i++) {
@@ -471,11 +472,11 @@ public abstract class Optimizer {
             final ObjectiveTemporalGraph objectiveGraph = new ObjectiveTemporalGraph(getFittestOfGenerations());
             objectiveGraph.setBackground(Color.WHITE);
             objectiveGraph.setPreferredSize(size);
-            tabbedPane.addTab("Objective", objectiveGraph);
+            tabbedPane.addTab(I18n.get("tab.objective"), objectiveGraph);
 
-            final Object[] options = new Object[]{"Close", "More"};
+            final Object[] options = new Object[]{I18n.get("common.close"), I18n.get("common.more")};
             final JOptionPane optionPane = new JOptionPane(ui, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION, null, options, options[0]);
-            final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Results");
+            final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.results"));
 
             while (true) {
                 dialog.setVisible(true);
@@ -485,7 +486,7 @@ public abstract class Optimizer {
                     for (int i = 0; i < population.size(); i++) {
                         System.out.println(i + " = " + individualToString(population.getIndividual(i)));
                     }
-                    displayResults("Population Distribution");
+                    displayResults(I18n.get("dialog.population_distribution"));
                 } else {
                     break;
                 }

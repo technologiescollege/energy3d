@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeBuildingWindowShgcCommand extends MyAbstractUndoableEdit {
 
@@ -53,7 +54,7 @@ public class ChangeBuildingWindowShgcCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "SHGC Change for All Windows of Selected Building";
+		return I18n.get("undo.shgc_change_all_windows_selected_building");
 	}
 
 }

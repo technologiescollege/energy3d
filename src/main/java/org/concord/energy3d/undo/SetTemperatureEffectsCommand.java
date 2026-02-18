@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class SetTemperatureEffectsCommand extends MyAbstractUndoableEdit {
 
@@ -50,7 +51,7 @@ public class SetTemperatureEffectsCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Temperature Effects Change for Selected Solar Panel";
+		return I18n.get("undo.temperature_effects_change_selected_solar_panel");
 	}
 
 }

@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.simulation.BuildingEnergyDailyGraph;
 import org.concord.energy3d.simulation.DailyGraph;
 import org.concord.energy3d.simulation.EnergyDailyAnalysis;
@@ -42,7 +43,7 @@ public class BuildingDailyEnergyGraph extends JPanel {
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -72,7 +73,7 @@ public class BuildingDailyEnergyGraph extends JPanel {
                             dg.setMilitaryTime(graph.getMilitaryTime());
                         }
                         g.setGraphType(graph.getGraphType());
-                        analysis.show("Daily Energy");
+                        analysis.show(I18n.get("analysis.daily_energy"));
                     }
                 }
             }
@@ -119,11 +120,11 @@ public class BuildingDailyEnergyGraph extends JPanel {
         graph.clearData();
         for (int i = 0; i < 24; i++) {
             SolarRadiation.getInstance().computeEnergyAtHour(i);
-            graph.addData("Windows", building.getPassiveSolarNow());
-            graph.addData("Solar Panels", building.getPhotovoltaicNow());
-            graph.addData("Heater", building.getHeatingNow());
-            graph.addData("AC", building.getCoolingNow());
-            graph.addData("Net", building.getTotalEnergyNow());
+            graph.addData(I18n.get("chart.series.windows"), building.getPassiveSolarNow());
+            graph.addData(I18n.get("chart.series.solar_panels"), building.getPhotovoltaicNow());
+            graph.addData(I18n.get("chart.series.heater"), building.getHeatingNow());
+            graph.addData(I18n.get("chart.series.ac"), building.getCoolingNow());
+            graph.addData(I18n.get("chart.series.net"), building.getTotalEnergyNow());
         }
         repaint();
     }
@@ -148,7 +149,7 @@ public class BuildingDailyEnergyGraph extends JPanel {
         StringBuilder s = new StringBuilder("{");
         if (building != null) {
             s.append("\"Building\": ").append(building.getId());
-            final String[] names = {"Net", "AC", "Heater", "Windows", "Solar Panels"};
+            final String[] names = {I18n.get("chart.series.net"), I18n.get("chart.series.ac"), I18n.get("chart.series.heater"), I18n.get("chart.series.windows"), I18n.get("chart.series.solar_panels")};
             for (final String name : names) {
                 final List<Double> data = graph.getData(name);
                 if (data == null) {

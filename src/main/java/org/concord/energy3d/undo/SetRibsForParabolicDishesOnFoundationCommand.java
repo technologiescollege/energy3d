@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.ParabolicDish;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetRibsForParabolicDishesOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class SetRibsForParabolicDishesOnFoundationCommand extends MyAbstractUndo
 
 	@Override
 	public String getPresentationName() {
-		return "Set Ribs for All Parabolic Dishes on Selected Foundation";
+		return I18n.get("undo.set_ribs_all_parabolic_dishes_foundation");
 	}
 
 }

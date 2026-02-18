@@ -9,6 +9,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SelectUtil;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -241,7 +242,11 @@ public class Tree extends HousePart implements Labelable {
     }
 
     public static String getPlantName(final int which) {
-        return PLANTS[which].getName();
+        if (which < 0 || which >= PLANTS.length) {
+            return "";
+        }
+        final String[] keys = {"plant.dogwood", "plant.elm", "plant.maple", "plant.pine", "plant.oak", "plant.linden", "plant.cottonwood"};
+        return I18n.get(keys[which]);
     }
 
     private boolean isShedded() {

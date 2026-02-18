@@ -13,6 +13,7 @@ import org.concord.energy3d.model.ParabolicTrough;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetPartSizeCommand extends MyAbstractUndoableEdit {
 
@@ -174,27 +175,27 @@ public class SetPartSizeCommand extends MyAbstractUndoableEdit {
 	@Override
 	public String getPresentationName() {
 		if (part instanceof Mirror) {
-			return "Set Size for Selected Heliostat";
+			return I18n.get("undo.set_size_selected_heliostat");
 		}
 		if (part instanceof ParabolicTrough) {
-			return "Set Size for Selected Parabolic Trough";
+			return I18n.get("undo.set_size_selected_parabolic_trough");
 		}
 		if (part instanceof ParabolicDish) {
-			return "Set Size for Selected Parabolic Dish";
+			return I18n.get("undo.set_size_selected_parabolic_dish");
 		}
 		if (part instanceof FresnelReflector) {
-			return "Set Size for Selected Fresnel Reflector";
+			return I18n.get("undo.set_size_selected_fresnel_reflector");
 		}
 		if (part instanceof Rack) {
-			return "Set Size for Selected Rack";
+			return I18n.get("undo.set_size_selected_rack");
 		}
 		if (part instanceof Window) {
-			return "Set Size for Selected Window";
+			return I18n.get("undo.set_size_selected_window");
 		}
 		if (part instanceof Door) {
-			return "Set Size for Selected Door";
+			return I18n.get("undo.set_size_selected_door");
 		}
-		return "Set Size";
+		return I18n.get("undo.set_size");
 	}
 
 }

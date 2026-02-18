@@ -32,6 +32,7 @@ import org.concord.energy3d.undo.DeleteNodeCommand;
 import org.concord.energy3d.undo.RemoveMultiplePartsCommand;
 import org.concord.energy3d.util.BugReporter;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.MeshLib;
 import org.concord.energy3d.util.SelectUtil;
 import org.concord.energy3d.util.TriangleMeshLib;
@@ -298,8 +299,8 @@ public class Foundation extends HousePart implements Thermal, Labelable {
                         it.remove();
                         EventQueue.invokeLater(() -> {
                             try {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), Paths.get(ns.getSourceURL().toURI()).toFile() + " was not found!",
-                                        "File problem", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.file_not_found", Paths.get(ns.getSourceURL().toURI()).toFile().toString()),
+                                        I18n.get("title.file_problem"), JOptionPane.ERROR_MESSAGE);
                             } catch (final HeadlessException e) {
                                 e.printStackTrace();
                             } catch (final URISyntaxException e) {
@@ -876,35 +877,35 @@ public class Foundation extends HousePart implements Thermal, Labelable {
         }
         if (labelPowerTowerOutput) {
             final double output = getPowerTowerOutputToday();
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(output) ? "Output" : EnergyPanel.NO_DECIMAL.format(output) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(output) ? I18n.get("label.output") : EnergyPanel.NO_DECIMAL.format(output) + " " + I18n.get("unit.kwh"));
         }
         if (labelNumberOfMirrors) {
             final int n = getNumberOfTargetingHeliostats();
-            text += n == 0 ? "" : "\n" + n + " Heliostats";
+            text += n == 0 ? "" : "\n" + n + " " + I18n.get("part.heliostats");
         }
         if (labelNumberOfFresnelReflectors) {
             final int n = getNumberOfTargetingFresnelReflectors();
-            text += n == 0 ? "" : "\n" + n + " Fresnel Reflectors";
+            text += n == 0 ? "" : "\n" + n + " " + I18n.get("part.fresnel_reflectors");
         }
         if (labelFresnelReflectorOutput) {
             final double output = getFresnelAbsorberOutputToday();
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(output) ? "Output" : EnergyPanel.NO_DECIMAL.format(output) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(output) ? I18n.get("label.output") : EnergyPanel.NO_DECIMAL.format(output) + " " + I18n.get("unit.kwh"));
         }
         if (labelBuildingEnergy) {
             final String s = totalEnergyToday > 100 ? EnergyPanel.NO_DECIMAL.format(totalEnergyToday) : EnergyPanel.ONE_DECIMAL.format(totalEnergyToday);
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalEnergyToday) ? "Building Energy" : s + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalEnergyToday) ? I18n.get("label.building_energy") : s + " " + I18n.get("unit.kwh"));
         }
         if (labelNumberOfSolarPanels) {
             final int n = getNumberOfSolarPanels();
-            text += n == 0 ? "" : "\n" + n + " Solar Panels";
+            text += n == 0 ? "" : "\n" + n + " " + I18n.get("part.solar_panels");
         }
         if (labelPvEnergy) {
             final String s = photovoltaicToday > 100 ? EnergyPanel.NO_DECIMAL.format(photovoltaicToday) : EnergyPanel.ONE_DECIMAL.format(photovoltaicToday);
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(photovoltaicToday) ? "PV Output" : s + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(photovoltaicToday) ? I18n.get("label.pv_output") : s + " " + I18n.get("unit.kwh"));
         }
         if (labelSolarPotential) {
             final String s = solarPotentialToday > 100 ? EnergyPanel.NO_DECIMAL.format(solarPotentialToday) : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday);
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Solar Potential" : s + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? I18n.get("label.solar_potential") : s + " " + I18n.get("unit.kwh"));
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -2311,14 +2312,14 @@ public class Foundation extends HousePart implements Thermal, Labelable {
             receiver = oldMirror.getReceiver(); // here we assume that all the heliostats on this foundation point to the same receiver (this is not always the case as a heliostat can point to any receiver)
         }
         final AddArrayCommand command = new AddArrayCommand(removed, this, Mirror.class);
-        command.put("Heliostat Aperture Width", layout.getApertureWidth());
-        command.put("Heliostat Aperture Height", layout.getApertureHeight());
-        command.put("Starting Field Angle", layout.getStartAngle());
-        command.put("Ending Field Angle", layout.getEndAngle());
-        command.put("Pole Height", layout.getPoleHeight());
-        command.put("Radial Spacing", layout.getRadialSpacing());
-        command.put("Radial Expansion Ratio", layout.getRadialExpansionRatio());
-        command.put("Azimuthal Spacing", layout.getAzimuthalSpacing());
+        command.put(I18n.get("param.heliostat_aperture_width"), layout.getApertureWidth());
+        command.put(I18n.get("param.heliostat_aperture_height"), layout.getApertureHeight());
+        command.put(I18n.get("param.starting_field_angle"), layout.getStartAngle());
+        command.put(I18n.get("param.ending_field_angle"), layout.getEndAngle());
+        command.put(I18n.get("param.pole_height"), layout.getPoleHeight());
+        command.put(I18n.get("param.radial_spacing"), layout.getRadialSpacing());
+        command.put(I18n.get("param.radial_expansion_ratio"), layout.getRadialExpansionRatio());
+        command.put(I18n.get("param.azimuthal_spacing"), layout.getAzimuthalSpacing());
         final double a = 0.5 * Math.min(getAbsPoint(0).distance(getAbsPoint(2)), getAbsPoint(0).distance(getAbsPoint(1)));
         final Vector3 center = getAbsCenter();
         final double dp = (layout.getApertureWidth() + layout.getAzimuthalSpacing()) / Scene.getInstance().getScale();
@@ -2479,15 +2480,15 @@ public class Foundation extends HousePart implements Thermal, Labelable {
             removed.clear();
         }
         final AddArrayCommand command = new AddArrayCommand(removed, this, Mirror.class);
-        command.put("Heliostat Aperture Width", layout.getApertureWidth());
-        command.put("Heliostat Aperture Height", layout.getApertureHeight());
-        command.put("Starting Field Angle", layout.getStartAngle());
-        command.put("Ending Field Angle", layout.getEndAngle());
-        command.put("Base Height", layout.getPoleHeight());
-        command.put("Starting Turn", layout.getStartTurn());
-        command.put("Scaling Factor", layout.getScalingFactor());
-        command.put("Radial Expansion Ration", layout.getRadialExpansionRatio());
-        command.put("Divergence Angle", layout.getDivergence());
+        command.put(I18n.get("param.heliostat_aperture_width"), layout.getApertureWidth());
+        command.put(I18n.get("param.heliostat_aperture_height"), layout.getApertureHeight());
+        command.put(I18n.get("param.starting_field_angle"), layout.getStartAngle());
+        command.put(I18n.get("param.ending_field_angle"), layout.getEndAngle());
+        command.put(I18n.get("param.base_height"), layout.getPoleHeight());
+        command.put(I18n.get("param.starting_turn"), layout.getStartTurn());
+        command.put(I18n.get("param.scaling_factor"), layout.getScalingFactor());
+        command.put(I18n.get("param.radial_expansion_ratio"), layout.getRadialExpansionRatio());
+        command.put(I18n.get("param.divergence_angle"), layout.getDivergence());
         final double a = 0.5 * Math.min(getAbsPoint(0).distance(getAbsPoint(2)), getAbsPoint(0).distance(getAbsPoint(1)));
         final double b = layout.getScalingFactor() * Math.hypot(layout.getApertureWidth(), layout.getApertureHeight()) / Scene.getInstance().getScale();
         final Vector3 center = getAbsCenter();
@@ -2591,14 +2592,14 @@ public class Foundation extends HousePart implements Thermal, Labelable {
             receiver = oldMirror.getReceiver(); // here we assume that all the heliostats on this foundation point to the same receiver (this is not always the case as a heliostat can point to any receiver)
         }
         final AddArrayCommand command = new AddArrayCommand(removed, this, Mirror.class);
-        command.put("Heliostat Aperture Width", layout.getApertureWidth());
-        command.put("Heliostat Aperture Height", layout.getApertureHeight());
-        command.put("Starting Field Angle", layout.getStartAngle());
-        command.put("Ending Field Angle", layout.getEndAngle());
-        command.put("Base Height", layout.getPoleHeight());
-        command.put("Row Spacing", layout.getRowSpacing());
-        command.put("Column Spacing", layout.getColumnSpacing());
-        command.put("Row Axis", layout.getRowAxis());
+        command.put(I18n.get("param.heliostat_aperture_width"), layout.getApertureWidth());
+        command.put(I18n.get("param.heliostat_aperture_height"), layout.getApertureHeight());
+        command.put(I18n.get("param.starting_field_angle"), layout.getStartAngle());
+        command.put(I18n.get("param.ending_field_angle"), layout.getEndAngle());
+        command.put(I18n.get("param.base_height"), layout.getPoleHeight());
+        command.put(I18n.get("param.row_spacing"), layout.getRowSpacing());
+        command.put(I18n.get("param.column_spacing"), layout.getColumnSpacing());
+        command.put(I18n.get("param.row_axis"), layout.getRowAxis());
         final double az = Math.toRadians(getAzimuth());
         if (!Util.isZero(az)) {
             rotate(az, null, false);
@@ -2672,10 +2673,10 @@ public class Foundation extends HousePart implements Thermal, Labelable {
             }
         }
         if (selectedParts.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no object to remove.", "No Object", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_object_to_remove"), I18n.get("title.no_object"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>Do you really want to remove all " + selectedParts.size() + " objects<br>within the white border line of the selected foundation?</html>", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.confirm_remove_objects_in_border", Integer.toString(selectedParts.size())) + "</html>", I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }
         SceneManager.getTaskManager().update(() -> {
@@ -2728,10 +2729,10 @@ public class Foundation extends HousePart implements Thermal, Labelable {
     public void addSolarPanelArrays(final SolarPanel solarPanel, final double rowSpacing, final double colSpacing, final int rowAxis) {
         EnergyPanel.getInstance().updateRadiationHeatMap();
         final AddArrayCommand command = new AddArrayCommand(removeChildrenOfClass(new Class[]{Rack.class, SolarPanel.class}), this, SolarPanel.class);
-        command.put("Tilt Angtle", solarPanel.getTiltAngle());
-        command.put("Row Spacing", rowSpacing);
-        command.put("Column Spacing", colSpacing);
-        command.put("Row Axis", rowAxis);
+        command.put(I18n.get("param.tilt_angle"), solarPanel.getTiltAngle());
+        command.put(I18n.get("param.row_spacing"), rowSpacing);
+        command.put(I18n.get("param.column_spacing"), colSpacing);
+        command.put(I18n.get("param.row_axis"), rowAxis);
         final double az = Math.toRadians(getAzimuth());
         if (!Util.isZero(az)) {
             rotate(az, null, false);
@@ -2818,9 +2819,9 @@ public class Foundation extends HousePart implements Thermal, Labelable {
     public void addSolarRackArrays(final SolarPanel panel, double tiltAngle, final double poleHeight, final int panelRowsPerRack, final double rowSpacing, final int rowAxis, final double poleDistanceX, final double poleDistanceY) {
         EnergyPanel.getInstance().updateRadiationHeatMap();
         final AddArrayCommand command = new AddArrayCommand(removeChildrenOfClass(new Class[]{Rack.class, SolarPanel.class}), this, Rack.class);
-        command.put("Tilt Angle", tiltAngle);
-        command.put("Solar Panel Rows per Rack", panelRowsPerRack);
-        command.put("Inter-Row Spacing", rowSpacing);
+        command.put(I18n.get("param.tilt_angle"), tiltAngle);
+        command.put(I18n.get("param.solar_panel_rows_per_rack"), panelRowsPerRack);
+        command.put(I18n.get("param.inter_row_spacing"), rowSpacing);
         final double az = Math.toRadians(getAzimuth());
         if (!Util.isZero(az)) {
             rotate(az, null, false);
@@ -4121,7 +4122,7 @@ public class Foundation extends HousePart implements Thermal, Labelable {
             }
             // now construct a new node that is a parent of all planar meshes
             final Node newNode = new Node(originalNode.getName());
-            final String nodeString = "Node #" + importedNodes.size() + ", Foundation #" + id;
+            final String nodeString = I18n.get("label.node_number", Integer.toString(importedNodes.size())) + ", " + I18n.get("label.foundation_number", Long.toString(id));
             final List<Mesh> meshes = new ArrayList<>();
             Util.getMeshes(originalNode, meshes);
             String warnInfo = null;
@@ -4141,7 +4142,7 @@ public class Foundation extends HousePart implements Thermal, Labelable {
                                 ud.setRenderState(s.getLocalRenderState(StateType.Texture));
                                 ud.setTextureBuffer(s.getMeshData().getTextureBuffer(0));
                                 s.setUserData(ud);
-                                s.setName("Mesh #" + meshIndex + ", " + nodeString);
+                                s.setName(I18n.get("label.mesh_number", Integer.toString(meshIndex)) + ", " + nodeString);
                                 newNode.attachChild(s);
                                 meshIndex++;
                             }
@@ -4155,7 +4156,7 @@ public class Foundation extends HousePart implements Thermal, Labelable {
                 }
             }
             if (warnInfo != null) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Non-triangular mesh " + warnInfo + " is found.", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.non_triangular_mesh_found", warnInfo), I18n.get("title.warning"), JOptionPane.WARNING_MESSAGE);
             }
             if (newNode.getNumberOfChildren() > 0) {
                 importedNodes.add(newNode);
@@ -4223,11 +4224,11 @@ public class Foundation extends HousePart implements Thermal, Labelable {
 
     public void removeAllImports() {
         if (importedNodes == null || importedNodes.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no imported structure to remove.", "No Imported Structure", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_imported_structure_to_remove"), I18n.get("title.no_imported_structure"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         final int count = importedNodes.size();
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + count + " imported structures?", "Confirm",
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.confirm_remove_imported_structures", Integer.toString(count)), I18n.get("dialog.confirm"),
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
             return;
         }

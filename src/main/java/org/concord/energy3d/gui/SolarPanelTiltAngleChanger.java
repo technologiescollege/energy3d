@@ -6,6 +6,7 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.ChangeFoundationSolarPanelTiltAngleCommand;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.undo.ChangeTiltAngleCommand;
 import org.concord.energy3d.undo.ChangeTiltAngleForAllSolarPanelsCommand;
 import org.concord.energy3d.undo.ChangeTiltAngleForSolarPanelRowCommand;
@@ -39,17 +40,17 @@ public class SolarPanelTiltAngleChanger {
         }
         final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
         final SolarPanel sp = (SolarPanel) selectedPart;
-        final String title = "<html>Tilt Angle of " + partInfo + " (&deg;)</html>";
-        final String footnote = "<html><hr><font size=2>The tilt angle of a solar panel is the angle between its surface and the base surface.<br>The tilt angle must be between -90&deg; and 90&deg;.<hr></html>";
+        final String title = "<html>" + I18n.get("title.tilt_angle_of", partInfo) + " (&deg;)</html>";
+        final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.tilt_angle_solar_panel") + "<hr></html>";
         final JPanel gui = new JPanel(new BorderLayout());
         final JPanel panel = new JPanel();
         gui.add(panel, BorderLayout.CENTER);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-        final JRadioButton rb1 = new JRadioButton("Only this Solar Panel", true);
-        final JRadioButton rb2 = new JRadioButton("Only this Row", true);
-        final JRadioButton rb3 = new JRadioButton("All Solar Panels on This Foundation");
-        final JRadioButton rb4 = new JRadioButton("All Solar Panels");
+        panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_solar_panel"), true);
+        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.only_this_row"), true);
+        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_solar_panels_on_foundation"));
+        final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_solar_panels"));
         panel.add(rb1);
         panel.add(rb2);
         panel.add(rb3);
@@ -77,9 +78,9 @@ public class SolarPanelTiltAngleChanger {
         final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(sp.getTiltAngle()));
         gui.add(inputField, BorderLayout.SOUTH);
 
-        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
         final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Tilt Angle");
+        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_tilt_angle"));
 
         while (true) {
             inputField.selectAll();
@@ -94,12 +95,12 @@ public class SolarPanelTiltAngleChanger {
                 try {
                     val = Double.parseDouble(inputField.getText());
                 } catch (final NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                     ok = false;
                 }
                 if (ok) {
                     if (val < -90 || val > 90) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "The tilt angle must be between -90 and 90 degrees.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.tilt_angle_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else {
                         if (Util.isZero(val - 90)) {
                             val = 89.999;
@@ -117,8 +118,8 @@ public class SolarPanelTiltAngleChanger {
                                     if (sp.checkContainerIntersection()) {
                                         EventQueue.invokeLater(() -> {
                                             JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "This tilt angle cannot be set as the solar panel would cut into the underlying surface.",
-                                                    "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                                    I18n.get("msg.solar_panel_tilt_illegal"),
+                                                    I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {
@@ -154,8 +155,8 @@ public class SolarPanelTiltAngleChanger {
                                     if (intersected) {
                                         EventQueue.invokeLater(() -> {
                                             JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "This tilt angle cannot be set as one or more solar panels would cut into the underlying surface.",
-                                                    "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                                    I18n.get("msg.solar_panels_tilt_illegal"),
+                                                    I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {
@@ -183,8 +184,8 @@ public class SolarPanelTiltAngleChanger {
                                     if (foundation.checkContainerIntersectionForSolarPanels()) {
                                         EventQueue.invokeLater(() -> {
                                             JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "This tilt angle cannot be set as one or more solar panels would cut into the underlying surface.",
-                                                    "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                                    I18n.get("msg.solar_panels_tilt_illegal"),
+                                                    I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {
@@ -210,8 +211,8 @@ public class SolarPanelTiltAngleChanger {
                                     if (Scene.getInstance().checkContainerIntersectionForAllSolarPanels()) {
                                         EventQueue.invokeLater(() -> {
                                             JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "This tilt angle cannot be set as one or more solar panels would cut into the underlying surface.",
-                                                    "Illegal Tilt Angle", JOptionPane.ERROR_MESSAGE);
+                                                    I18n.get("msg.solar_panels_tilt_illegal"),
+                                                    I18n.get("msg.illegal_tilt_angle"), JOptionPane.ERROR_MESSAGE);
                                             c.undo();
                                         });
                                     } else {

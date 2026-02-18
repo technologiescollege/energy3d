@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetTextureForPartsCommand extends MyAbstractUndoableEdit {
 
@@ -52,7 +53,7 @@ public class SetTextureForPartsCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Set Texture for Foundations";
+		return I18n.get("undo.set_texture_foundations");
 	}
 
 }

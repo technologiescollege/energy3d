@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeInverterEfficiencyForAllCommand extends MyAbstractUndoableEdit {
 
@@ -46,7 +47,7 @@ public class ChangeInverterEfficiencyForAllCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Inverter Efficiency Change for All Solar Panels";
+		return I18n.get("undo.inverter_efficiency_change_all_solar_panels");
 	}
 
 }

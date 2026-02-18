@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Wall;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeWallTypeCommand extends MyAbstractUndoableEdit {
 
@@ -42,7 +43,7 @@ public class ChangeWallTypeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Type Change of Wall";
+		return I18n.get("undo.type_change_wall");
 	}
 
 }

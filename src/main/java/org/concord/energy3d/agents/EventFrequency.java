@@ -27,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import org.concord.energy3d.gui.MainFrame;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.ClipImage;
 import org.concord.energy3d.util.Util;
 
@@ -97,7 +98,7 @@ public class EventFrequency extends JComponent {
 
 		g2.setColor(Color.WHITE);
 		g2.setFont(new Font("Arial", Font.PLAIN, 11));
-		final String xLabel = "Event Count";
+		final String xLabel = I18n.get("axis.event_count");
 		g2.drawString(xLabel, width / 2 - g2.getFontMetrics().stringWidth(xLabel) / 2, xAxisY + 30);
 
 		if (max > 0 && eventCounts != null && !eventCounts.isEmpty()) {
@@ -117,7 +118,7 @@ public class EventFrequency extends JComponent {
 
 	public void showGui() {
 
-		final JDialog dialog = new JDialog(MainFrame.getInstance(), "Event Count", true);
+		final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.event_count"), true);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		final JPanel contentPane = new JPanel(new BorderLayout());
@@ -126,10 +127,10 @@ public class EventFrequency extends JComponent {
 		final JMenuBar menuBar = new JMenuBar();
 		dialog.setJMenuBar(menuBar);
 
-		final JMenu menu = new JMenu("Export");
+		final JMenu menu = new JMenu(I18n.get("menu.export"));
 		menuBar.add(menu);
 
-		final JMenuItem mi = new JMenuItem("Copy Image");
+		final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -147,7 +148,7 @@ public class EventFrequency extends JComponent {
 		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-		final JButton button = new JButton("Close");
+		final JButton button = new JButton(I18n.get("common.close"));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {

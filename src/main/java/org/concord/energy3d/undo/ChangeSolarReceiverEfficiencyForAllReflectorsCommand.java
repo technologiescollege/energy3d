@@ -9,6 +9,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.SolarReflector;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeSolarReceiverEfficiencyForAllReflectorsCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class ChangeSolarReceiverEfficiencyForAllReflectorsCommand extends MyAbst
 
 	@Override
 	public String getPresentationName() {
-		return "Solar Receiver Efficiency Change for All Reflectors";
+		return I18n.get("undo.solar_receiver_efficiency_change_all_reflectors");
 	}
 
 }

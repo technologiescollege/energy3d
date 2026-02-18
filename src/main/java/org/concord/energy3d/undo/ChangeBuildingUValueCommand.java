@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Thermal;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeBuildingUValueCommand extends MyAbstractUndoableEdit {
 
@@ -61,7 +62,7 @@ public class ChangeBuildingUValueCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "U-Factor Change for Whole Building";
+		return I18n.get("undo.u_factor_change_whole_building");
 	}
 
 }

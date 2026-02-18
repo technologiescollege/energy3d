@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.ParabolicDish;
+import org.concord.energy3d.util.I18n;
 
 public class SetParabolicDishRibsCommand extends MyAbstractUndoableEdit {
 
@@ -46,7 +47,7 @@ public class SetParabolicDishRibsCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Set Ribs for Selected Parabolic Dish";
+		return I18n.get("undo.set_ribs_selected_parabolic_dish");
 	}
 
 }

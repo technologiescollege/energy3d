@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Window;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeWindowShuttersCommand extends MyAbstractUndoableEdit {
 
@@ -52,7 +53,7 @@ public class ChangeWindowShuttersCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Shutters for Window";
+		return I18n.get("undo.change_shutters_window");
 	}
 
 }

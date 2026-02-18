@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class SetSolarPanelArrayOnRackCustomCommand extends MyAbstractUndoableEdit {
 
@@ -65,7 +66,7 @@ public class SetSolarPanelArrayOnRackCustomCommand extends MyAbstractUndoableEdi
 
 	@Override
 	public String getPresentationName() {
-		return "Set Solar Panel Array on Rack";
+		return I18n.get("undo.set_solar_panel_array_rack");
 	}
 
 }

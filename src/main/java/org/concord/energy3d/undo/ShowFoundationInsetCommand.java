@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
+import org.concord.energy3d.util.I18n;
 
 public class ShowFoundationInsetCommand extends MyAbstractUndoableEdit {
 
@@ -34,7 +35,7 @@ public class ShowFoundationInsetCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Foundation Inset";
+		return I18n.get("undo.show_foundation_inset");
 	}
 
 }

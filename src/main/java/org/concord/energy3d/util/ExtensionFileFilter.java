@@ -15,7 +15,7 @@ public class ExtensionFileFilter extends FileFilter {
 
     private ExtensionFileFilter(final String description, final String[] extensions) {
         if (description == null) {
-            this.description = extensions[0] + "{ " + extensions.length + "} ";
+            this.description = extensions[0] + I18n.get("filefilter.extensions_count", extensions.length);
         } else {
             this.description = description;
         }

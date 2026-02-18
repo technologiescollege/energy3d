@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Window;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeWindowShgcCommand extends MyAbstractUndoableEdit {
 
@@ -40,7 +41,7 @@ public class ChangeWindowShgcCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "SHGC Change for Selected Window";
+		return I18n.get("undo.shgc_change_selected_window");
 	}
 
 }

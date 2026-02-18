@@ -12,6 +12,7 @@ import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.UIManager;
 
@@ -28,11 +29,12 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.util.BugReporter;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Updater;
 
 public class MainApplication {
 
-    public static final String VERSION = "8.7.5";
+    public static final String VERSION = "8.8.0";
     private static Thread sceneManagerThread;
     public static boolean appDirectoryWritable = true;
     public static boolean isMacOpeningFile;
@@ -98,6 +100,15 @@ public class MainApplication {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (final Exception e) {
             e.printStackTrace();
+        }
+
+        // UI language: -Denergy3d.locale=fr or saved preference (Edit > Properties > Language)
+        String localeCode = System.getProperty("energy3d.locale", "").trim();
+        if (localeCode.isEmpty()) {
+            localeCode = java.util.prefs.Preferences.userNodeForPackage(MainApplication.class).get("locale", "");
+        }
+        if (!localeCode.isEmpty()) {
+            I18n.setLocale(new Locale(localeCode));
         }
 
         initializing = true;

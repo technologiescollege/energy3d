@@ -16,6 +16,7 @@ import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Atmosphere;
 import org.concord.energy3d.simulation.PvModuleSpecs;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -529,7 +530,7 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
             }
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.TWO_DECIMALS.format(solarPotentialToday) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.TWO_DECIMALS.format(solarPotentialToday) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -545,16 +546,16 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
         String name = null;
         switch (trackerType) {
             case HORIZONTAL_SINGLE_AXIS_TRACKER:
-                name = "HSAT";
+                name = I18n.get("tracker.hsat");
                 break;
             case TILTED_SINGLE_AXIS_TRACKER:
-                name = "TSAT";
+                name = I18n.get("tracker.tsat");
                 break;
             case VERTICAL_SINGLE_AXIS_TRACKER:
-                name = "VSAT";
+                name = I18n.get("tracker.vsat");
                 break;
             case ALTAZIMUTH_DUAL_AXIS_TRACKER:
-                name = "AADAT";
+                name = I18n.get("tracker.aadat");
                 break;
         }
         return name;
@@ -851,7 +852,7 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
             if (container instanceof Roof || container instanceof Rack) {
                 if (normal == null) {
                     // don't remove this error message just in case this happens again
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Normal of solar panel [" + c + "] is null. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_panel_normal_null", String.valueOf(c)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 if (Util.isEqual(normal, Vector3.UNIT_Z)) { // flat roof
@@ -894,12 +895,12 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
                     isOutside = false;
                 }
                 if (isOutside) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, you are not allowed to paste a solar panel outside a roof or rack.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_panel_paste_outside"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 final double o = c.overlap();
                 if (o >= 0) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new solar panel is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_panel_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (container instanceof Foundation) {
@@ -926,7 +927,7 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
                 c.points.get(0).setY(newY);
                 final double o = c.overlap();
                 if (o >= 0) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new solar panel is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_panel_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (container instanceof Wall) {
@@ -938,7 +939,7 @@ public class SolarPanel extends HousePart implements Trackable, Meshable, Labela
                 }
                 c.points.get(0).setX(newX);
                 if (c.overlap() >= 0) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new solar panel is too close to an existing one.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_panel_too_close_simple"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             }

@@ -64,6 +64,7 @@ import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.undo.*;
 import org.concord.energy3d.util.*;
 import org.concord.energy3d.util.Config.RenderMode;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 import java.awt.*;
@@ -2037,7 +2038,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                             setSelectedPart(foundation);
                             if (isTooFar(foundation)) {
                                 cmd.undo();
-                                EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), "This position was not allowed because it was too far from the center.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                                EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.position_not_allowed"), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                             }
                         }
                     }
@@ -2070,7 +2071,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                                 if (isTooFar(selectedPart)) {
                                     editPartCommand.undo();
                                     final String name = selectedPart.getClass().getSimpleName() + " (" + selectedPart.getId() + ")";
-                                    EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), "Moving " + name + " was not allowed because it was moved too far from the center.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                                    EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.moving_not_allowed", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                                 } else {
                                     if (editPartCommand.isReallyEdited()) {
                                         undoManager.addEdit(editPartCommand);
@@ -2116,7 +2117,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                                         Scene.getInstance().remove(selectedPart, true);
                                         final String name = selectedPart.getClass().getSimpleName() + " (" + selectedPart.getId() + ")";
                                         EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                "Adding " + name + " was not allowed because it was placed too far from the center.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                                                I18n.get("msg.adding_not_allowed", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                                         addSuccess = false;
                                     } else if (selectedPart instanceof Rack) {
                                         Rack rack = (Rack) selectedPart;
@@ -2124,7 +2125,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                                             Scene.getInstance().remove(selectedPart, true);
                                             final String name = selectedPart.getClass().getSimpleName() + " (" + selectedPart.getId() + ")";
                                             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "Adding " + name + " was not allowed because it would not be completely inside the underlying surface.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                                                    I18n.get("msg.adding_not_allowed_surface", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                                             addSuccess = false;
                                         } else {
                                             if (rack.getContainer() instanceof Roof || rack.getContainer() instanceof Wall) {
@@ -2138,7 +2139,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                                             Scene.getInstance().remove(selectedPart, true);
                                             final String name = selectedPart.getClass().getSimpleName() + " (" + selectedPart.getId() + ")";
                                             EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                                                    "Adding " + name + " was not allowed because it would not be completely inside the underlying surface.", "Illegal position", JOptionPane.WARNING_MESSAGE));
+                                                    I18n.get("msg.adding_not_allowed_surface", name), I18n.get("title.illegal_position"), JOptionPane.WARNING_MESSAGE));
                                             addSuccess = false;
                                         } else {
                                             if (panel.getContainer() instanceof Roof || panel.getContainer() instanceof Wall) {
@@ -2229,7 +2230,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
         if (selectedPart instanceof Foundation) {
             final Foundation foundation = (Foundation) selectedPart;
             if (!foundation.getChildren().isEmpty() && foundation.getSelectedMesh() == null) {
-                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Deleting the foundation also deletes all the objects on it. Are you sure?", "Confirmation", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.deleting_foundation"), I18n.get("title.confirmation"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                     return;
                 }
             }
@@ -2550,9 +2551,9 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
             } else {
                 if (ask) {
                     if (count > 1) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "There are multiple buildings. You must select a building first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.multiple_buildings"), I18n.get("title.no_selection"), JOptionPane.WARNING_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no building.", "No Building", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_building"), I18n.get("title.no_building"), JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -2566,7 +2567,7 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
                 foundation = topContainer;
             } else {
                 if (ask) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "You must select a building first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.must_select_building"), I18n.get("title.no_selection"), JOptionPane.WARNING_MESSAGE);
                 }
             }
         }

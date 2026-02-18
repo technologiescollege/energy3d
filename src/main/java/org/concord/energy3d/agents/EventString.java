@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -98,7 +100,7 @@ public class EventString extends JPanel {
 
 	public void showGui() {
 
-		final JDialog dialog = new JDialog(MainFrame.getInstance(), "Event String", true);
+		final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.event_string"), true);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		final JPanel contentPane = new JPanel(new BorderLayout());
@@ -107,10 +109,10 @@ public class EventString extends JPanel {
 		final JMenuBar menuBar = new JMenuBar();
 		dialog.setJMenuBar(menuBar);
 
-		final JMenu menu = new JMenu("Export");
+		final JMenu menu = new JMenu(I18n.get("menu.export"));
 		menuBar.add(menu);
 
-		JMenuItem mi = new JMenuItem("Copy Colored String");
+		JMenuItem mi = new JMenuItem(I18n.get("menu.copy_colored_string"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -118,24 +120,24 @@ public class EventString extends JPanel {
 				final ActionEvent ae = new ActionEvent(html, ActionEvent.ACTION_PERFORMED, "copy");
 				if (ae != null) {
 					html.getActionMap().get(ae.getActionCommand()).actionPerformed(ae);
-					JOptionPane.showMessageDialog(MainFrame.getInstance(), "The string is now ready for pasting.", "Copy String", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.string_ready_for_pasting"), I18n.get("title.copy_string"), JOptionPane.INFORMATION_MESSAGE);
 					html.select(0, 0);
 				}
 			}
 		});
 		menu.add(mi);
 
-		mi = new JMenuItem("Copy Plain String");
+		mi = new JMenuItem(I18n.get("menu.copy_plain_string"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(eventString), null);
-				JOptionPane.showMessageDialog(MainFrame.getInstance(), "The string is now ready for pasting.", "Copy String", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.string_ready_for_pasting"), I18n.get("title.copy_string"), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menu.add(mi);
 
-		mi = new JMenuItem("Copy Image");
+		mi = new JMenuItem(I18n.get("menu.copy_image"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -153,7 +155,7 @@ public class EventString extends JPanel {
 		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-		final JButton button = new JButton("Close");
+		final JButton button = new JButton(I18n.get("common.close"));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {

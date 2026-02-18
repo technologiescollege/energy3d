@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ShowHeatFluxCommand extends MyAbstractUndoableEdit {
@@ -37,7 +38,7 @@ public class ShowHeatFluxCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Heat Flux Vectors";
+		return I18n.get("undo.show_heat_flux_vectors");
 	}
 
 }

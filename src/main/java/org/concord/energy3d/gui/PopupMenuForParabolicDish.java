@@ -62,6 +62,7 @@ import org.concord.energy3d.undo.SetRimRadiusForAllParabolicDishesCommand;
 import org.concord.energy3d.undo.SetRimRadiusForParabolicDishesOnFoundationCommand;
 import org.concord.energy3d.undo.ShowSunBeamCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 class PopupMenuForParabolicDish extends PopupMenuFactory {
 
@@ -71,7 +72,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
 
         if (popupMenuForParabolicDish == null) {
 
-            final JMenuItem miMesh = new JMenuItem("Mesh...");
+            final JMenuItem miMesh = new JMenuItem(I18n.get("menu.mesh"));
             miMesh.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -88,19 +89,19 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Radial Direction: "));
+                    inputPanel.add(new JLabel(I18n.get("label.radial_direction")));
                     final JTextField nRadialField = new JTextField("" + d.getNRadialSections());
                     inputPanel.add(nRadialField);
-                    inputPanel.add(new JLabel("Axial Direction: "));
+                    inputPanel.add(new JLabel(I18n.get("label.axial_direction")));
                     final JTextField nAxialField = new JTextField("" + d.getNAxialSections());
                     inputPanel.add(nAxialField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -121,9 +122,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set mesh for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Mesh");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_mesh_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_mesh"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -137,16 +138,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                                 nRadialSections = Integer.parseInt(nRadialField.getText());
                                 nAxialSections = Integer.parseInt(nAxialField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (nRadialSections < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Number of radial sections must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.radial_sections_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (nAxialSections < 4) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Number of axial sections mesh must be at least 4.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.axial_sections_mesh_min"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (!Util.isPowerOfTwo(nRadialSections) || !Util.isPowerOfTwo(nAxialSections)) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Number of parabolic dish mesh sections in x or y direction must be power of two.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_mesh_power_of_two"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     final int nRadialSections2 = nRadialSections;
                                     final int nAxialSections2 = nAxialSections;
@@ -189,7 +190,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miRib = new JMenuItem("Ribs...");
+            final JMenuItem miRib = new JMenuItem(I18n.get("menu.ribs"));
             miRib.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -206,16 +207,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Rib Lines: "));
+                    inputPanel.add(new JLabel(I18n.get("label.rib_lines")));
                     final JTextField nribField = new JTextField("" + d.getNumberOfRibs());
                     inputPanel.add(nribField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -236,9 +237,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set rib lines for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Ribs");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_rib_lines_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_ribs"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -251,12 +252,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 nrib = Integer.parseInt(nribField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (nrib < 0) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Number of ribs cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.ribs_cannot_be_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = nrib != d.getNumberOfRibs();
                                     final int nrib2 = nrib;
@@ -322,7 +323,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JCheckBoxMenuItem cbmiDisableEditPoint = new JCheckBoxMenuItem("Disable Edit Point");
+            final JCheckBoxMenuItem cbmiDisableEditPoint = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
             cbmiDisableEditPoint.addItemListener(new ItemListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -340,10 +341,10 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -363,11 +364,11 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             break;
                     }
 
-                    final String title = "<html>" + (disabled ? "Disable" : "Enable") + " edit point for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Disable the edit point of a parabolic dish prevents it<br>from being unintentionally moved.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel"};
+                    final String title = "<html>" + I18n.get(disabled ? "title.disable_edit_point" : "title.enable_edit_point", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.disable_edit_point_parabolic_dish") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), (disabled ? "Disable" : "Enable") + " Edit Point");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get(disabled ? "dialog.disable_edit_point" : "dialog.enable_edit_point"));
                     dialog.setVisible(true);
                     if (optionPane.getValue() == options[0]) {
                         if (rb1.isSelected()) {
@@ -394,7 +395,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiDrawSunBeams = new JCheckBoxMenuItem("Draw Sun Beams");
+            final JCheckBoxMenuItem cbmiDrawSunBeams = new JCheckBoxMenuItem(I18n.get("menu.draw_sun_beams"));
             cbmiDrawSunBeams.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof ParabolicDish)) {
@@ -413,7 +414,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miRimRadius = new JMenuItem("Rim Radius...");
+            final JMenuItem miRimRadius = new JMenuItem(I18n.get("menu.rim_radius"));
             miRimRadius.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -430,16 +431,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Rim Radius (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.rim_radius_m")));
                     final JTextField apertureRadiusField = new JTextField(threeDecimalsFormat.format(d.getRimRadius()));
                     inputPanel.add(apertureRadiusField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -460,9 +461,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set rim radius for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Rim Radius");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_rim_radius_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_rim_radius"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -475,12 +476,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 r = Double.parseDouble(apertureRadiusField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (r < 1 || r > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic dish rim radius must be between 1 and 10 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_rim_radius_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(r - d.getRimRadius()) > 0.000001;
                                     final double rimRadius = r;
@@ -546,7 +547,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miFocalLength = new JMenuItem("Focal Length...");
+            final JMenuItem miFocalLength = new JMenuItem(I18n.get("menu.focal_length"));
             miFocalLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -563,16 +564,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(1, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Focal Length (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.focal_length_m")));
                     final JTextField focalLengthField = new JTextField(threeDecimalsFormat.format(d.getFocalLength()));
                     inputPanel.add(focalLengthField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -593,9 +594,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set focal length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Focal Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_focal_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.focal_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -608,12 +609,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 fl = Double.parseDouble(focalLengthField.getText());
                             } catch (final NumberFormatException nfe) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (fl < 0.5 || fl > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Focal length must be between 0.5 and 10 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.focal_length_range_dish"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(fl - d.getFocalLength()) > 0.000001;
                                     final double fl2 = fl;
@@ -679,7 +680,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleHeight = new JMenuItem("Pole Height...");
+            final JMenuItem miPoleHeight = new JMenuItem(I18n.get("menu.pole_height"));
             miPoleHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -699,10 +700,10 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -724,9 +725,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(d.getPoleHeight() * Scene.getInstance().getScale()));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Pole Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_pole_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -741,12 +742,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText()) / Scene.getInstance().getScale();
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val * Scene.getInstance().getScale() > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height must be between 0 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val - d.getPoleHeight()) > 0.000001;
                                     final double poleHeight = val;
@@ -812,7 +813,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miStructureType = new JMenuItem("Structure Type...");
+            final JMenuItem miStructureType = new JMenuItem(I18n.get("menu.structure_type"));
             miStructureType.addActionListener(new ActionListener() {
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
 
@@ -825,16 +826,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
                     final Foundation foundation = d.getTopContainer();
-                    final String title = "<html>Structure Type of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.structure_type_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -853,13 +854,13 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final JComboBox<String> comboBox = new JComboBox<String>(new String[]{"Central Pole", "Tripod"});
+                    final JComboBox<String> comboBox = new JComboBox<String>(new String[]{I18n.get("structure_type.central_pole"), I18n.get("structure_type.tripod")});
                     comboBox.setSelectedIndex(d.getStructureType());
                     gui.add(comboBox, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Structure Type");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.structure_type"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -929,9 +930,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
             miLabelNone.addActionListener(e -> {
                 if (miLabelNone.isSelected()) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -951,7 +952,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
             });
             labelMenu.add(miLabelNone);
 
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
             miLabelCustom.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicDish) {
@@ -959,7 +960,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final SetParabolicDishLabelCommand c = new SetParabolicDishLabelCommand(d);
                     d.setLabelCustom(miLabelCustom.isSelected());
                     if (d.getLabelCustom()) {
-                        d.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", d.getLabelCustomText()));
+                        d.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), d.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         d.draw();
@@ -972,7 +973,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCustom);
 
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
             miLabelId.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicDish) {
@@ -990,7 +991,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
             });
             labelMenu.add(miLabelId);
 
-            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem("Energy Output");
+            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem(I18n.get("label.energy_output"));
             miLabelEnergyOutput.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof ParabolicDish) {
@@ -1022,7 +1023,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 Util.selectSilently(cbmiDisableEditPoint, d.getLockEdit());
             });
 
-            final JMenuItem miReflectance = new JMenuItem("Mirror Reflectance...");
+            final JMenuItem miReflectance = new JMenuItem(I18n.get("menu.mirror_reflectance"));
             miReflectance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1035,16 +1036,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
-                    final String title = "<html>Reflectance (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Reflectance can be affected by pollen and dust.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.reflectance_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.reflectance") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1066,9 +1067,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(d.getReflectance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Mirror Reflectance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_mirror_reflectance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1083,12 +1084,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 99) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic dish reflectance must be between 50% and 99%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_reflectance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - d.getReflectance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1143,7 +1144,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miAbsorptance = new JMenuItem("Receiver Absorptance...");
+            final JMenuItem miAbsorptance = new JMenuItem(I18n.get("menu.receiver_absorptance"));
             miAbsorptance.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1156,16 +1157,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
-                    final String title = "<html>Absorptance (%) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.absorptance_percent_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2><hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1187,9 +1188,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(d.getAbsorptance() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Receiver Absorptance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_receiver_absorptance"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1204,12 +1205,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 99) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic dish absorptance must be between 50% and 99%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_absorptance_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - d.getAbsorptance()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1264,7 +1265,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miOpticalEfficiency = new JMenuItem("Optical Efficiency...");
+            final JMenuItem miOpticalEfficiency = new JMenuItem(I18n.get("menu.optical_efficiency"));
             miOpticalEfficiency.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1277,16 +1278,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
-                    final String title = "<html>Opitical efficiency (%) of " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>For example, the percentage of the effective area for reflection after deducting<br>the area of facet gaps, module frames, absorber shadow, etc.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.optical_efficiency_percent_of", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.optical_efficiency") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1308,9 +1309,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(d.getOpticalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Optical Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_optical_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1325,12 +1326,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 50 || val > 100) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic dish optical efficiency must be between 50% and 100%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_optical_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - d.getOpticalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1385,7 +1386,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miThermalEfficiency = new JMenuItem("Thermal Efficiency...");
+            final JMenuItem miThermalEfficiency = new JMenuItem(I18n.get("menu.thermal_efficiency"));
             miThermalEfficiency.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -1398,16 +1399,16 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     }
                     final String partInfo = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
                     final ParabolicDish d = (ParabolicDish) selectedPart;
-                    final String title = "<html>Thermal efficiency (%) of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.thermal_efficiency_percent_of", partInfo) + "</html>";
                     final String footnote = "<html><hr><font size=2><hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.CENTER);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Parabolic Dish", true);
-                    final JRadioButton rb2 = new JRadioButton("All Parabolic Dishes on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Parabolic Dishes");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_parabolic_dish"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_parabolic_dishes_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_parabolic_dishes"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -1429,9 +1430,9 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(EnergyPanel.TWO_DECIMALS.format(d.getThermalEfficiency() * 100));
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Parabolic Dish Thermal Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.parabolic_dish_thermal_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1446,12 +1447,12 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 5 || val > 80) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Parabolic dish thermal efficiency must be between 5% and 80%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_thermal_efficiency_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(val * 0.01 - d.getThermalEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1525,7 +1526,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
             popupMenuForParabolicDish.add(miRib);
             popupMenuForParabolicDish.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Yield Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
@@ -1536,7 +1537,7 @@ class PopupMenuForParabolicDish extends PopupMenuFactory {
             });
             popupMenuForParabolicDish.add(mi);
 
-            mi = new JMenuItem("Annual Yield Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;

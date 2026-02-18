@@ -37,6 +37,7 @@ import org.concord.energy3d.model.Building;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -97,13 +98,13 @@ public abstract class Analysis {
                     previousResults += "</tr>";
                 }
                 previousResults += "</table>";
-                final Object[] options = new Object[]{"OK", "Copy Data"};
-                String msg = "<html>The annual output is <b>" + Graph.TWO_DECIMALS.format(annualOutput) + " kWh</b>.";
+                final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data")};
+                String msg = "<html>" + I18n.get("msg.annual_output_is", Graph.TWO_DECIMALS.format(annualOutput)) + ".";
                 msg += "<br>The payback period is <b>" + Graph.TWO_DECIMALS.format(paybackPeriod) + " years.</b>.";
                 msg += "<br>The return on investment over " + lifespan + " years is <b>" + (roi > 0 ? "<font color=black>" : "<font color=red>") + Graph.TWO_DECIMALS.format(roi) + "%</font></b>.";
-                msg += "<br><hr>Compare with the results from last " + (n - m) + " runs:<br>" + previousResults + "</html>";
+                msg += "<br><hr>" + I18n.get("msg.compare_with_last_runs", Integer.toString(n - m)) + "<br>" + previousResults + "</html>";
                 final JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                final JDialog dialog = optionPane.createDialog(parent, "Annual Analysis");
+                final JDialog dialog = optionPane.createDialog(parent, I18n.get("title.annual_analysis"));
                 dialog.setVisible(true);
                 final Object choice = optionPane.getValue();
                 if (choice == options[1]) {
@@ -121,7 +122,7 @@ public abstract class Analysis {
                     output += annualOutput + ", " + (double) lifespan + ", " + roi + ", " + paybackPeriod;
                     final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clpbrd.setContents(new StringSelection(output), null);
-                    JOptionPane.showMessageDialog(parent, "<html>" + (n + 1) + " data points copied to system clipboard.", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n + 1)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 String previousResults = "<table border=1><tr bgcolor=#cccccc><td><b>Run</b></td><td><b>Annual Electricity (kWh)</b></td></tr>";
@@ -132,11 +133,11 @@ public abstract class Analysis {
                     previousResults += "<td>" + Graph.TWO_DECIMALS.format(results[0]) + "</font></td></tr>";
                 }
                 previousResults += "</table>";
-                final Object[] options = new Object[]{"OK", "Copy Data"};
-                String msg = "<html>The annual output is <b>" + Graph.TWO_DECIMALS.format(annualOutput) + " kWh</b>.";
-                msg += "<br><hr>Compare with the results from last " + (n - m) + " runs:<br>" + previousResults + "</html>";
+                final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data")};
+                String msg = "<html>" + I18n.get("msg.annual_output_is", Graph.TWO_DECIMALS.format(annualOutput)) + ".";
+                msg += "<br><hr>" + I18n.get("msg.compare_with_last_runs", Integer.toString(n - m)) + "<br>" + previousResults + "</html>";
                 final JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                final JDialog dialog = optionPane.createDialog(parent, "Annual Analysis");
+                final JDialog dialog = optionPane.createDialog(parent, I18n.get("title.annual_analysis"));
                 dialog.setVisible(true);
                 final Object choice = optionPane.getValue();
                 if (choice == options[1]) {
@@ -149,7 +150,7 @@ public abstract class Analysis {
                     output += annualOutput;
                     final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clpbrd.setContents(new StringSelection(output), null);
-                    JOptionPane.showMessageDialog(parent, "<html>" + (n + 1) + " data points copied to system clipboard.", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n + 1)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } else {
@@ -161,14 +162,14 @@ public abstract class Analysis {
                 report.append((roi > 0 ? "<font color=black>" : "<font color=red>") + Graph.TWO_DECIMALS.format(roi) + "%</font></b>.");
             }
             report.append("</html>");
-            JOptionPane.showMessageDialog(parent, report.toString(), "Annual Analysis", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parent, report.toString(), I18n.get("title.annual_analysis"), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     void viewFullHistory(List<double[]> storedResults) {
         final int n = storedResults.size();
         if (n <= 0) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>No previous run.</html>", "Full History", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.no_previous_run") + "</html>", I18n.get("title.full_history"), JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (Scene.getInstance().getCalculateRoi() && SceneManager.getInstance().getSelectedPart() == null) {
                 String previousResults = "<table width=100% border=1><tr bgcolor=#cccccc><td><b><font size=3>Run</b></td><td><b><font size=3>Annual Electricity (kWh)</b></td>";
@@ -182,7 +183,7 @@ public abstract class Analysis {
                     previousResults += "</tr>";
                 }
                 previousResults += "</table>";
-                final Object[] options = new Object[]{"OK", "Copy Data", "Clear History"};
+                final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data"), I18n.get("common.clear_history")};
                 final JEditorPane htmlPane = new JEditorPane();
                 htmlPane.setContentType("text/html");
                 htmlPane.setText("<html>" + previousResults + "</html>");
@@ -190,7 +191,7 @@ public abstract class Analysis {
                 final JScrollPane scrollPane = new JScrollPane(htmlPane);
                 scrollPane.setPreferredSize(new Dimension(400, 400));
                 final JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Results from All Previous Runs");
+                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("title.results_from_all_previous_runs"));
                 dialog.setVisible(true);
                 final Object choice = optionPane.getValue();
                 if (choice == options[1]) {
@@ -207,7 +208,7 @@ public abstract class Analysis {
                     }
                     final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clpbrd.setContents(new StringSelection(output), null);
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + n + " data points copied to system clipboard.</html>", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                 } else if (choice == options[2]) {
                     clearHistory();
                 }
@@ -219,7 +220,7 @@ public abstract class Analysis {
                     previousResults += "<td><font size=3>" + Graph.TWO_DECIMALS.format(results[0]) + "</font></td></tr>";
                 }
                 previousResults += "</table>";
-                final Object[] options = new Object[]{"OK", "Copy Data", "Clear History"};
+                final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data"), I18n.get("common.clear_history")};
                 final JEditorPane htmlPane = new JEditorPane();
                 htmlPane.setContentType("text/html");
                 htmlPane.setText("<html>" + previousResults + "</html>");
@@ -227,7 +228,7 @@ public abstract class Analysis {
                 final JScrollPane scrollPane = new JScrollPane(htmlPane);
                 scrollPane.setPreferredSize(new Dimension(400, 400));
                 final JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Results from All Previous Runs");
+                final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("title.results_from_all_previous_runs"));
                 dialog.setVisible(true);
                 final Object choice = optionPane.getValue();
                 if (choice == options[1]) {
@@ -239,7 +240,7 @@ public abstract class Analysis {
                     }
                     final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clpbrd.setContents(new StringSelection(output), null);
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + n + " data points copied to system clipboard.</html>", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n)) + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                 } else if (choice == options[2]) {
                     clearHistory();
                 }
@@ -248,7 +249,7 @@ public abstract class Analysis {
     }
 
     private void clearHistory() {
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>This will clear the history. Are you sure?", "Confirm",
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.clear_history_confirm") + "</html>", I18n.get("dialog.confirm"),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
             if (this instanceof PvAnnualAnalysis) {
                 PvAnnualAnalysis.storedResults.clear();
@@ -277,7 +278,7 @@ public abstract class Analysis {
         } else if (this instanceof ParabolicDishAnnualAnalysis) {
             viewFullHistory(ParabolicDishAnnualAnalysis.storedResults);
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Under construction...", "Full History", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.under_construction"), I18n.get("title.full_history"), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -348,7 +349,7 @@ public abstract class Analysis {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        runButton = new JButton("Run");
+        runButton = new JButton(I18n.get("common.run"));
         runButton.addActionListener(e -> {
             runButton.setEnabled(false);
             analysisStopped = false;
@@ -356,13 +357,13 @@ public abstract class Analysis {
         });
         buttonPanel.add(runButton);
 
-        JButton button = new JButton("Close");
+        JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> {
             stopAnalysis();
             if (graph.hasData()) {
-                final Object[] options = {"Yes", "No", "Cancel"};
-                final int i = JOptionPane.showOptionDialog(dialog, "Do you want to keep the results of this run in the graph?",
-                        "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+                final Object[] options = {I18n.get("common.yes"), I18n.get("common.no"), I18n.get("dialog.cancel")};
+                final int i = JOptionPane.showOptionDialog(dialog, I18n.get("msg.keep_results_in_graph"),
+                        I18n.get("dialog.confirm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
                 if (i == JOptionPane.CANCEL_OPTION) {
                     return;
                 }
@@ -375,7 +376,7 @@ public abstract class Analysis {
         });
         buttonPanel.add(button);
 
-        button = new JButton("View Full History");
+        button = new JButton(I18n.get("common.view_full_history"));
         button.addActionListener(e -> {
             viewHistory();
         });
@@ -403,14 +404,14 @@ public abstract class Analysis {
 
     JMenu createTypesMenu() {
 
-        final JMenu menu = new JMenu("Types");
+        final JMenu menu = new JMenu(I18n.get("menu.types"));
         menu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(final MenuEvent e) {
                 menu.removeAll();
                 final Set<String> dataNames = graph.getDataNames();
                 if (!dataNames.isEmpty()) {
-                    JMenuItem mi = new JMenuItem("Show All");
+                    JMenuItem mi = new JMenuItem(I18n.get("menu.show_all"));
                     mi.addActionListener(e1 -> {
                         for (final String name : dataNames) {
                             graph.hideData(name, false);
@@ -419,7 +420,7 @@ public abstract class Analysis {
                         TimeSeriesLogger.getInstance().logShowCurve(graph.getClass().getSimpleName(), "All", true);
                     });
                     menu.add(mi);
-                    mi = new JMenuItem("Hide All");
+                    mi = new JMenuItem(I18n.get("menu.hide_all"));
                     mi.addActionListener(e1 -> {
                         for (final String name : dataNames) {
                             graph.hideData(name, true);

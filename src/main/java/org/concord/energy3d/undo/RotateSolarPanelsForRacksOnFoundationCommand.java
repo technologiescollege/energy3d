@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class RotateSolarPanelsForRacksOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -61,7 +62,7 @@ public class RotateSolarPanelsForRacksOnFoundationCommand extends MyAbstractUndo
 
 	@Override
 	public String getPresentationName() {
-		return "Rotate Solar Panels for All Racks on Selected Foundation";
+		return I18n.get("undo.rotate_solar_panels_all_racks_foundation");
 	}
 
 }

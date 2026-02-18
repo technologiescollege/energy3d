@@ -344,11 +344,11 @@ public class Sensor extends HousePart implements SolarCollector, Labelable {
         }
         if (labelLightOutput) {
             double totalLightToday = getSolarPotentialToday() / getArea();
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalLightToday) ? "Light" : EnergyPanel.ONE_DECIMAL.format(totalLightToday) + " kWh/m^2");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalLightToday) ? org.concord.energy3d.util.I18n.get("sensor.light") : EnergyPanel.ONE_DECIMAL.format(totalLightToday) + " kWh/m^2");
         }
         if (labelHeatFluxOutput) {
             double totalHeatFluxToday = -getTotalHeatLoss() / getArea();
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalHeatFluxToday) ? "Heat Flux" : EnergyPanel.ONE_DECIMAL.format(totalHeatFluxToday) + " kWh/m^2");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(totalHeatFluxToday) ? org.concord.energy3d.util.I18n.get("sensor.heat_flux") : EnergyPanel.ONE_DECIMAL.format(totalHeatFluxToday) + " kWh/m^2");
         }
         if (!text.equals("")) {
             label.setText(text);

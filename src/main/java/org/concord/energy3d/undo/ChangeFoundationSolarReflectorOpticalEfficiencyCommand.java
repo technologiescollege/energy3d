@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.SolarReflector;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationSolarReflectorOpticalEfficiencyCommand extends MyAbstractUndoableEdit {
 
@@ -52,7 +53,7 @@ public class ChangeFoundationSolarReflectorOpticalEfficiencyCommand extends MyAb
 
 	@Override
 	public String getPresentationName() {
-		return "Optical Efficiency Change for All " + reflectors.get(0).getClass().getSimpleName() + "s on Selected Foundation";
+		return I18n.get("undo.optical_efficiency_change_all") + " " + MyAbstractUndoableEdit.getPartDisplayName(reflectors.get(0).getClass()) + "s " + I18n.get("undo.on_selected_foundation");
 	}
 
 }

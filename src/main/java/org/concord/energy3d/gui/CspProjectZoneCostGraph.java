@@ -27,6 +27,7 @@ import org.concord.energy3d.simulation.CspProjectCost;
 import org.concord.energy3d.simulation.PieChart;
 import org.concord.energy3d.simulation.PvDesignSpecs;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -61,13 +62,13 @@ public class CspProjectZoneCostGraph extends JPanel {
         budgetPanel = new JPanel(new BorderLayout());
         budgetBar = new ColorBar(Color.WHITE, Color.LIGHT_GRAY);
         budgetBar.setPreferredSize(new Dimension(100, 16));
-        budgetBar.setToolTipText("<html>The total project cost must not exceed the limit (if specified).</html>");
+        budgetBar.setToolTipText("<html>" + I18n.get("tooltip.project_cost_limit") + "</html>");
         budgetPanel.add(budgetBar, BorderLayout.CENTER);
 
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -96,7 +97,7 @@ public class CspProjectZoneCostGraph extends JPanel {
             }
 
         });
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(this));
         popupMenu.add(mi);
     }
@@ -149,7 +150,7 @@ public class CspProjectZoneCostGraph extends JPanel {
             final PvDesignSpecs pvSpecs = Scene.getInstance().getPvDesignSpecs();
             budgetBar.setEnabled(pvSpecs.isBudgetEnabled());
             budgetBar.setMaximum(pvSpecs.getMaximumBudget());
-            final String t = "Total (" + (pvSpecs.isBudgetEnabled() ? "\u2264 $" + noDecimals.format(pvSpecs.getMaximumBudget()) : "$") + ")";
+            final String t = I18n.get("cost.total") + " (" + (pvSpecs.isBudgetEnabled() ? "\u2264 $" + noDecimals.format(pvSpecs.getMaximumBudget()) : "$") + ")";
             budgetPanel.setBorder(EnergyPanel.createTitledBorder(t, true));
             budgetBar.setValue((float) totalCost);
             budgetBar.repaint();
@@ -170,16 +171,16 @@ public class CspProjectZoneCostGraph extends JPanel {
         double[] data;
         String[] legends;
         CspFinancialModel model = Scene.getInstance().getCspFinancialModel();
-        String years = "(" + model.getLifespan() + " years)";
+        String years = "(" + model.getLifespan() + " " + I18n.get("label.years") + ")";
         if (Util.isZero(receiverCost)) {
             data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, collectorCost};
-            legends = new String[]{"Land " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Collectors (One-Time)"};
+            legends = new String[]{I18n.get("cost.legend.land") + " " + years, I18n.get("cost.legend.cleaning") + " " + years, I18n.get("cost.legend.maintenance") + " " + years, I18n.get("cost.legend.loan_interest") + " " + years, I18n.get("cost.legend.collectors_one_time")};
         } else {
             data = new double[]{landRentalCost, cleaningCost, maintenanceCost, loanInterest, collectorCost, receiverCost};
-            legends = new String[]{"Land " + years, "Cleaning " + years, "Maintenance " + years, "Loan Interest " + years, "Collectors (One-Time)", "Receivers (One-Time)"};
+            legends = new String[]{I18n.get("cost.legend.land") + " " + years, I18n.get("cost.legend.cleaning") + " " + years, I18n.get("cost.legend.maintenance") + " " + years, I18n.get("cost.legend.loan_interest") + " " + years, I18n.get("cost.legend.collectors_one_time"), I18n.get("cost.legend.receivers_one_time")};
         }
 
-        PieChart pie = new PieChart(data, colors, legends, "$", null, "Move mouse for more info", false);
+        PieChart pie = new PieChart(data, colors, legends, "$", null, I18n.get("chart.move_mouse_for_info"), false);
         pie.setBackground(Color.WHITE);
         pie.setPreferredSize(new Dimension(getWidth() - 5, getHeight() - budgetPanel.getHeight() - 5));
         pie.setBorder(BorderFactory.createEtchedBorder());

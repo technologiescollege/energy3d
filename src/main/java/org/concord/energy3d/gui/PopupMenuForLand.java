@@ -14,6 +14,7 @@ import org.concord.energy3d.util.Config;
 import org.concord.energy3d.util.FileChooser;
 import org.concord.energy3d.util.SpringUtilities;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -44,65 +45,65 @@ class PopupMenuForLand extends PopupMenuFactory {
 
         if (popupMenuForLand == null) {
 
-            final JMenuItem miInfo = new JMenuItem("Land");
+            final JMenuItem miInfo = new JMenuItem(I18n.get("menu.land"));
             miInfo.setEnabled(false);
             miInfo.setOpaque(true);
             miInfo.setBackground(Config.isMac() ? Color.DARK_GRAY : Color.GRAY);
             miInfo.setForeground(Color.WHITE);
 
-            final JMenuItem miPaste = new JMenuItem("Paste");
+            final JMenuItem miPaste = new JMenuItem(I18n.get("menu.paste"));
             miPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miPaste.addActionListener(e -> SceneManager.getTaskManager().update(() -> {
                 Scene.getInstance().pasteToPickedLocationOnLand();
                 return null;
             }));
 
-            final JMenuItem miRemoveAllTrees = new JMenuItem("Remove All Trees");
+            final JMenuItem miRemoveAllTrees = new JMenuItem(I18n.get("menu.remove_all_trees"));
             miRemoveAllTrees.addActionListener(e -> Scene.getInstance().removeAllTrees());
 
-            final JMenuItem miRemoveAllHumans = new JMenuItem("Remove All Humans");
+            final JMenuItem miRemoveAllHumans = new JMenuItem(I18n.get("menu.remove_all_humans"));
             miRemoveAllHumans.addActionListener(e -> Scene.getInstance().removeAllHumans());
 
-            final JMenuItem miRemoveAllBuildings = new JMenuItem("Remove All Foundations");
+            final JMenuItem miRemoveAllBuildings = new JMenuItem(I18n.get("menu.remove_all_foundations"));
             miRemoveAllBuildings.addActionListener(e -> Scene.getInstance().removeAllFoundations());
 
-            final JMenuItem miImportEnergy3D = new JMenuItem("Import...");
-            miImportEnergy3D.setToolTipText("Import the content in an existing Energy3D file into the clicked location on the land as the center");
+            final JMenuItem miImportEnergy3D = new JMenuItem(I18n.get("menu.import"));
+            miImportEnergy3D.setToolTipText(I18n.get("tooltip.import_energy3d"));
             miImportEnergy3D.addActionListener(e -> MainFrame.getInstance().importFile());
 
-            final JMenuItem miImportCollada = new JMenuItem("Import Collada...");
-            miImportCollada.setToolTipText("Import the content in an existing Collada file into the clicked location on the land as the center");
+            final JMenuItem miImportCollada = new JMenuItem(I18n.get("menu.import_collada"));
+            miImportCollada.setToolTipText(I18n.get("tooltip.import_collada"));
             miImportCollada.addActionListener(e -> MainFrame.getInstance().importColladaFile());
 
-            final JMenu miImportPrefabMenu = new JMenu("Import a Prefab");
-            addPrefabMenuItem("Back Hip Roof Porch", "prefabs/back-hip-roof-porch.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Balcony", "prefabs/balcony1.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Bell Tower", "prefabs/bell-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Box", "prefabs/box.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Chimney", "prefabs/chimney.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Connecting Porch", "prefabs/connecting-porch.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Cylinder Tower", "prefabs/cylinder-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Fence", "prefabs/fence1.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Flat-Top Porch", "prefabs/flat-top-porch.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Fountain", "prefabs/fountain.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Front Door Overhang", "prefabs/front-door-overhang.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Gable Dormer", "prefabs/gable-dormer.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Hexagonal Gazebo", "prefabs/hexagonal-gazebo.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Hexagonal Tower", "prefabs/hexagonal-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Lighthouse", "prefabs/lighthouse.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Octagonal Tower", "prefabs/octagonal-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Round Tower", "prefabs/round-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Shed Dormer", "prefabs/shed-dormer.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Solarium", "prefabs/solarium1.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Square Tower", "prefabs/square-tower.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Stair", "prefabs/stair1.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Tall Front Door Overhang", "prefabs/tall-front-door-overhang.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Temple Front", "prefabs/temple-front.ng3", miImportPrefabMenu);
-            addPrefabMenuItem("Waterfront Deck", "prefabs/waterfront-deck.ng3", miImportPrefabMenu);
+            final JMenu miImportPrefabMenu = new JMenu(I18n.get("menu.import_prefab"));
+            addPrefabMenuItem(I18n.get("prefab.back_hip_roof_porch"), "prefabs/back-hip-roof-porch.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.balcony"), "prefabs/balcony1.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.bell_tower"), "prefabs/bell-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.box"), "prefabs/box.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.chimney"), "prefabs/chimney.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.connecting_porch"), "prefabs/connecting-porch.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.cylinder_tower"), "prefabs/cylinder-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.fence"), "prefabs/fence1.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.flat_top_porch"), "prefabs/flat-top-porch.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.fountain"), "prefabs/fountain.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.front_door_overhang"), "prefabs/front-door-overhang.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.gable_dormer"), "prefabs/gable-dormer.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.hexagonal_gazebo"), "prefabs/hexagonal-gazebo.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.hexagonal_tower"), "prefabs/hexagonal-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.lighthouse"), "prefabs/lighthouse.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.octagonal_tower"), "prefabs/octagonal-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.round_tower"), "prefabs/round-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.shed_dormer"), "prefabs/shed-dormer.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.solarium"), "prefabs/solarium1.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.square_tower"), "prefabs/square-tower.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.stair"), "prefabs/stair1.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.tall_front_door_overhang"), "prefabs/tall-front-door-overhang.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.temple_front"), "prefabs/temple-front.ng3", miImportPrefabMenu);
+            addPrefabMenuItem(I18n.get("prefab.waterfront_deck"), "prefabs/waterfront-deck.ng3", miImportPrefabMenu);
 
-            final JMenuItem miAlbedo = new JMenuItem("Albedo...");
+            final JMenuItem miAlbedo = new JMenuItem(I18n.get("menu.albedo"));
             miAlbedo.addActionListener(e -> {
-                final String title = "<html>Background Albedo (dimensionless [0, 1])<hr><font size=2>Examples:<br>0.17 (soil), 0.25 (grass), 0.40 (sand), 0.55 (concrete), snow (0.9)</html>";
+                final String title = "<html>" + I18n.get("title.background_albedo") + "</html>";
                 while (true) {
                     final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), title, Scene.getInstance().getGround().getAlbedo());
                     if (newValue == null) {
@@ -111,7 +112,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                         try {
                             final double val = Double.parseDouble(newValue);
                             if (val < 0 || val > 1) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Albedo value must be in 0-1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.albedo_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 if (val != Scene.getInstance().getGround().getAlbedo()) {
                                     final ChangeBackgroundAlbedoCommand c = new ChangeBackgroundAlbedoCommand();
@@ -122,23 +123,23 @@ class PopupMenuForLand extends PopupMenuFactory {
                                 break;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
             });
 
-            final JMenuItem miSnowReflection = new JMenuItem("Snow Reflection...");
+            final JMenuItem miSnowReflection = new JMenuItem(I18n.get("menu.snow_reflection"));
             miSnowReflection.addActionListener(e -> {
                 final JPanel gui = new JPanel(new BorderLayout());
-                final String title = "<html>Increase of indirect solar radiation due to snow reflection<br>(a dimensionless parameter within [0, 0.2])</html>";
+                final String title = "<html>" + I18n.get("title.snow_reflection") + "</html>";
                 gui.add(new JLabel(title), BorderLayout.NORTH);
                 final JPanel inputPanel = new JPanel(new SpringLayout());
                 inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                 gui.add(inputPanel, BorderLayout.CENTER);
                 final JTextField[] fields = new JTextField[12];
                 for (int i = 0; i < 12; i++) {
-                    final JLabel l = new JLabel(AnnualGraph.THREE_LETTER_MONTH[i] + ": ", JLabel.TRAILING);
+                    final JLabel l = new JLabel(AnnualGraph.getThreeLetterMonth()[i] + ": ", JLabel.TRAILING);
                     inputPanel.add(l);
                     fields[i] = new JTextField(threeDecimalsFormat.format(Scene.getInstance().getGround().getSnowReflectionFactor(i)), 5);
                     l.setLabelFor(fields[i]);
@@ -146,7 +147,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                 }
                 SpringUtilities.makeCompactGrid(inputPanel, 12, 2, 6, 6, 6, 6);
                 while (true) {
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, "Snow reflection factor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, I18n.get("dialog.snow_reflection_factor"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
                         break;
                     }
                     boolean pass = true;
@@ -155,11 +156,11 @@ class PopupMenuForLand extends PopupMenuFactory {
                         try {
                             val[i] = Double.parseDouble(fields[i].getText());
                             if (val[i] < 0 || val[i] > 0.2) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Snow reflection factor must be in 0-0.2.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.snow_reflection_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 pass = false;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), fields[i].getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", fields[i].getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                             pass = false;
                         }
                     }
@@ -175,9 +176,9 @@ class PopupMenuForLand extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miThermalDiffusivity = new JMenuItem("Ground Thermal Diffusivity...");
+            final JMenuItem miThermalDiffusivity = new JMenuItem(I18n.get("menu.ground_thermal_diffusivity"));
             miThermalDiffusivity.addActionListener(e -> {
-                final String title = "<html>Ground Thermal Diffusivity (m<sup>2</sup>/s)<hr><font size=2>Examples:<br>0.039 (sand), 0.046 (clay), 0.05 (silt)</html>";
+                final String title = "<html>" + I18n.get("title.ground_thermal_diffusivity") + "</html>";
                 while (true) {
                     final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), title, Scene.getInstance().getGround().getThermalDiffusivity());
                     if (newValue == null) {
@@ -186,7 +187,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                         try {
                             final double val = Double.parseDouble(newValue);
                             if (val <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Ground thermal diffusivity must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.ground_thermal_diffusivity_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 if (val != Scene.getInstance().getGround().getThermalDiffusivity()) {
                                     final ChangeGroundThermalDiffusivityCommand c = new ChangeGroundThermalDiffusivityCommand();
@@ -197,17 +198,17 @@ class PopupMenuForLand extends PopupMenuFactory {
                                 break;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
             });
 
-            final JMenuItem miClearImage = new JMenuItem("Clear Image");
-            final JMenuItem miRescaleImage = new JMenuItem("Rescale Image...");
-            final JCheckBoxMenuItem miShowImage = new JCheckBoxMenuItem("Show Image");
+            final JMenuItem miClearImage = new JMenuItem(I18n.get("menu.clear_image"));
+            final JMenuItem miRescaleImage = new JMenuItem(I18n.get("menu.rescale_image"));
+            final JCheckBoxMenuItem miShowImage = new JCheckBoxMenuItem(I18n.get("menu.show_image"));
 
-            final JMenu groundImageMenu = new JMenu("Ground Image");
+            final JMenu groundImageMenu = new JMenu(I18n.get("menu.ground_image"));
             groundImageMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -230,11 +231,11 @@ class PopupMenuForLand extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miUseEarthView = new JMenuItem("Use Image from Earth View...");
+            final JMenuItem miUseEarthView = new JMenuItem(I18n.get("menu.use_image_earth_view"));
             miUseEarthView.addActionListener(e -> new MapDialog(MainFrame.getInstance()).setVisible(true));
             groundImageMenu.add(miUseEarthView);
 
-            final JMenuItem miUseImageFile = new JMenuItem("Use Image from File...");
+            final JMenuItem miUseImageFile = new JMenuItem(I18n.get("menu.use_image_file"));
             miUseImageFile.addActionListener(e -> {
                 final File file = FileChooser.getInstance().showDialog(".png", FileChooser.pngFilter, false);
                 if (file == null) {
@@ -246,7 +247,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                         Scene.getInstance().setGroundImageEarthView(false);
                     } catch (final Throwable t) {
                         t.printStackTrace();
-                        EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), t.getMessage(), "Error", JOptionPane.ERROR_MESSAGE));
+                        EventQueue.invokeLater(() -> JOptionPane.showMessageDialog(MainFrame.getInstance(), t.getMessage(), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE));
                     }
                     return null;
                 });
@@ -256,7 +257,7 @@ class PopupMenuForLand extends PopupMenuFactory {
             groundImageMenu.addSeparator();
 
             miRescaleImage.addActionListener(e -> {
-                final String title = "Scale the ground image";
+                final String title = I18n.get("title.scale_ground_image");
                 while (true) {
                     final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), title, Scene.getInstance().getGroundImageScale());
                     if (newValue == null) {
@@ -265,7 +266,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                         try {
                             final double val = Double.parseDouble(newValue);
                             if (val <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "The scaling factor must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.scaling_factor_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 // final RescaleGroundImageCommand c = new RescaleGroundImageCommand();
                                 SceneManager.getTaskManager().update(() -> {
@@ -276,7 +277,7 @@ class PopupMenuForLand extends PopupMenuFactory {
                                 break;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }

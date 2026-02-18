@@ -22,6 +22,7 @@ import org.concord.energy3d.model.Tree;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.util.BugReporter;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -37,7 +38,7 @@ public class ParabolicTroughDailyAnalysis extends DailyAnalysis {
 
     @Override
     void runAnalysis(final JDialog parent) {
-        graph.info = "Calculating...";
+        graph.info = I18n.get("msg.calculating");
         graph.repaint();
         onStart();
         SceneManager.getTaskManager().update(() -> {
@@ -60,10 +61,10 @@ public class ParabolicTroughDailyAnalysis extends DailyAnalysis {
                     for (int i = n - 1; i >= 0; i--) {
                         previousRuns += keys[i] + " : " + Graph.TWO_DECIMALS.format(recordedResults.get(keys[i])) + " kWh<br>";
                     }
-                    final Object[] options = new Object[]{"OK", "Copy Data"};
-                    final String msg = "<html>The calculated daily output is <b>" + current + " kWh</b>.<br><hr>Results from previously recorded tests:<br>" + previousRuns + "</html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("common.copy_data")};
+                    final String msg = "<html>" + I18n.get("msg.calculated_daily_output", current) + "<br><hr>" + I18n.get("msg.results_from_previously_recorded_tests") + "<br>" + previousRuns + "</html>";
                     final JOptionPane optionPane = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Daily Output");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("title.daily_output"));
                     dialog.setVisible(true);
                     final Object choice = optionPane.getValue();
                     if (choice == options[1]) {
@@ -74,10 +75,10 @@ public class ParabolicTroughDailyAnalysis extends DailyAnalysis {
                         output += current;
                         final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
                         clpbrd.setContents(new StringSelection(output), null);
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + (n + 1) + " data points copied to system clipboard.<br><hr>" + output, "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.data_points_copied", Integer.toString(n + 1)) + "<br><hr>" + output + "</html>", I18n.get("dialog.confirm"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(parent, "<html>The calculated daily output is <b>" + current + " kWh</b>.</html>", "Daily Output", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(parent, "<html>" + I18n.get("msg.calculated_daily_output", current) + "</html>", I18n.get("title.daily_output"), JOptionPane.INFORMATION_MESSAGE);
                 }
             });
             return null;
@@ -130,19 +131,19 @@ public class ParabolicTroughDailyAnalysis extends DailyAnalysis {
         final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
         String s = null;
         int cost = -1;
-        String title = "Daily Yield of All Parabolic Troughs (" + Scene.getInstance().countParts(ParabolicTrough.class) + " Troughs)";
+        String title = I18n.get("title.daily_yield_all_parabolic_troughs", Integer.toString(Scene.getInstance().countParts(ParabolicTrough.class)));
         if (selectedPart != null) {
             if (selectedPart instanceof ParabolicTrough) {
                 cost = (int) CspProjectCost.getPartCost(selectedPart);
                 s = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                title = "Daily Yield";
+                title = I18n.get("title.daily_yield");
             } else if (selectedPart instanceof Foundation) {
-                title = "Daily Yield of Selected Foundation (" + ((Foundation) selectedPart).countParts(ParabolicTrough.class) + " Parabolic Troughs)";
+                title = I18n.get("title.daily_yield_of_foundation", Integer.toString(((Foundation) selectedPart).countParts(ParabolicTrough.class)), I18n.get("part.parabolic_troughs"));
             } else if (selectedPart.getTopContainer() != null) {
-                title = "Daily Yield of Selected Foundation (" + selectedPart.getTopContainer().countParts(ParabolicTrough.class) + " Parabolic Troughs)";
+                title = I18n.get("title.daily_yield_of_foundation", Integer.toString(selectedPart.getTopContainer().countParts(ParabolicTrough.class)), I18n.get("part.parabolic_troughs"));
             }
         }
-        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + " (Cost: $" + cost + ")");
+        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + I18n.get("msg.cost_suffix", String.valueOf(cost)));
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
         menuBar.add(createOptionsMenu(dialog, null, true));

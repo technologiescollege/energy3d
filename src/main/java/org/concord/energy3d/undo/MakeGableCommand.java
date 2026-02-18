@@ -9,6 +9,7 @@ import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.model.Roof;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.type.ReadOnlyVector3;
 
@@ -47,7 +48,7 @@ public class MakeGableCommand extends EditPartCommand {
 
 	@Override
 	public String getPresentationName() {
-		return "Convert to Gable";
+		return I18n.get("undo.convert_to_gable");
 	}
 
 }

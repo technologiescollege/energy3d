@@ -18,6 +18,8 @@ import org.concord.energy3d.model.Sensor;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
+import org.concord.energy3d.util.I18n;
 
 public class RemovePartCommand extends MyAbstractUndoableEdit {
 
@@ -102,9 +104,9 @@ public class RemovePartCommand extends MyAbstractUndoableEdit {
 	@Override
 	public String getPresentationName() {
 		if (part instanceof Foundation && !part.getChildren().isEmpty()) {
-			return "Remove Building";
+			return I18n.get("undo.remove_building");
 		}
-		return "Remove " + part.getClass().getSimpleName();
+		return I18n.get("undo.remove") + " " + MyAbstractUndoableEdit.getPartDisplayName(part.getClass());
 	}
 
 }

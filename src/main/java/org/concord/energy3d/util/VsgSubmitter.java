@@ -26,6 +26,7 @@ import org.concord.energy3d.model.GeoLocation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.AnnualGraph;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -36,24 +37,18 @@ public class VsgSubmitter {
 
         final GeoLocation geo = Scene.getInstance().getGeoLocation();
         if (geo == null) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "No geolocation is set for this model. It cannot be submitted.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_geolocation"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         final Calendar calendar = Heliodon.getInstance().getCalendar();
         if (calendar.get(Calendar.DAY_OF_MONTH) != 1) {
-            String msg = "";
-            msg += "All models must have run an annual simulation and the date must be set to be the first day of a month.<br>";
-            msg += "The date of this model is not set to the first day of a month and cannot be accepted.";
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + msg + "</html>", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.annual_simulation_required") + "</html>", I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (Scene.getInstance().getSolarResults() == null) {
-            String msg = "";
-            msg += "All models must have run an annual simulation, but this model does not<br>";
-            msg += "provide any annual simulation result and cannot be accepted.";
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + msg + "</html>", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.no_annual_simulation_result") + "</html>", I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -79,7 +74,7 @@ public class VsgSubmitter {
         final double[][] solarResults = Scene.getInstance().getSolarResults();
         if (solarResults != null) {
             for (int i = 0; i < solarResults.length; i++) {
-                s += "\t\"" + AnnualGraph.THREE_LETTER_MONTH[i] + "\": \"";
+                s += "\t\"" + AnnualGraph.getThreeLetterMonth()[i] + "\": \"";
                 for (int j = 0; j < solarResults[i].length; j++) {
                     s += EnergyPanel.FIVE_DECIMALS.format(solarResults[i][j]).replaceAll(",", "") + " ";
                 }
@@ -94,7 +89,7 @@ public class VsgSubmitter {
             file = SnapshotLogger.getInstance().saveSnapshot("vsg_model");
         } catch (final Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Failed in saving a snapshot of your current design.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.failed_snapshot"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -113,26 +108,24 @@ public class VsgSubmitter {
             final JTextField emailField = new JTextField(Scene.getInstance().getDesigner() == null ? "" : Scene.getInstance().getDesigner().getEmail());
             final JTextField organizationField = new JTextField(Scene.getInstance().getDesigner() == null ? "" : Scene.getInstance().getDesigner().getOrganization());
             final JPanel personalInfoPanel = new JPanel(new SpringLayout());
-            personalInfoPanel.setBorder(BorderFactory.createTitledBorder("Contributor information (for earning scores and making contact only)"));
-            personalInfoPanel.add(new JLabel("Name: "));
+            personalInfoPanel.setBorder(BorderFactory.createTitledBorder(I18n.get("label.contributor_info")));
+            personalInfoPanel.add(new JLabel(I18n.get("label.name")));
             personalInfoPanel.add(nameField);
-            personalInfoPanel.add(new JLabel("Email: "));
+            personalInfoPanel.add(new JLabel(I18n.get("label.email")));
             personalInfoPanel.add(emailField);
-            personalInfoPanel.add(new JLabel("Organization: "));
+            personalInfoPanel.add(new JLabel(I18n.get("label.organization")));
             personalInfoPanel.add(organizationField);
             SpringUtilities.makeCompactGrid(personalInfoPanel, 3, 2, 8, 8, 8, 8);
             panel.add(personalInfoPanel, BorderLayout.CENTER);
 
             String s1 = "<html><font size=2>";
-            s1 += "By pressing the Yes button below, you agree to contribute your work to the Virtual Solar Grid, a public<br>";
-            s1 += "website that collects many virtual solar power systems. Your work will be reviewed by experts to determine<br>";
-            s1 += "its readiness for publication. You will be notified about its status through the email you provide above.<br>";
-            s1 += "If you agree on these terms, please continue. Otherwise, click the No button to abort.</font><br><br>";
-            s1 += "<b>Do you want to submit your work to the Virtual Solar Grid now?";
+            s1 += I18n.get("msg.vsg_terms");
+            s1 += "</font><br><br>";
+            s1 += "<b>" + I18n.get("msg.vsg_submit_question");
             s1 += "</b></html>";
             panel.add(new JLabel(s1), BorderLayout.SOUTH);
 
-            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, "Virtual Solar Grid", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, I18n.get("title.virtual_solar_grid"), JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.YES_OPTION) {
                 Scene.getInstance().getDesigner().setName(nameField.getText());
                 Scene.getInstance().getDesigner().setEmail(emailField.getText());
                 Scene.getInstance().getDesigner().setOrganization(organizationField.getText());
@@ -165,10 +158,10 @@ public class VsgSubmitter {
         @Override
         protected void done() {
             try {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), "Notice", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), I18n.get("title.notice"), JOptionPane.INFORMATION_MESSAGE);
             } catch (final Exception e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Failed in uploading the file...<hr>" + e.getMessage() + "</html>", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.failed_uploading_file") + "<hr>" + e.getMessage() + "</html>", I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }

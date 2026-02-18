@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 public class ShowZenithAngleCommand extends MyAbstractUndoableEdit {
 
@@ -36,7 +37,7 @@ public class ShowZenithAngleCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Zenith Angle";
+		return I18n.get("undo.show_zenith_angle");
 	}
 
 }

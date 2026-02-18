@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Mirror;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationHeliostatTargetCommand extends MyAbstractUndoableEdit {
 
@@ -71,7 +72,7 @@ public class ChangeFoundationHeliostatTargetCommand extends MyAbstractUndoableEd
 
 	@Override
 	public String getPresentationName() {
-		return "Change Target for All Mirrors on Selected Foundation";
+		return I18n.get("undo.change_target_all_mirrors_selected_foundation");
 	}
 
 }

@@ -10,6 +10,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class RemoveMultiplePartsCommand extends MyAbstractUndoableEdit {
 
@@ -80,15 +81,15 @@ public class RemoveMultiplePartsCommand extends MyAbstractUndoableEdit {
 	@Override
 	public String getPresentationName() {
 		if (parts.isEmpty()) {
-			return "Remove Nothing";
+			return I18n.get("undo.remove_nothing");
 		}
 		if (sameParent && !sameType) {
-			return "Remove All Elements of a Container";
+			return I18n.get("undo.remove_all_elements_container");
 		}
 		if (sameType) {
-			return "Remove " + parts.get(0).getClass().getSimpleName() + "s";
+			return I18n.get("undo.remove") + " " + MyAbstractUndoableEdit.getPartDisplayName(parts.get(0).getClass()) + "s";
 		}
-		return "Remove Multiple Parts";
+		return I18n.get("undo.remove_multiple_parts");
 	}
 
 }

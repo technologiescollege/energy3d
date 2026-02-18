@@ -14,6 +14,7 @@ import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 /**
  * Chromosome of an individual is encoded as follows:
@@ -58,7 +59,7 @@ public class WindowOptimizer extends NetEnergyOptimizer {
                         normalizedValue = 1;
                     }
                     firstBorn.setGene(i, normalizedValue);
-                    setGeneName(i, "Window Width (" + w.getId() + ")");
+                    setGeneName(i, org.concord.energy3d.util.I18n.get("param.window_width_with_id", String.valueOf(w.getId())));
                     setGeneMinimum(i, minWidth);
                     setGeneMaximum(i, maxWidth);
                     setInitialGene(i, w.getWindowWidth());
@@ -70,7 +71,7 @@ public class WindowOptimizer extends NetEnergyOptimizer {
                         normalizedValue = 1;
                     }
                     firstBorn.setGene(i, normalizedValue);
-                    setGeneName(i, "Window Height (" + w.getId() + ")");
+                    setGeneName(i, org.concord.energy3d.util.I18n.get("param.window_height_with_id", String.valueOf(w.getId())));
                     setGeneMinimum(i, minHeight);
                     setGeneMaximum(i, maxHeight);
                     setInitialGene(i, w.getWindowHeight());
@@ -99,7 +100,7 @@ public class WindowOptimizer extends NetEnergyOptimizer {
                         normalizedValue = 1;
                     }
                     firstBorn.setGene(i, normalizedValue);
-                    setGeneName(i, "Window Width (" + w.getId() + ")");
+                    setGeneName(i, org.concord.energy3d.util.I18n.get("param.window_width_with_id", String.valueOf(w.getId())));
                     setGeneMinimum(i, minWidth);
                     setGeneMaximum(i, maxWidth);
                     setInitialGene(i, w.getWindowWidth());
@@ -111,7 +112,7 @@ public class WindowOptimizer extends NetEnergyOptimizer {
                         normalizedValue = 1;
                     }
                     firstBorn.setGene(i, normalizedValue);
-                    setGeneName(i, "Window Height (" + w.getId() + ")");
+                    setGeneName(i, org.concord.energy3d.util.I18n.get("param.window_height_with_id", String.valueOf(w.getId())));
                     setGeneMinimum(i, minHeight);
                     setGeneMaximum(i, maxHeight);
                     setInitialGene(i, w.getWindowHeight());
@@ -285,10 +286,10 @@ public class WindowOptimizer extends NetEnergyOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Energy Use: " + EnergyPanel.TWO_DECIMALS.format(-best.getFitness());
+                s = I18n.get("label.daily_energy_use") + ": " + EnergyPanel.TWO_DECIMALS.format(-best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Energy Use: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_energy_use") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);
@@ -303,10 +304,10 @@ public class WindowOptimizer extends NetEnergyOptimizer {
         String s = null;
         switch (objectiveFunction.getType()) {
             case ObjectiveFunction.DAILY:
-                s = "Daily Energy Use\nCurrent: " + EnergyPanel.TWO_DECIMALS.format(-individual.getFitness()) + ", Top: " + EnergyPanel.TWO_DECIMALS.format(-best.getFitness());
+                s = I18n.get("label.daily_energy_use") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.TWO_DECIMALS.format(-individual.getFitness()) + ", " + I18n.get("label.top") + ": " + EnergyPanel.TWO_DECIMALS.format(-best.getFitness());
                 break;
             case ObjectiveFunction.ANNUAL:
-                s = "Annual Energy Use\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness() * 365.0 / 12.0) + ", Top: " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
+                s = I18n.get("label.annual_energy_use") + "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(-individual.getFitness() * 365.0 / 12.0) + ", " + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(-best.getFitness() * 365.0 / 12.0);
                 break;
         }
         foundation.setLabelCustomText(s);

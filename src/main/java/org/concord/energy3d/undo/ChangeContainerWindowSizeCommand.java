@@ -7,10 +7,12 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.model.HousePart;
+import org.concord.energy3d.model.Roof;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeContainerWindowSizeCommand extends MyAbstractUndoableEdit {
 
@@ -76,7 +78,12 @@ public class ChangeContainerWindowSizeCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Size Change for All Windows on " + (container instanceof Wall ? "Wall" : "Roof");
+		if (container instanceof Wall) {
+			return I18n.get("undo.size_change_all_windows_wall");
+		} else if (container instanceof Roof) {
+			return I18n.get("undo.size_change_all_windows_roof");
+		}
+		return I18n.get("undo.size_change_all_windows_container");
 	}
 
 }

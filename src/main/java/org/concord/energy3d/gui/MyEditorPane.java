@@ -52,6 +52,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.*;
 import org.concord.energy3d.util.Html2Text;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -79,7 +80,7 @@ class MyEditorPane {
                 } else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED) {
                     editorPane.setToolTipText(e.getURL().toString());
                 } else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
-                    editorPane.setToolTipText("<html>Double-click to enlarge this window<br>Right-click to open a popup menu for editing</html>");
+                    editorPane.setToolTipText("<html>" + I18n.get("tooltip.double_click_enlarge") + "<br>" + I18n.get("tooltip.right_click_popup") + "</html>");
                 }
             } else {
                 final Element element = e.getSourceElement();
@@ -128,7 +129,7 @@ class MyEditorPane {
                             } else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED) {
                                 editorPane.setToolTipText(s);
                             } else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
-                                editorPane.setToolTipText("<html>Double-click to enlarge this window<br>Right-click to open a popup menu for editing</html>");
+                                editorPane.setToolTipText("<html>" + I18n.get("tooltip.double_click_enlarge") + "<br>" + I18n.get("tooltip.right_click_popup") + "</html>");
                             }
                         }
                     }
@@ -136,8 +137,8 @@ class MyEditorPane {
             }
         });
 
-        final JMenuItem miEdit = new JMenuItem("Edit");
-        final JMenuItem miCopy = new JMenuItem("Copy");
+        final JMenuItem miEdit = new JMenuItem(I18n.get("button.edit"));
+        final JMenuItem miCopy = new JMenuItem(I18n.get("menu.copy"));
         popupMenu = new JPopupMenu();
         popupMenu.setInvoker(editorPane);
         popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -163,7 +164,7 @@ class MyEditorPane {
 
         miEdit.addActionListener(e -> {
             if (!popup) {
-                new InstructionSheetDialog(MyEditorPane.this, "Sheet " + (id + 1), id, true).setVisible(true);
+                new InstructionSheetDialog(MyEditorPane.this, I18n.get("dialog.sheet", Integer.toString(id + 1)), id, true).setVisible(true);
             }
         });
         popupMenu.add(miEdit);
@@ -179,7 +180,7 @@ class MyEditorPane {
             public void mouseClicked(final MouseEvent e) {
                 if (!popup) {
                     if (e.getClickCount() >= 2) {
-                        new InstructionSheetDialog(MyEditorPane.this, "Sheet " + (id + 1), id, false).setVisible(true);
+                        new InstructionSheetDialog(MyEditorPane.this, I18n.get("dialog.sheet", Integer.toString(id + 1)), id, false).setVisible(true);
                     }
                 }
             }
@@ -195,7 +196,7 @@ class MyEditorPane {
 
             @Override
             public void mouseEntered(final MouseEvent e) {
-                editorPane.setToolTipText("<html>Double-click to enlarge this window" + (Scene.isInternalFile() ? "" : "<br>Right-click to open a popup menu for editing") + "</html>");
+                editorPane.setToolTipText("<html>" + I18n.get("tooltip.double_click_enlarge") + (Scene.isInternalFile() ? "" : "<br>" + I18n.get("tooltip.right_click_popup")) + "</html>");
             }
         });
     }
@@ -447,12 +448,12 @@ class MyEditorPane {
             try {
                 a = Double.parseDouble(s);
             } catch (final Exception e) {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
             }
             if (a >= 0) {
                 Scene.getInstance().getGround().setAlbedo(a);
             } else {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Albedo cannot be negative.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.albedo_cannot_be_negative") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -490,10 +491,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         BuildingLocationOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else if (act.startsWith("Building Orientation Optimizer")) {
@@ -507,10 +508,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         BuildingOrientationOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else if (act.startsWith("Window Optimizer")) {
@@ -524,10 +525,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         WindowOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else if (act.startsWith("Solar Panel Tilt Angle Optimizer")) {
@@ -547,10 +548,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         HeliostatPositionOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else if (act.startsWith("Heliostat Concentric Field Optimizer")) {
@@ -564,10 +565,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         HeliostatConcentricFieldOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else if (act.startsWith("Heliostat Spiral Field Optimizer")) {
@@ -581,10 +582,10 @@ class MyEditorPane {
                     if (p instanceof Foundation) {
                         HeliostatSpiralFieldOptimizer.make((Foundation) p);
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (final Exception e) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>Error in <i>" + act + "</i>.<br>Please select the IDs manually.</html>", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + I18n.get("msg.error_in_action", act) + "<br>" + I18n.get("msg.select_ids_manually") + "</html>", I18n.get("msg.input_error"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -603,7 +604,7 @@ class MyEditorPane {
                 new MonthlySunshineHours().showDialog();
             }
         } else {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + act + "</html>", "Information", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html>" + act + "</html>", I18n.get("title.information"), JOptionPane.INFORMATION_MESSAGE);
         }
 
     }

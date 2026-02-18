@@ -8,6 +8,7 @@ import org.concord.energy3d.undo.ChangeRoofTypeCommand;
 import org.concord.energy3d.undo.ChangeTextureCommand;
 import org.concord.energy3d.util.Config;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -35,13 +36,13 @@ class PopupMenuForFloor extends PopupMenuFactory {
 
         if (popupMenuForFloor == null) {
 
-            final JMenuItem miInfo = new JMenuItem("Floor");
+            final JMenuItem miInfo = new JMenuItem(I18n.get("menu.floor"));
             miInfo.setEnabled(false);
             miInfo.setOpaque(true);
             miInfo.setBackground(Config.isMac() ? Color.BLACK : Color.GRAY);
             miInfo.setForeground(Color.WHITE);
 
-            final JMenuItem miPaste = new JMenuItem("Paste");
+            final JMenuItem miPaste = new JMenuItem(I18n.get("menu.paste"));
             miPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miPaste.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
@@ -51,7 +52,7 @@ class PopupMenuForFloor extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miClear = new JMenuItem("Clear");
+            final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear"));
             miClear.addActionListener(event -> {
                 SceneManager.getTaskManager().update(() -> {
                     Scene.getInstance().removeAllChildren(SceneManager.getInstance().getSelectedPart());
@@ -60,10 +61,10 @@ class PopupMenuForFloor extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenu typeMenu = new JMenu("Type");
+            final JMenu typeMenu = new JMenu(I18n.get("menu.type"));
             final ButtonGroup typeGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem rbmiSolid = new JRadioButtonMenuItem("Solid");
+            final JRadioButtonMenuItem rbmiSolid = new JRadioButtonMenuItem(I18n.get("floor_type.solid"));
             rbmiSolid.addItemListener(event -> {
                 if (event.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -86,7 +87,7 @@ class PopupMenuForFloor extends PopupMenuFactory {
             typeMenu.add(rbmiSolid);
             typeGroup.add(rbmiSolid);
 
-            final JRadioButtonMenuItem rbmiTransparent = new JRadioButtonMenuItem("Transparent");
+            final JRadioButtonMenuItem rbmiTransparent = new JRadioButtonMenuItem(I18n.get("floor_type.transparent"));
             rbmiTransparent.addItemListener(event -> {
                 if (event.getStateChange() == ItemEvent.SELECTED) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -139,7 +140,7 @@ class PopupMenuForFloor extends PopupMenuFactory {
 
             });
 
-            final JMenu textureMenu = new JMenu("Texture");
+            final JMenu textureMenu = new JMenu(I18n.get("menu.texture"));
             final ButtonGroup textureGroup = new ButtonGroup();
             final JRadioButtonMenuItem rbmiTextureNone = createTextureMenuItem(Floor.TEXTURE_NONE, null);
             final JRadioButtonMenuItem rbmiTextureEdge = createTextureMenuItem(Floor.TEXTURE_EDGE, null);
@@ -210,12 +211,12 @@ class PopupMenuForFloor extends PopupMenuFactory {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
-            m = new JRadioButtonMenuItem("No Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.none"));
         } else if (type == HousePart.TEXTURE_EDGE) {
-            m = new JRadioButtonMenuItem("Edge Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.edge"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText("Texture #" + type);
+            m.setText(I18n.get("texture.number", type));
         }
 
         m.addItemListener(e -> {

@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Window;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.type.ReadOnlyColorRGBA;
 
@@ -44,7 +45,7 @@ public class ChangeMuntinColorCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Muntin Color Change for Selected Window";
+		return I18n.get("undo.muntin_color_change_selected_window");
 	}
 
 }

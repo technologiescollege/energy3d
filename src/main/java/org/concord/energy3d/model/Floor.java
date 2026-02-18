@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.SizeAnnotation;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.MeshLib;
 import org.concord.energy3d.util.PolygonWithHoles;
 import org.concord.energy3d.util.Util;
@@ -61,7 +62,7 @@ public class Floor extends HousePart {
         mesh.setModelBound(new BoundingBox());
         mesh.setRenderState(offsetState);
 
-        outlineMesh = new Line("Floor (Outline)");
+        outlineMesh = new Line(I18n.get("node.floor_outline"));
         outlineMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(8));
         outlineMesh.setDefaultColor(ColorRGBA.BLACK);
         outlineMesh.setModelBound(new BoundingBox());

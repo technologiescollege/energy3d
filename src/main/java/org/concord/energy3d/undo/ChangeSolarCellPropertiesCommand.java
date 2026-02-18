@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeSolarCellPropertiesCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +63,7 @@ public class ChangeSolarCellPropertiesCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Solar Cell Property Change for Selected Solar Panel";
+		return I18n.get("undo.solar_cell_property_change_selected_solar_panel");
 	}
 
 }

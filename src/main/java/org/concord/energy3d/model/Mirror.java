@@ -13,6 +13,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Atmosphere;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -99,14 +100,14 @@ public class Mirror extends HousePart implements SolarReflector, Labelable {
             }
         }
 
-        mesh = new Mesh("Reflecting Mirror");
+        mesh = new Mesh(I18n.get("node.reflecting_mirror"));
         mesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(6));
         mesh.getMeshData().setTextureBuffer(BufferUtils.createVector2Buffer(6), 0);
         mesh.setModelBound(new OrientedBoundingBox());
         mesh.setUserData(new UserData(this));
         root.attachChild(mesh);
 
-        surround = new Box("Mirror (Surround)");
+        surround = new Box(I18n.get("node.mirror_surround"));
         surround.setModelBound(new OrientedBoundingBox());
         final OffsetState offset = new OffsetState();
         offset.setFactor(1);
@@ -114,13 +115,13 @@ public class Mirror extends HousePart implements SolarReflector, Labelable {
         surround.setRenderState(offset);
         root.attachChild(surround);
 
-        outlineMesh = new Line("Mirror (Outline)");
+        outlineMesh = new Line(I18n.get("node.mirror_outline"));
         outlineMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(8));
         outlineMesh.setDefaultColor(ColorRGBA.BLACK);
         outlineMesh.setModelBound(new OrientedBoundingBox());
         root.attachChild(outlineMesh);
 
-        post = new MyCylinder("Post Cylinder", 2, Scene.getInstance().getAllHeliostats().size() < 200 ? 10 : 2, 10, 0); // if there are many mirrors, reduce the solution of post
+        post = new MyCylinder(I18n.get("node.post_cylinder"), 2, Scene.getInstance().getAllHeliostats().size() < 200 ? 10 : 2, 10, 0); // if there are many mirrors, reduce the solution of post
         post.setRadius(0.6);
         post.setDefaultColor(ColorRGBA.WHITE);
         post.setRenderState(offsetState);
@@ -128,7 +129,7 @@ public class Mirror extends HousePart implements SolarReflector, Labelable {
         post.updateModelBound();
         root.attachChild(post);
 
-        lightBeams = new Line("Light Beams");
+        lightBeams = new Line(I18n.get("node.light_beams"));
         lightBeams.setLineWidth(1f);
         lightBeams.setStipplePattern((short) 0xffff);
         lightBeams.setModelBound(null);
@@ -311,7 +312,7 @@ public class Mirror extends HousePart implements SolarReflector, Labelable {
             text += (text.equals("") ? "" : "\n") + "#" + id;
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.ONE_DECIMAL.format(getOutputToday()) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.ONE_DECIMAL.format(getOutputToday()) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -492,7 +493,7 @@ public class Mirror extends HousePart implements SolarReflector, Labelable {
         }
         final double o = copy.overlap();
         if (o >= 0) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new heliostat is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.heliostat_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

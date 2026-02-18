@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.ParabolicDish;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetRimRadiusForParabolicDishesOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class SetRimRadiusForParabolicDishesOnFoundationCommand extends MyAbstrac
 
 	@Override
 	public String getPresentationName() {
-		return "Set Rim Radius for All Parabolic Dishes on Selected Foundation";
+		return I18n.get("undo.set_rim_radius_all_parabolic_dishes_foundation");
 	}
 
 }

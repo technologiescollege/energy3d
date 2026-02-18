@@ -15,6 +15,7 @@ import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Wall;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 /**
@@ -32,89 +33,89 @@ public class BuildingLocationOptimizerMaker extends OptimizerMaker {
 
         final List<Wall> walls = foundation.getWalls();
         if (walls.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no building on this foundation.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_building_on_this_foundation"), I18n.get("title.information"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         final JPanel panel = new JPanel(new SpringLayout());
 
-        panel.add(new JLabel("Solution:"));
-        final JComboBox<String> solutionComboBox = new JComboBox<>(new String[]{"Building Location"});
+        panel.add(new JLabel(I18n.get("label.solution")));
+        final JComboBox<String> solutionComboBox = new JComboBox<>(new String[]{I18n.get("combo.building_location")});
         panel.add(solutionComboBox);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Objective:"));
-        final JComboBox<String> objectiveComboBox = new JComboBox<>(new String[]{"Daily Energy Use", "Annual Energy Use"});
+        panel.add(new JLabel(I18n.get("label.objective")));
+        final JComboBox<String> objectiveComboBox = new JComboBox<>(new String[]{I18n.get("combo.daily_energy_use"), I18n.get("combo.annual_energy_use")});
         objectiveComboBox.setSelectedIndex(selectedObjectiveFunction);
         panel.add(objectiveComboBox);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Minimum X:"));
+        panel.add(new JLabel(I18n.get("label.minimum_x")));
         final JTextField minimumXField = new JTextField(EnergyPanel.TWO_DECIMALS.format(minimumX));
         panel.add(minimumXField);
-        panel.add(new JLabel("<html><font size=2>Meter</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.meter") + "</font></html>"));
 
-        panel.add(new JLabel("Maximum X:"));
+        panel.add(new JLabel(I18n.get("label.maximum_x")));
         final JTextField maximumXField = new JTextField(EnergyPanel.TWO_DECIMALS.format(maximumX));
         panel.add(maximumXField);
-        panel.add(new JLabel("<html><font size=2>Meter</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.meter") + "</font></html>"));
 
-        panel.add(new JLabel("Minimum Y:"));
+        panel.add(new JLabel(I18n.get("label.minimum_y")));
         final JTextField minimumYField = new JTextField(EnergyPanel.TWO_DECIMALS.format(minimumY));
         panel.add(minimumYField);
-        panel.add(new JLabel("<html><font size=2>Meter</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.meter") + "</font></html>"));
 
-        panel.add(new JLabel("Maximum Y:"));
+        panel.add(new JLabel(I18n.get("label.maximum_y")));
         final JTextField maximumYField = new JTextField(EnergyPanel.TWO_DECIMALS.format(maximumY));
         panel.add(maximumYField);
-        panel.add(new JLabel("<html><font size=2>Meter</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.meter") + "</font></html>"));
 
-        panel.add(new JLabel("Chromosome type:"));
-        final JComboBox<String> typeComboBox = new JComboBox<>(new String[]{"Continuous"});
+        panel.add(new JLabel(I18n.get("label.chromosome_type")));
+        final JComboBox<String> typeComboBox = new JComboBox<>(new String[]{I18n.get("combo.continuous")});
         panel.add(typeComboBox);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Selection method:"));
-        final JComboBox<String> selectionComboBox = new JComboBox<>(new String[]{"Roulette Wheel", "Tournament"});
+        panel.add(new JLabel(I18n.get("label.selection_method")));
+        final JComboBox<String> selectionComboBox = new JComboBox<>(new String[]{I18n.get("combo.roulette_wheel"), I18n.get("combo.tournament")});
         selectionComboBox.setSelectedIndex(selectedSelectionMethod);
         panel.add(selectionComboBox);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Population size:"));
+        panel.add(new JLabel(I18n.get("label.population_size")));
         final JTextField populationField = new JTextField(populationSize + "");
         panel.add(populationField);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Maximum generations:"));
+        panel.add(new JLabel(I18n.get("label.maximum_generations")));
         final JTextField generationField = new JTextField(maximumGenerations + "");
         panel.add(generationField);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Mutation rate:"));
+        panel.add(new JLabel(I18n.get("label.mutation_rate")));
         final JTextField mutationRateField = new JTextField(selectedSearchMethod == 1 ? "0" : EnergyPanel.FIVE_DECIMALS.format(mutationRate));
         mutationRateField.setEnabled(selectedSearchMethod != 1);
         panel.add(mutationRateField);
-        panel.add(new JLabel("<html><font size=2>Not %</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.not_percent") + "</font></html>"));
 
-        panel.add(new JLabel("Convergence criterion:"));
-        final JComboBox<String> convergenceCriterionComboBox = new JComboBox<>(new String[]{"Bitwise (Nominal)"});
+        panel.add(new JLabel(I18n.get("label.convergence_criterion")));
+        final JComboBox<String> convergenceCriterionComboBox = new JComboBox<>(new String[]{I18n.get("combo.bitwise_nominal")});
         panel.add(convergenceCriterionComboBox);
         panel.add(new JLabel());
 
-        panel.add(new JLabel("Convergence threshold:"));
+        panel.add(new JLabel(I18n.get("label.convergence_threshold")));
         final JTextField convergenceThresholdField = new JTextField(EnergyPanel.FIVE_DECIMALS.format(convergenceThreshold));
         panel.add(convergenceThresholdField);
-        panel.add(new JLabel("<html><font size=2>Not %</font></html>"));
+        panel.add(new JLabel("<html><font size=2>" + I18n.get("unit.not_percent") + "</font></html>"));
 
-        final JLabel localSearchRadiusLabel = new JLabel("Local search radius:");
+        final JLabel localSearchRadiusLabel = new JLabel(I18n.get("label.local_search_radius"));
         final JTextField localSearchRadiusField = new JTextField(EnergyPanel.FIVE_DECIMALS.format(localSearchRadius));
-        final JLabel localSearchRadiusLabel2 = new JLabel("<html><font size=2>(0, 1]</font></html>");
+        final JLabel localSearchRadiusLabel2 = new JLabel("<html><font size=2>" + I18n.get("unit.range_zero_one") + "</font></html>");
         localSearchRadiusLabel.setEnabled(selectedSearchMethod > 0);
         localSearchRadiusField.setEnabled(selectedSearchMethod > 0);
         localSearchRadiusLabel2.setEnabled(selectedSearchMethod > 0);
 
-        panel.add(new JLabel("Search method:"));
-        final JComboBox<String> searchMethodComboBox = new JComboBox<>(new String[]{"Global Search (Uniform Selection)", "Local Search (Random Optimization)"});
+        panel.add(new JLabel(I18n.get("label.search_method")));
+        final JComboBox<String> searchMethodComboBox = new JComboBox<>(new String[]{I18n.get("combo.global_search_uniform"), I18n.get("combo.local_search_random")});
         searchMethodComboBox.setSelectedIndex(selectedSearchMethod);
         searchMethodComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -135,9 +136,9 @@ public class BuildingLocationOptimizerMaker extends OptimizerMaker {
 
         SpringUtilities.makeCompactGrid(panel, 15, 3, 6, 6, 6, 6);
 
-        final Object[] options = new Object[]{"OK", "Cancel", "Previous Results"};
+        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.previous_results")};
         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION, null, options, options[0]);
-        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Genetic Algorithm Options for Optimizing Building Location");
+        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.genetic_algorithm_options_building_location"));
 
         while (true) {
             dialog.setVisible(true);
@@ -152,7 +153,7 @@ public class BuildingLocationOptimizerMaker extends OptimizerMaker {
                     }
                     op.displayResults(choice.toString());
                 } else {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "No data is available.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_data_available"), I18n.get("title.information"), JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 boolean ok = true;
@@ -170,20 +171,20 @@ public class BuildingLocationOptimizerMaker extends OptimizerMaker {
                     minimumY = Double.parseDouble(minimumYField.getText());
                     maximumY = Double.parseDouble(maximumYField.getText());
                 } catch (final NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value_short"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     ok = false;
                 }
                 if (ok) {
                     if (populationSize <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Population size must be greater than zero.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.population_size_positive"), I18n.get("title.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else if (maximumGenerations < 0) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Maximum generations cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.max_generations_not_negative"), I18n.get("title.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else if (mutationRate < 0 || mutationRate > 1) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Mutation rate must be between 0 and 1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.mutation_rate_range"), I18n.get("title.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else if (convergenceThreshold < 0 || convergenceThreshold > 0.1) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Convergence threshold must be between 0 and 0.1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.convergence_threshold_range"), I18n.get("title.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else if (localSearchRadius < 0 || localSearchRadius > 1) {
-                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Local search radius must be between 0 and 1.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.local_search_radius_range"), I18n.get("title.range_error"), JOptionPane.ERROR_MESSAGE);
                     } else {
                         selectedObjectiveFunction = objectiveComboBox.getSelectedIndex();
                         selectedSelectionMethod = selectionComboBox.getSelectedIndex();

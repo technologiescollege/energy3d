@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class SetTemperatrureEffectsForAllCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class SetTemperatrureEffectsForAllCommand extends MyAbstractUndoableEdit 
 
 	@Override
 	public String getPresentationName() {
-		return "Temperature Effects Change for All Solar Panels";
+		return I18n.get("undo.temperature_effects_change_all_solar_panels");
 	}
 
 }

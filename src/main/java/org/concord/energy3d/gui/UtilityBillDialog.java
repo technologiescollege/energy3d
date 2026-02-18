@@ -17,6 +17,7 @@ import javax.swing.SpringLayout;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.simulation.AnnualGraph;
 import org.concord.energy3d.simulation.UtilityBill;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 /**
@@ -31,12 +32,12 @@ class UtilityBillDialog extends JDialog {
 
         super(MainFrame.getInstance(), true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setTitle("Input Electricty Usage from Utility Bill (kWh)");
+        setTitle(I18n.get("dialog.utility_bill"));
 
         final JLabel[] labels = new JLabel[12];
         final JTextField[] fields = new JTextField[12];
         for (int i = 0; i < 12; i++) {
-            labels[i] = new JLabel(AnnualGraph.THREE_LETTER_MONTH[i]);
+            labels[i] = new JLabel(AnnualGraph.getThreeLetterMonth()[i]);
             fields[i] = new JTextField(FORMAT1.format(utilityBill.getMonthlyEnergy(i)), 10);
         }
 
@@ -58,7 +59,7 @@ class UtilityBillDialog extends JDialog {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
             final double[] x = new double[12];
             try {
@@ -67,12 +68,12 @@ class UtilityBillDialog extends JDialog {
                 }
             } catch (final NumberFormatException err) {
                 err.printStackTrace();
-                JOptionPane.showMessageDialog(UtilityBillDialog.this, "Invalid input: " + err.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(UtilityBillDialog.this, I18n.get("msg.invalid_input") + ": " + err.getMessage(), I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             for (int i = 0; i < 12; i++) {
                 if (x[i] < 0) {
-                    JOptionPane.showMessageDialog(UtilityBillDialog.this, "Energy usage cannot be negative.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(UtilityBillDialog.this, I18n.get("msg.energy_usage_negative"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 utilityBill.setMonthlyEnergy(i, x[i]);
@@ -85,7 +86,7 @@ class UtilityBillDialog extends JDialog {
         buttonPanel.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> dispose());
         cancelButton.setActionCommand("Cancel");
         buttonPanel.add(cancelButton);

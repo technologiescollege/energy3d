@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class SetSizeForAllRacksCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +63,7 @@ public class SetSizeForAllRacksCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Set Size for All Racks";
+		return I18n.get("undo.set_size_all_racks");
 	}
 
 }

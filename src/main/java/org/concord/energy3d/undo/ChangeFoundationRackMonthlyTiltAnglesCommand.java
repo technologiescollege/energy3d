@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Rack;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationRackMonthlyTiltAnglesCommand extends MyAbstractUndoableEdit {
 
@@ -59,7 +60,7 @@ public class ChangeFoundationRackMonthlyTiltAnglesCommand extends MyAbstractUndo
 
 	@Override
 	public String getPresentationName() {
-		return "Change Monthly Tilt Angles for All Racks on Selected Foundation";
+		return I18n.get("undo.change_monthly_tilt_angles_all_racks_selected_foundation");
 	}
 
 }

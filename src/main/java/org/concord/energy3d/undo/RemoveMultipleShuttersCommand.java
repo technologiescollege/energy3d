@@ -8,6 +8,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class RemoveMultipleShuttersCommand extends MyAbstractUndoableEdit {
 
@@ -61,9 +62,9 @@ public class RemoveMultipleShuttersCommand extends MyAbstractUndoableEdit {
 	@Override
 	public String getPresentationName() {
 		if (windows.isEmpty()) {
-			return "Remove Nothing";
+			return I18n.get("undo.remove_nothing");
 		}
-		return "Remove All Window Shutters";
+		return I18n.get("undo.remove_all_window_shutters");
 	}
 
 }

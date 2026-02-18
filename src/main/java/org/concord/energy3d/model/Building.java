@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.math.Vector2;
@@ -280,17 +281,17 @@ public class Building {
 
     @Override
     public String toString() {
-        String s = "(ID=" + foundation.getId();
+        String s = "(" + I18n.get("building.id") + "=" + foundation.getId();
         if (calculate(false)) {
-            s += " #wall=" + walls.size();
-            s += " #window=" + windows.size();
-            s += " height=" + FORMAT1.format(height);
-            s += " area=" + FORMAT1.format(area);
-            s += " center=\"" + FORMAT1.format(cx) + ", " + FORMAT1.format(cy) + "\"";
+            s += " " + I18n.get("building.wall_count") + "=" + walls.size();
+            s += " " + I18n.get("building.window_count") + "=" + windows.size();
+            s += " " + I18n.get("building.height") + "=" + FORMAT1.format(height);
+            s += " " + I18n.get("building.area") + "=" + FORMAT1.format(area);
+            s += " " + I18n.get("building.center") + "=\"" + FORMAT1.format(cx) + ", " + FORMAT1.format(cy) + "\"";
             final double solar = foundation.getSolarPotentialToday();
             if (solar >= 0) {
-                s += " solar_energy=" + solar;
-                s += " solar_energy_density=" + FORMAT4.format(solar / (area * height));
+                s += " " + I18n.get("building.solar_energy") + "=" + solar;
+                s += " " + I18n.get("building.solar_energy_density") + "=" + FORMAT4.format(solar / (area * height));
             }
         }
         return s + ")";

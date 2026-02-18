@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Thermal;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeVolumetricHeatCapacityCommand extends MyAbstractUndoableEdit {
 
@@ -46,7 +47,7 @@ public class ChangeVolumetricHeatCapacityCommand extends MyAbstractUndoableEdit 
 
 	@Override
 	public String getPresentationName() {
-		return "Volumetric Heat Capacity Change for Selected Part";
+		return I18n.get("undo.volumetric_heat_capacity_change_selected_part");
 	}
 
 }

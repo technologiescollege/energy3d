@@ -16,6 +16,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.ChangeFigureCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 class PopupMenuForHuman extends PopupMenuFactory {
 
@@ -50,14 +51,14 @@ class PopupMenuForHuman extends PopupMenuFactory {
             popupMenuForHuman = createPopupMenu(true, true, null);
             popupMenuForHuman.addSeparator();
 
-            final JMenu personMenu = new JMenu("Select Person");
+            final JMenu personMenu = new JMenu(I18n.get("menu.select_person"));
             popupMenuForHuman.add(personMenu);
 
             final ButtonGroup personButtonGroup = new ButtonGroup();
 
-            final JMenu menMenu = new JMenu("Men");
+            final JMenu menMenu = new JMenu(I18n.get("menu.men"));
             personMenu.add(menMenu);
-            final JMenu womenMenu = new JMenu("Women");
+            final JMenu womenMenu = new JMenu(I18n.get("menu.women"));
             personMenu.add(womenMenu);
 
             final JRadioButtonMenuItem[] rbmi = new JRadioButtonMenuItem[Human.FIGURES.length];

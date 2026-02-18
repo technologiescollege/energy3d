@@ -6,6 +6,7 @@ import javax.swing.undo.CannotUndoException;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.gui.MainPanel;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 public class ShowShadowCommand extends MyAbstractUndoableEdit {
@@ -40,7 +41,7 @@ public class ShowShadowCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Show Shadow";
+		return I18n.get("undo.show_shadow");
 	}
 
 }

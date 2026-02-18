@@ -25,6 +25,7 @@ import org.concord.energy3d.simulation.Graph;
 import org.concord.energy3d.simulation.PartEnergyDailyGraph;
 import org.concord.energy3d.simulation.PvDailyAnalysis;
 import org.concord.energy3d.simulation.SolarRadiation;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -44,7 +45,7 @@ public class PvProjectDailyEnergyGraph extends JPanel {
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -135,7 +136,7 @@ public class PvProjectDailyEnergyGraph extends JPanel {
                         output += r.getYieldNow();
                     }
                 }
-                graph.addData("Solar", output);
+                graph.addData(I18n.get("chart.series.solar"), output);
             }
         }
         repaint();
@@ -161,7 +162,7 @@ public class PvProjectDailyEnergyGraph extends JPanel {
         StringBuilder s = new StringBuilder("{");
         if (base != null) {
             s.append("\"Foundation\": ").append(base.getId());
-            final List<Double> data = graph.getData("Solar");
+            final List<Double> data = graph.getData(I18n.get("chart.series.solar"));
             if (data != null) {
                 s.append(", \"Solar\": {");
                 s.append("\"Hourly\": [");
@@ -170,7 +171,7 @@ public class PvProjectDailyEnergyGraph extends JPanel {
                 }
                 s = new StringBuilder(s.substring(0, s.length() - 1));
                 s.append("]\n");
-                s.append(", \"Total\": ").append(Graph.ENERGY_FORMAT.format(getResult("Solar")));
+                s.append(", \"Total\": ").append(Graph.ENERGY_FORMAT.format(getResult(I18n.get("chart.series.solar"))));
                 s.append("}");
             }
         } else {

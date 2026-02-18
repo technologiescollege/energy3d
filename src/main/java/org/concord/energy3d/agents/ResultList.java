@@ -41,6 +41,7 @@ import org.concord.energy3d.simulation.Graph;
 import org.concord.energy3d.simulation.PartEnergyAnnualGraph;
 import org.concord.energy3d.simulation.PartEnergyDailyGraph;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -94,11 +95,11 @@ public class ResultList {
 	public void showGui() {
 
 		if (events.isEmpty()) {
-			JOptionPane.showMessageDialog(MainFrame.getInstance(), "No previous results were found.", "No Result", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_previous_results"), I18n.get("title.no_result"), JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
-		final JDialog dialog = new JDialog(MainFrame.getInstance(), "List of Results", true);
+		final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("title.list_of_results"), true);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		final JPanel contentPane = new JPanel(new BorderLayout());
@@ -107,10 +108,10 @@ public class ResultList {
 		final JMenuBar menuBar = new JMenuBar();
 		dialog.setJMenuBar(menuBar);
 
-		final JMenu menu = new JMenu("Export");
+		final JMenu menu = new JMenu(I18n.get("menu.export"));
 		menuBar.add(menu);
 
-		final JMenuItem mi = new JMenuItem("Copy Image");
+		final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -146,7 +147,7 @@ public class ResultList {
 				final int i = list.getSelectedIndex();
 				final AnalysisEvent a = events.get(i);
 				setGraph(a);
-				fileLabel.setText("File: " + Util.getFileName(a.getFile().getPath()));
+				fileLabel.setText(I18n.get("label.file") + Util.getFileName(a.getFile().getPath()));
 				graphContainer.add(graph, BorderLayout.CENTER);
 				graphContainer.validate();
 				final Map<String, List<Double>> r = a.getResults();
@@ -168,7 +169,7 @@ public class ResultList {
 		fileLabel = new JLabel();
 		buttonPanel.add(fileLabel);
 
-		final JButton button = new JButton("Close");
+		final JButton button = new JButton(I18n.get("common.close"));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {

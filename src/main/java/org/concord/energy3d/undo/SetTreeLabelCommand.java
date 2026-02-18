@@ -1,6 +1,7 @@
 package org.concord.energy3d.undo;
 
 import org.concord.energy3d.model.Tree;
+import org.concord.energy3d.util.I18n;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -52,7 +53,7 @@ public class SetTreeLabelCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Label of Tree";
+		return I18n.get("undo.change_label_tree");
 	}
 
 }

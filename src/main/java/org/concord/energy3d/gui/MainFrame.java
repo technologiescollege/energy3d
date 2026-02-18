@@ -234,7 +234,7 @@ public class MainFrame extends JFrame {
     private void initialize() {
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setTitle("Energy3D V" + MainApplication.VERSION);
+        setTitle(I18n.get("app.title", MainApplication.VERSION));
 
         setJMenuBar(getAppMenuBar());
         setContentPane(MainPanel.getInstance());
@@ -365,7 +365,7 @@ public class MainFrame extends JFrame {
                     replayFolderMenuItem.setEnabled(inactive);
                     final File lastFolder = DesignReplay.getInstance().getLastFolder();
                     replayLastFolderMenuItem.setEnabled(lastFolder != null && inactive);
-                    replayLastFolderMenuItem.setText(lastFolder != null ? "Replay Last Folder: " + lastFolder : "Replay Last Folder");
+                    replayLastFolderMenuItem.setText(lastFolder != null ? I18n.get("menu.replay_last_folder") + ": " + lastFolder : I18n.get("menu.replay_last_folder"));
                     replayControlsMenu.setEnabled(!inactive);
                     analyzeFolderMenuItem.setEnabled(inactive);
 
@@ -386,8 +386,8 @@ public class MainFrame extends JFrame {
                                 x.addActionListener(e1 -> {
                                     boolean ok = false;
                                     if (Scene.getInstance().isEdited()) {
-                                        final int save = JOptionPane.showConfirmDialog(MainFrame.this, "Do you want to save changes?",
-                                                "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                        final int save = JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.save_changes"),
+                                                I18n.get("menu.save"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                                         if (save == JOptionPane.YES_OPTION) {
                                             save();
                                             if (!Scene.getInstance().isEdited()) {
@@ -425,7 +425,7 @@ public class MainFrame extends JFrame {
 
                 }
             });
-            fileMenu.setText("File");
+            fileMenu.setText(I18n.get("menu.file"));
             addItemToFileMenu(getNewMenuItem());
             addItemToFileMenu(getOpenMenuItem());
             addItemToFileMenu(getSaveMenuItem());
@@ -443,7 +443,7 @@ public class MainFrame extends JFrame {
             addItemToFileMenu(getReplayFolderMenuItem());
             addItemToFileMenu(getReplayLastFolderMenuItem());
 
-            replayControlsMenu = new JMenu("Replay Controls");
+            replayControlsMenu = new JMenu(I18n.get("menu.replay_controls"));
             replayControlsMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -466,7 +466,7 @@ public class MainFrame extends JFrame {
                 public void menuSelected(final MenuEvent e) {
                     endReplayMenuItem.setEnabled(PlayControl.active);
                     pauseReplayMenuItem.setEnabled(PlayControl.active);
-                    pauseReplayMenuItem.setText((PlayControl.replaying ? "Pause Replay" : "Resume Replay") + " (Space Bar)");
+                    pauseReplayMenuItem.setText(PlayControl.replaying ? I18n.get("menu.resume_replay") : I18n.get("menu.pause_replay"));
                     forwardReplayMenuItem.setEnabled(!PlayControl.replaying);
                     backwardReplayMenuItem.setEnabled(!PlayControl.replaying);
                 }
@@ -498,12 +498,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getNewMenuItem() {
         if (newMenuItem == null) {
-            newMenuItem = new JMenuItem("New");
+            newMenuItem = new JMenuItem(I18n.get("menu.new"));
             newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             newMenuItem.addActionListener(e -> {
                 boolean ok = false;
                 if (Scene.getInstance().isEdited()) {
-                    final int save = JOptionPane.showConfirmDialog(MainFrame.this, "Do you want to save changes?", "Save",
+                    final int save = JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.save_changes"), I18n.get("dialog.save"),
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (save == JOptionPane.YES_OPTION) {
                         save();
@@ -527,7 +527,7 @@ public class MainFrame extends JFrame {
                                 EnergyPanel.getInstance().update();
                                 EnergyPanel.getInstance().clearAllGraphs();
                                 EnergyPanel.getInstance().selectInstructionSheet(0);
-                                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), "New File", null));
+                                MainApplication.addEvent(new OperationEvent(Scene.getURL(), System.currentTimeMillis(), I18n.get("menu.new"), null));
                             });
                         } catch (final Throwable err) {
                             BugReporter.report(err);
@@ -542,12 +542,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getOpenMenuItem() {
         if (openMenuItem == null) {
-            openMenuItem = new JMenuItem("Open...");
+            openMenuItem = new JMenuItem(I18n.get("menu.open") + "...");
             openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             openMenuItem.addActionListener(e -> {
                 if (Scene.getInstance().isEdited()) {
-                    final int save = JOptionPane.showConfirmDialog(MainFrame.this, "Do you want to save changes?",
-                            "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    final int save = JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.save_changes"),
+                            I18n.get("dialog.save"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (save == JOptionPane.YES_OPTION) {
                         save();
                         if (!Scene.getInstance().isEdited()) {
@@ -584,7 +584,7 @@ public class MainFrame extends JFrame {
 
     void reopen() {
         if (Scene.getInstance().isEdited()) {
-            final int save = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Save as", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            final int save = JOptionPane.showConfirmDialog(this, I18n.get("msg.save_changes"), I18n.get("menu.save_as"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (save == JOptionPane.YES_OPTION) {
                 saveFile(false);
                 if (!Scene.getInstance().isEdited()) {
@@ -605,7 +605,7 @@ public class MainFrame extends JFrame {
                 try {
                     Scene.open(url);
                 } catch (final Exception e) {
-                    BugReporter.report(e, "Error in reopening " + url);
+                    BugReporter.report(e, I18n.get("msg.error_reopening", url));
                 }
                 return null;
             });
@@ -614,10 +614,10 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRecoveryMenuItem() {
         if (recoveryMenuItem == null) {
-            recoveryMenuItem = new JMenuItem("Recover from Latest Snapshot...");
+            recoveryMenuItem = new JMenuItem(I18n.get("menu.recover_snapshot"));
             recoveryMenuItem.addActionListener(e -> {
                 if (Scene.getInstance().getNoSnaphshotLogging()) {
-                    JOptionPane.showMessageDialog(instance, "<html>Sorry, your file cannot be recovered as snapshot logging<br>is disabled for it.</html>", "File Recovery", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(instance, "<html>" + I18n.get("msg.recovery_snapshot_disabled") + "</html>", I18n.get("dialog.file_recovery"), JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     final File f = SnapshotLogger.getInstance().getLatestSnapshot();
                     if (f != null) {
@@ -626,11 +626,11 @@ public class MainFrame extends JFrame {
                                 Scene.open(f.toURI().toURL());
                                 EventQueue.invokeLater(() -> {
                                     updateTitleBar();
-                                    JOptionPane.showMessageDialog(instance, "<html>Please overwrite the file you wish to restore with the recovered file.</html>", "File Recovery", JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(instance, "<html>" + I18n.get("msg.recovery_overwrite") + "</html>", I18n.get("dialog.file_recovery"), JOptionPane.INFORMATION_MESSAGE);
                                     saveasMenuItem.doClick();
                                 });
                             } catch (final Throwable err) {
-                                BugReporter.report(err, "Recovery error");
+                                BugReporter.report(err, I18n.get("msg.recovery_error"));
                             }
                             return null;
                         });
@@ -643,10 +643,10 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getListLoggedSnapshotsMenuItem() {
         if (listLoggedSnapshotsMenuItem == null) {
-            listLoggedSnapshotsMenuItem = new JMenuItem("List All Logged Snapshots...");
+            listLoggedSnapshotsMenuItem = new JMenuItem(I18n.get("menu.list_snapshots"));
             listLoggedSnapshotsMenuItem.addActionListener(e -> {
                 if (Scene.getInstance().getNoSnaphshotLogging()) {
-                    JOptionPane.showMessageDialog(instance, "<html>Sorry, the snapshot logging of this file is disabled.</html>", "File Recovery", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(instance, "<html>" + I18n.get("msg.snapshot_logging_disabled") + "</html>", I18n.get("dialog.file_recovery"), JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     final FileChooser fileChooser = new FileChooser();
                     fileChooser.setCurrentDirectory(SnapshotLogger.getLogFolder());
@@ -672,16 +672,16 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getClearLogMenuItem() {
         if (clearLogMenuItem == null) {
-            clearLogMenuItem = new JMenuItem("Clear Log...");
+            clearLogMenuItem = new JMenuItem(I18n.get("menu.clear_log"));
             clearLogMenuItem.addActionListener(e -> {
                 final File logFolder = SnapshotLogger.getLogFolder();
                 if (!logFolder.exists()) {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Nothing has been logged.", "No log", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.nothing_logged"), I18n.get("dialog.no_log"), JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 if (JOptionPane.CANCEL_OPTION == JOptionPane.showConfirmDialog(MainFrame.this,
-                        "<html>The logged data (json and ng3 files) will be permanently deleted.<br>Are you sure?</html>",
-                        "Clear Log", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+                        "<html>" + I18n.get("msg.clear_log_confirm") + "</html>",
+                        I18n.get("dialog.clear_log"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) {
                     return;
                 }
                 final File[] files = logFolder.listFiles();
@@ -697,7 +697,7 @@ public class MainFrame extends JFrame {
 
                         @Override
                         protected void done() {
-                            JOptionPane.showMessageDialog(MainFrame.this, files.length + " files were deleted.", "Deletion completed", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.files_deleted", Integer.toString(files.length)), I18n.get("dialog.deletion_completed"), JOptionPane.INFORMATION_MESSAGE);
                         }
                     }.execute();
                 }
@@ -708,7 +708,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPreferencesMenuItem() {
         if (preferencesMenuItem == null) {
-            preferencesMenuItem = new JMenuItem("System Information & Preferences...");
+            preferencesMenuItem = new JMenuItem(I18n.get("menu.system_preferences"));
             preferencesMenuItem.addActionListener(e -> showPreferences());
         }
         return preferencesMenuItem;
@@ -721,35 +721,35 @@ public class MainFrame extends JFrame {
         inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         gui.add(inputPanel, BorderLayout.CENTER);
 
-        JLabel label = new JLabel("Maximum memory: ");
+        JLabel label = new JLabel(I18n.get("label.maximum_memory"));
         inputPanel.add(label);
         final JTextField maxMemoryField = new JTextField(Math.round(runtime.maxMemory() / (1024.0 * 1024.0)) + " MB");
         maxMemoryField.setEditable(false);
         label.setLabelFor(maxMemoryField);
         inputPanel.add(maxMemoryField);
 
-        label = new JLabel("Total memory: ");
+        label = new JLabel(I18n.get("label.total_memory"));
         inputPanel.add(label);
         final JTextField totalMemoryField = new JTextField(Math.round(runtime.totalMemory() / (1024.0 * 1024.0)) + " MB");
         totalMemoryField.setEditable(false);
         label.setLabelFor(totalMemoryField);
         inputPanel.add(totalMemoryField);
 
-        label = new JLabel("Processors: ");
+        label = new JLabel(I18n.get("label.processors"));
         inputPanel.add(label);
         final JTextField processorsField = new JTextField(Runtime.getRuntime().availableProcessors() + "");
         processorsField.setEditable(false);
         label.setLabelFor(processorsField);
         inputPanel.add(processorsField);
 
-        label = new JLabel("Java vendor: ");
+        label = new JLabel(I18n.get("label.java_vendor"));
         inputPanel.add(label);
         final JTextField javaVendorField = new JTextField(System.getProperty("java.vendor"), 12);
         javaVendorField.setEditable(false);
         label.setLabelFor(javaVendorField);
         inputPanel.add(javaVendorField);
 
-        label = new JLabel("Java version: ");
+        label = new JLabel(I18n.get("label.java_version"));
         inputPanel.add(label);
         final JTextField javaVersionField = new JTextField(System.getProperty("java.version"));
         javaVersionField.setEditable(false);
@@ -757,19 +757,19 @@ public class MainFrame extends JFrame {
         inputPanel.add(javaVersionField);
 
         SpringUtilities.makeCompactGrid(inputPanel, 5, 2, 6, 6, 6, 6);
-        final Object[] options = new Object[]{"OK", "Cancel"};
-        final JOptionPane optionPane = new JOptionPane(new Object[]{"<html><font size=2>System preferences apply to the software.<br>For setting properties of a model, use<br>Edit > Properities.</html>", gui},
+        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
+        final JOptionPane optionPane = new JOptionPane(new Object[]{"<html><font size=2>" + I18n.get("msg.system_preferences_info") + "</html>", gui},
                 JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, options[1]);
-        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "System Information & Preferences");
+        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.system_info_preferences"));
         dialog.setVisible(true);
     }
 
     private JMenuItem getAnalyzeFolderMenuItem() {
         if (analyzeFolderMenuItem == null) {
-            analyzeFolderMenuItem = new JMenuItem("Analyze Folder...");
+            analyzeFolderMenuItem = new JMenuItem(I18n.get("menu.analyze_folder"));
             analyzeFolderMenuItem.addActionListener(e -> {
-                if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(MainFrame.this, "This feature is for researchers only. Are you sure you want to continue?",
-                        "Research Mode", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+                if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.researchers_only"),
+                        I18n.get("dialog.research_mode"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
                     return;
                 }
                 SceneManager.getInstance().refresh(1);
@@ -787,10 +787,10 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getReplayFolderMenuItem() {
         if (replayFolderMenuItem == null) {
-            replayFolderMenuItem = new JMenuItem("Replay Folder...");
+            replayFolderMenuItem = new JMenuItem(I18n.get("menu.replay_folder"));
             replayFolderMenuItem.addActionListener(e -> {
-                if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(MainFrame.this, "This feature is for researchers only. Are you sure you want to continue?",
-                        "Research Mode", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
+                if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.researchers_only"),
+                        I18n.get("dialog.research_mode"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)) {
                     return;
                 }
                 SceneManager.getInstance().refresh(1);
@@ -809,7 +809,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getReplayLastFolderMenuItem() {
         if (replayLastFolderMenuItem == null) {
-            replayLastFolderMenuItem = new JMenuItem("Replay Last Folder");
+            replayLastFolderMenuItem = new JMenuItem(I18n.get("menu.replay_last_folder"));
             replayLastFolderMenuItem.addActionListener(e -> {
                 if (DesignReplay.getInstance().getLastFolder() != null) {
                     DesignReplay.getInstance().play(DesignReplay.getInstance().getLastFolder().listFiles(ng3NameFilter));
@@ -821,7 +821,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getEndReplayMenuItem() {
         if (endReplayMenuItem == null) {
-            endReplayMenuItem = new JMenuItem("End Replay (Escape Key)");
+            endReplayMenuItem = new JMenuItem(I18n.get("menu.end_replay"));
             endReplayMenuItem.addActionListener(e -> DesignReplay.active = false);
         }
         return endReplayMenuItem;
@@ -829,7 +829,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPauseReplayMenuItem() {
         if (pauseReplayMenuItem == null) {
-            pauseReplayMenuItem = new JMenuItem("Pause Replay");
+            pauseReplayMenuItem = new JMenuItem(I18n.get("menu.pause_replay"));
             pauseReplayMenuItem.addActionListener(e -> {
                 if (PlayControl.active) {
                     PlayControl.replaying = !PlayControl.replaying;
@@ -841,7 +841,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getForwardReplayMenuItem() {
         if (forwardReplayMenuItem == null) {
-            forwardReplayMenuItem = new JMenuItem("Replay Forward (Right Arrow Key)");
+            forwardReplayMenuItem = new JMenuItem(I18n.get("menu.forward_replay"));
             forwardReplayMenuItem.addActionListener(e -> {
                 if (PlayControl.active) {
                     PlayControl.replaying = false;
@@ -854,7 +854,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getBackwardReplayMenuItem() {
         if (backwardReplayMenuItem == null) {
-            backwardReplayMenuItem = new JMenuItem("Replay Backward (Left Arrow Key)");
+            backwardReplayMenuItem = new JMenuItem(I18n.get("menu.backward_replay"));
             backwardReplayMenuItem.addActionListener(e -> {
                 if (PlayControl.active) {
                     PlayControl.replaying = false;
@@ -867,21 +867,22 @@ public class MainFrame extends JFrame {
 
     public void updateTitleBar() {
         final String star = Scene.getInstance().isEdited() ? "*" : "";
+        final String baseTitle = I18n.get("app.title", MainApplication.VERSION) + star;
         if (Scene.getURL() == null) {
-            setTitle("Energy3D V" + MainApplication.VERSION + star);
+            setTitle(baseTitle);
         } else {
             if (Scene.isInternalFile()) {
                 final String s = Scene.getURL().toString();
-                setTitle("Energy3D V" + MainApplication.VERSION + " - @" + s.substring(s.lastIndexOf("/") + 1).replaceAll("%20", " ") + star);
+                setTitle(baseTitle + " - @" + s.substring(s.lastIndexOf("/") + 1).replaceAll("%20", " "));
             } else {
-                setTitle("Energy3D V" + MainApplication.VERSION + " - " + new File(Scene.getURL().getFile()).toString().replaceAll("%20", " ") + star);
+                setTitle(baseTitle + " - " + new File(Scene.getURL().getFile()).toString().replaceAll("%20", " "));
             }
         }
     }
 
     private JMenuItem getSaveMenuItem() {
         if (saveMenuItem == null) {
-            saveMenuItem = new JMenuItem("Save");
+            saveMenuItem = new JMenuItem(I18n.get("menu.save"));
             saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             saveMenuItem.addActionListener(e -> save());
         }
@@ -890,7 +891,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPrintMenuItem() {
         if (printMenuItem == null) {
-            printMenuItem = new JMenuItem("Print...");
+            printMenuItem = new JMenuItem(I18n.get("menu.print"));
             printMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             printMenuItem.addActionListener(e -> {
                 final PrintController printController = PrintController.getInstance();
@@ -919,7 +920,7 @@ public class MainFrame extends JFrame {
 
     public JCheckBoxMenuItem getPreviewMenuItem() {
         if (previewMenuItem == null) {
-            previewMenuItem = new JCheckBoxMenuItem("Print Preview");
+            previewMenuItem = new JCheckBoxMenuItem(I18n.get("menu.print_preview"));
             previewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             previewMenuItem.addItemListener(e -> MainPanel.getInstance().getPreviewButton().setSelected(previewMenuItem.isSelected()));
         }
@@ -929,7 +930,7 @@ public class MainFrame extends JFrame {
     private JRadioButtonMenuItem getOrbitMenuItem() {
         if (orbitMenuItem == null) {
             orbitMenuItem = new JRadioButtonMenuItem();
-            orbitMenuItem.setText("Orbit");
+            orbitMenuItem.setText(I18n.get("menu.orbit"));
             orbitMenuItem.setSelected(true);
             orbitMenuItem.addActionListener(e -> SceneManager.getInstance().setCameraControl(CameraMode.ORBIT));
         }
@@ -939,7 +940,7 @@ public class MainFrame extends JFrame {
     private JRadioButtonMenuItem getFirstPersonMenuItem() {
         if (firstPersonMenuItem == null) {
             firstPersonMenuItem = new JRadioButtonMenuItem();
-            firstPersonMenuItem.setText("First Person");
+            firstPersonMenuItem.setText(I18n.get("menu.first_person"));
             firstPersonMenuItem.addActionListener(e -> SceneManager.getInstance().setCameraControl(CameraMode.FIRST_PERSON));
         }
         return firstPersonMenuItem;
@@ -949,7 +950,7 @@ public class MainFrame extends JFrame {
         if (resetCameraMenuItem == null) {
             resetCameraMenuItem = new JMenuItem();
             resetCameraMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
-            resetCameraMenuItem.setText("Reset View");
+            resetCameraMenuItem.setText(I18n.get("menu.reset_view"));
             resetCameraMenuItem.addActionListener(e -> SceneManager.getInstance().resetCamera());
         }
         return resetCameraMenuItem;
@@ -958,16 +959,98 @@ public class MainFrame extends JFrame {
     private JMenuItem getExitMenuItem() {
         if (exitMenuItem == null) {
             exitMenuItem = new JMenuItem();
-            exitMenuItem.setText("Exit");
+            exitMenuItem.setText(I18n.get("menu.exit"));
             exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             exitMenuItem.addActionListener(e -> exit());
         }
         return exitMenuItem;
     }
 
+    /** Called after the user changes the UI language in Edit &gt; Properties so menu labels update immediately. */
+    public void refreshMenuLabelsAfterLocaleChange() {
+        setTitle(I18n.get("app.title", MainApplication.VERSION));
+        getFileMenu();
+        getEditMenu();
+        getViewMenu();
+        getAnalysisMenu();
+        getHelpMenu();
+        getTemplatesMenu();
+        getTutorialsMenu();
+        if (fileMenu != null) fileMenu.setText(I18n.get("menu.file"));
+        if (newMenuItem != null) newMenuItem.setText(I18n.get("menu.new"));
+        if (openMenuItem != null) openMenuItem.setText(I18n.get("menu.open") + "...");
+        if (saveMenuItem != null) saveMenuItem.setText(I18n.get("menu.save"));
+        if (saveasMenuItem != null) saveasMenuItem.setText(I18n.get("menu.save_as") + "...");
+        if (exitMenuItem != null) exitMenuItem.setText(I18n.get("menu.exit"));
+        if (replayControlsMenu != null) replayControlsMenu.setText(I18n.get("menu.replay_controls"));
+        if (pauseReplayMenuItem != null) pauseReplayMenuItem.setText(PlayControl.replaying ? I18n.get("menu.resume_replay") : I18n.get("menu.pause_replay"));
+        if (recoveryMenuItem != null) recoveryMenuItem.setText(I18n.get("menu.recover_snapshot"));
+        if (listLoggedSnapshotsMenuItem != null) listLoggedSnapshotsMenuItem.setText(I18n.get("menu.list_snapshots"));
+        if (clearLogMenuItem != null) clearLogMenuItem.setText(I18n.get("menu.clear_log"));
+        if (printMenuItem != null) printMenuItem.setText(I18n.get("menu.print"));
+        if (previewMenuItem != null) previewMenuItem.setText(I18n.get("menu.print_preview"));
+        if (submitToVsgMenuItem != null) submitToVsgMenuItem.setText(I18n.get("menu.submit_vsg"));
+        if (editMenu != null) editMenu.setText(I18n.get("menu.edit"));
+        if (undoMenuItem != null) undoMenuItem.setText(I18n.get("menu.undo"));
+        if (redoMenuItem != null) redoMenuItem.setText(I18n.get("menu.redo"));
+        if (cutMenuItem != null) cutMenuItem.setText(I18n.get("menu.cut"));
+        if (copyMenuItem != null) copyMenuItem.setText(I18n.get("menu.copy"));
+        if (pasteMenuItem != null) pasteMenuItem.setText(I18n.get("menu.paste"));
+        if (propertiesMenuItem != null) propertiesMenuItem.setText(I18n.get("menu.properties"));
+        if (viewMenu != null) viewMenu.setText(I18n.get("menu.view"));
+        if (orbitMenuItem != null) orbitMenuItem.setText(I18n.get("menu.orbit"));
+        if (firstPersonMenuItem != null) firstPersonMenuItem.setText(I18n.get("menu.first_person"));
+        if (resetCameraMenuItem != null) resetCameraMenuItem.setText(I18n.get("menu.reset_view"));
+        if (visualizationSettingsMenuItem != null) visualizationSettingsMenuItem.setText(I18n.get("menu.visualization_settings"));
+        if (zoomInMenuItem != null) zoomInMenuItem.setText(I18n.get("menu.zoom_in"));
+        if (zoomOutMenuItem != null) zoomOutMenuItem.setText(I18n.get("menu.zoom_out"));
+        if (groundImageMenu != null) groundImageMenu.setText(I18n.get("menu.ground_image"));
+        if (showGroundImageMenuItem != null) showGroundImageMenuItem.setText(I18n.get("menu.show_image"));
+        if (sunAnglesMenu != null) sunAnglesMenu.setText(I18n.get("menu.sun_angles"));
+        if (axesMenuItem != null) axesMenuItem.setText(I18n.get("menu.axes"));
+        if (zenithAngleMenuItem != null) zenithAngleMenuItem.setText(I18n.get("menu.zenith_angle"));
+        if (elevationAngleMenuItem != null) elevationAngleMenuItem.setText(I18n.get("menu.elevation_angle"));
+        if (azimuthAngleMenuItem != null) azimuthAngleMenuItem.setText(I18n.get("menu.azimuth_angle"));
+        if (lightBeamsMenuItem != null) lightBeamsMenuItem.setText(I18n.get("menu.reflector_light_beams"));
+        if (disableShadowInActionMenuItem != null) disableShadowInActionMenuItem.setText(I18n.get("menu.disable_shadows_in_action"));
+        if (roofDashedLineMenuItem != null) roofDashedLineMenuItem.setText(I18n.get("menu.roof_dashed_lines"));
+        if (shadowMenuItem != null) shadowMenuItem.setText(I18n.get("menu.shadows"));
+        if (solarRadiationHeatMapMenuItem != null) solarRadiationHeatMapMenuItem.setText(I18n.get("menu.solar_irradiance_heat_map"));
+        if (onlySolarComponentsInSolarMapMenuItem != null) onlySolarComponentsInSolarMapMenuItem.setText(I18n.get("menu.only_on_solar_components"));
+        if (showSolarLandMenuItem != null) showSolarLandMenuItem.setText(I18n.get("menu.show_on_land"));
+        if (solarAbsorptionHeatMapMenuItem != null) solarAbsorptionHeatMapMenuItem.setText(I18n.get("menu.only_absorbed_energy"));
+        if (onlyReflectionHeatMapMenuItem != null) onlyReflectionHeatMapMenuItem.setText(I18n.get("menu.only_reflected_energy"));
+        if (showHeatFluxVectorsMenuItem != null) showHeatFluxVectorsMenuItem.setText(I18n.get("menu.heat_flux_vectors"));
+        if (annotationsMenuItem != null) annotationsMenuItem.setText(I18n.get("menu.annotations"));
+        if (defaultMenuItem != null) defaultMenuItem.setText(I18n.get("menu.default_env"));
+        if (desertMenuItem != null) desertMenuItem.setText(I18n.get("menu.desert"));
+        if (grasslandMenuItem != null) grasslandMenuItem.setText(I18n.get("menu.grassland"));
+        if (forestMenuItem != null) forestMenuItem.setText(I18n.get("menu.forest"));
+        if (noteCheckBoxMenuItem != null) noteCheckBoxMenuItem.setText(I18n.get("menu.show_note"));
+        if (infoPanelCheckBoxMenuItem != null) infoPanelCheckBoxMenuItem.setText(I18n.get("menu.show_info_panel"));
+        if (autoRecomputeEnergyMenuItem != null) autoRecomputeEnergyMenuItem.setText(I18n.get("menu.auto_recompute_energy_label"));
+        if (analysisMenu != null) analysisMenu.setText(I18n.get("menu.analysis"));
+        if (simulationSettingsMenuItem != null) simulationSettingsMenuItem.setText(I18n.get("menu.simulation_settings"));
+        if (sortIdMenuItem != null) sortIdMenuItem.setText(I18n.get("menu.sort_id"));
+        if (helpMenu != null) helpMenu.setText(I18n.get("menu.help"));
+        if (aboutMenuItem != null) aboutMenuItem.setText(I18n.get("menu.about"));
+        if (preferencesMenuItem != null) preferencesMenuItem.setText(I18n.get("menu.system_preferences"));
+        if (examplesMenu != null) {
+            examplesMenu.setText(I18n.get("menu.examples"));
+            refreshMenuLabelsRecursive(examplesMenu);
+        }
+        if (tutorialsMenu != null) {
+            tutorialsMenu.setText(I18n.get("menu.tutorials"));
+            refreshMenuLabelsRecursive(tutorialsMenu);
+        }
+        if (environmentMenu != null) environmentMenu.setText(I18n.get("menu.set_environment"));
+        if (aboutDialog != null) aboutDialog.setTitle(I18n.get("dialog.about"));
+        if (EnergyPanel.getInstance() != null) EnergyPanel.getInstance().refreshLabelsAfterLocaleChange();
+    }
+
     private JMenu getHelpMenu() {
         if (helpMenu == null) {
-            helpMenu = new JMenu("Help");
+            helpMenu = new JMenu(I18n.get("menu.help"));
             helpMenu.addMenuListener(new MenuListener() {
 
                 @Override
@@ -985,29 +1068,29 @@ public class MainFrame extends JFrame {
 
             // User data and models
 
-            final JMenu userHistoryMenu = new JMenu("View My History");
+            final JMenu userHistoryMenu = new JMenu(I18n.get("menu.view_my_history"));
             helpMenu.add(userHistoryMenu);
             helpMenu.addSeparator();
 
-            final JMenu userEventsMenu = new JMenu("Events");
+            final JMenu userEventsMenu = new JMenu(I18n.get("menu.events"));
             userHistoryMenu.add(userEventsMenu);
 
-            JMenuItem mi = new JMenuItem("Event String");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.event_string"));
             mi.addActionListener(e -> new EventString().showGui());
             userEventsMenu.add(mi);
 
-            mi = new JMenuItem("Event Time Series");
+            mi = new JMenuItem(I18n.get("menu.event_time_series"));
             mi.addActionListener(e -> new EventTimeSeries().showGui());
             userEventsMenu.add(mi);
 
-            mi = new JMenuItem("Event Frequency");
+            mi = new JMenuItem(I18n.get("menu.event_frequency"));
             mi.addActionListener(e -> new EventFrequency().showGui());
             userEventsMenu.add(mi);
 
-            final JMenu userResultsMenu = new JMenu("Results");
+            final JMenu userResultsMenu = new JMenu(I18n.get("menu.results"));
             userHistoryMenu.add(userResultsMenu);
 
-            mi = new JMenuItem("Analysis Results");
+            mi = new JMenuItem(I18n.get("menu.analysis_results"));
             mi.addActionListener(e -> new ResultList().showGui());
             userResultsMenu.add(mi);
 
@@ -1020,7 +1103,7 @@ public class MainFrame extends JFrame {
             helpMenu.add(getListLoggedSnapshotsMenuItem());
             helpMenu.add(getClearLogMenuItem());
 
-            final JMenuItem miUpdate = new JMenuItem("Check Update..."); // the automatic updater can fail sometimes. This provides an independent check.
+            final JMenuItem miUpdate = new JMenuItem(I18n.get("menu.check_update")); // the automatic updater can fail sometimes. This provides an independent check.
             helpMenu.add(miUpdate);
             miUpdate.setEnabled(!Config.isWebStart() && !Config.isEclipse());
             miUpdate.addActionListener(e -> {
@@ -1029,7 +1112,7 @@ public class MainFrame extends JFrame {
                     jarFile = new File(MainApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
                 } catch (final URISyntaxException e1) {
                     e1.printStackTrace();
-                    JOptionPane.showMessageDialog(instance, e1.getMessage(), "URL Error (local energy3d.jar)", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(instance, e1.getMessage(), I18n.get("msg.url_error_local"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (!jarFile.toString().endsWith("energy3d.jar")) {
@@ -1058,13 +1141,12 @@ public class MainFrame extends JFrame {
                     @Override
                     protected void done() {
                         if (connection == null) {
-                            JOptionPane.showMessageDialog(instance, msg, "URL Error (remote energy3d.jar)", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(instance, msg, I18n.get("msg.url_error_remote"), JOptionPane.ERROR_MESSAGE);
                         } else {
                             if (remoteLastModified <= localLastModified) {
-                                JOptionPane.showMessageDialog(instance, "Your software is up to date.", "Update Status", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(instance, I18n.get("msg.software_up_to_date"), I18n.get("dialog.update_status"), JOptionPane.INFORMATION_MESSAGE);
                             } else {
-                                JOptionPane.showMessageDialog(instance, "<html>Your software is out of date. But for some reason, it cannot update itself." +
-                                        "<br>Please go to http://energy3d.concord.org to download and reinstall the latest version.</html>", "Update Status", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(instance, "<html>" + I18n.get("msg.software_out_of_date") + "</html>", I18n.get("dialog.update_status"), JOptionPane.INFORMATION_MESSAGE);
                                 Util.openBrowser("http://energy3d.concord.org");
                             }
                         }
@@ -1080,16 +1162,16 @@ public class MainFrame extends JFrame {
 
             // Energy3D web pages
 
-            mi = new JMenuItem("Visit Home Page...");
+            mi = new JMenuItem(I18n.get("menu.visit_home"));
             mi.addActionListener(e -> Util.openBrowser("http://energy3d.concord.org"));
             helpMenu.add(mi);
-            mi = new JMenuItem("Visit Virtual Solar Grid...");
+            mi = new JMenuItem(I18n.get("menu.visit_vsg"));
             mi.addActionListener(e -> Util.openBrowser("http://energy.concord.org/energy3d/vsg/syw.html"));
             helpMenu.add(mi);
-            mi = new JMenuItem("Visit User Forum...");
+            mi = new JMenuItem(I18n.get("menu.visit_forum"));
             mi.addActionListener(e -> Util.openBrowser("https://energy.concord.org/energy3d/forum/"));
             helpMenu.add(mi);
-            mi = new JMenuItem("Contact Us...");
+            mi = new JMenuItem(I18n.get("menu.contact_us"));
             mi.addActionListener(e -> Util.openBrowser("http://energy.concord.org/energy3d/contact.html"));
             helpMenu.add(mi);
             if (!Config.isMac()) {
@@ -1111,7 +1193,7 @@ public class MainFrame extends JFrame {
     private JMenuItem getAboutMenuItem() {
         if (aboutMenuItem == null) {
             aboutMenuItem = new JMenuItem();
-            aboutMenuItem.setText("About...");
+            aboutMenuItem.setText(I18n.get("menu.about"));
             aboutMenuItem.addActionListener(e -> showAbout());
         }
         return aboutMenuItem;
@@ -1120,30 +1202,28 @@ public class MainFrame extends JFrame {
     private JDialog getAboutDialog() {
         if (aboutDialog == null) {
             aboutDialog = new JDialog(this);
-            aboutDialog.setTitle("About");
+            aboutDialog.setTitle(I18n.get("dialog.about"));
             final JPanel p = new JPanel(new BorderLayout(10, 10));
             p.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-            final String title = "<h3>Energy3D</h3><h4><i>Learning to build a sustainable world</i></h4>Version: " + MainApplication.VERSION + ", &copy; 2011-" + Calendar.getInstance().get(Calendar.YEAR);
-            final String developer = "<br>The Engineering Computation Laboratory, The Concord Consortium<hr><h4>Developers</h4>This program is brought to you by:" +
-                    "<ul><li>Dr. Charles Xie (2009-present) <li>Dr. Saeid Nourian (2010-2017)</ul>and the people who created Java, Ardor3D, Getdown, JOGL, and Poly2tri.";
-            final String license = "<br>The program is provided to you under the MIT License.";
-            final String funder = "<h4>Funders</h4>Funding is provided by the National Science Foundation through grants" +
-                    "<br>0918449, 1304485, 1348530, 1503196, 1512868, and 1721054 and by" +
-                    "<br>General Motors through grant 34871079, awarded to Charles Xie. Any" +
-                    "<br>opinions, findings, and conclusions or recommendations expressed in the" +
-                    "<br>materials associated with this program are those of the author(s) and do" +
-                    "<br>not necessarily reflect the views of the National Science Foundation or" +
-                    "<br>General Motors.";
-            final String source = "<h4>Source Code</h4>https://github.com/concord-consortium/energy3d";
-            String acknowledge = "<h4>Acknowledgement</h4>";
-            acknowledge += "<font size=2>This program is dedicated to Dr. Robert Tinker (1941-2017), the founder of<br>the Concord Consortium. ";
-            acknowledge += "The help from the following people to improve<br>this program is much appreciated: Katie Armstrong, Siobhan Bailey, Jie Chao,<br>";
+            final String title = "<h3>" + I18n.get("app.name") + "</h3><h4><i>" + I18n.get("about.tagline") + "</i></h4>" + I18n.get("about.version") + ": " + MainApplication.VERSION + ", &copy; 2011-" + Calendar.getInstance().get(Calendar.YEAR);
+            final String developer = "<br>" + I18n.get("about.laboratory") + "<hr><h4>" + I18n.get("about.developers") + "</h4>" + I18n.get("about.brought_by") + ":" +
+                    "<ul><li>Dr. Charles Xie (2009-present) <li>Dr. Saeid Nourian (2010-2017)</ul>" + I18n.get("about.credits");
+            final String license = "<br>" + I18n.get("about.license");
+            final String funder = "<h4>" + I18n.get("about.funders") + "</h4>" + I18n.get("about.funding_nsf") +
+                    "<br>0918449, 1304485, 1348530, 1503196, 1512868, and 1721054 " + I18n.get("about.funding_and") +
+                    "<br>" + I18n.get("about.funding_gm") +
+                    "<br>" + I18n.get("about.funding_disclaimer");
+            final String source = "<h4>" + I18n.get("about.source_code") + "</h4>https://github.com/concord-consortium/energy3d";
+            String acknowledge = "<h4>" + I18n.get("about.acknowledgement") + "</h4>";
+            acknowledge += "<font size=2>" + I18n.get("about.dedication") + "<br>";
+            acknowledge += I18n.get("about.thanks") + "<br>";
+            acknowledge += "Katie Armstrong, Siobhan Bailey, Jie Chao,<br>";
             acknowledge += "Guanhua Chen, Amos Decker, Maya Haigis, Xudong Huang, Shiyan Jiang,<br>";
             acknowledge += "Mark Liao, Shasha Liu, Jeff Lockwood, Joy Massicotte, Ethan McElroy, Scott Ogle,<br>";
             acknowledge += "Cormac Paterson, Allison Pearson, Molla Rahman, Corey Schimpf, Elena Sereiviene,<br>";
             acknowledge += "Zhenghui Sha, Shannon Sung, Wanli Xing, Helen Zhang";
             p.add(new JLabel("<html>" + title + developer + license + funder + source + acknowledge + "</html>"), BorderLayout.CENTER);
-            final JButton button = new JButton("Close");
+            final JButton button = new JButton(I18n.get("common.close"));
             button.addActionListener(e -> aboutDialog.dispose());
             final JPanel p2 = new JPanel();
             p2.add(button);
@@ -1156,7 +1236,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getSaveasMenuItem() {
         if (saveasMenuItem == null) {
-            saveasMenuItem = new JMenuItem("Save As...");
+            saveasMenuItem = new JMenuItem(I18n.get("menu.save_as") + "...");
             saveasMenuItem.setAccelerator(KeyStroke.getKeyStroke("F12"));
             saveasMenuItem.addActionListener(e -> saveFile(false));
         }
@@ -1165,27 +1245,20 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getSubmitToVsgMenuItem() {
         if (submitToVsgMenuItem == null) {
-            submitToVsgMenuItem = new JMenuItem("Submit to Virtual Solar Grid...");
+            submitToVsgMenuItem = new JMenuItem(I18n.get("menu.submit_vsg"));
             submitToVsgMenuItem.addActionListener(e -> {
                 final GeoLocation geo = Scene.getInstance().getGeoLocation();
                 if (geo == null) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "No geolocation is set for this model. It cannot be submitted.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_geolocation"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                String legal = "<html><hr><font size=2>";
-                legal += "Please be advised that your submission contains an address that may be sensitive,<br>";
-                legal += "for example under the circumstance that you are under 18 years old and are working<br>";
-                legal += "on a home project. By clicking the Accept Button below, you (and your parent or<br>";
-                legal += "guardian if you are a minor) will authorize the Virtual Solar Grid to publish your<br>";
-                legal += "work in the public domain. Your work will be a valuable contribution to an important<br>";
-                legal += "citizen science project for studying how humanity can be powered by renewable energy.<br>";
-                legal += "<hr></html>";
+                String legal = "<html><hr><font size=2>" + I18n.get("msg.vsg_legal_notice") + "<hr></html>";
                 final JPanel gui = new JPanel(new BorderLayout());
-                String s = "<html><b>Authorization for the Virtual Solar Grid to publish your work</b></html>";
+                String s = "<html><b>" + I18n.get("msg.vsg_authorization") + "</b></html>";
                 s += "";
-                final Object[] options = new Object[]{"Accept", "Decline", "Check Virtual Solar Grid"};
+                final Object[] options = new Object[]{I18n.get("dialog.accept"), I18n.get("dialog.decline"), I18n.get("dialog.check_vsg")};
                 final JOptionPane optionPane = new JOptionPane(new Object[]{s, legal, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[1]);
-                final JDialog dialog = optionPane.createDialog(instance, "Authorization for Publication");
+                final JDialog dialog = optionPane.createDialog(instance, I18n.get("dialog.authorization_publication"));
                 dialog.setVisible(true);
                 final Object choice = optionPane.getValue();
                 if (choice == options[0]) {
@@ -1201,7 +1274,7 @@ public class MainFrame extends JFrame {
 
     private JMenu getAnalysisMenu() {
         if (analysisMenu == null) {
-            analysisMenu = new JMenu("Analysis");
+            analysisMenu = new JMenu(I18n.get("menu.analysis"));
             analysisMenu.addMenuListener(new MenuListener() {
 
                 private void enableEnergyAnalysis(final boolean b) {
@@ -1238,7 +1311,7 @@ public class MainFrame extends JFrame {
 
             analysisMenu.add(getSimulationSettingsMenuItem());
 
-            final JMenu weatherMenu = new JMenu("Weather");
+            final JMenu weatherMenu = new JMenu(I18n.get("menu.weather"));
             weatherMenu.add(getMonthlySunshineHoursMenuItem());
             weatherMenu.add(getAnnualEnvironmentalTemperatureMenuItem());
             weatherMenu.add(getDailyEnvironmentalTemperatureMenuItem());
@@ -1246,7 +1319,7 @@ public class MainFrame extends JFrame {
 
             analysisMenu.addSeparator();
 
-            final JMenu buildingsMenu = new JMenu("Buildings");
+            final JMenu buildingsMenu = new JMenu(I18n.get("menu.buildings"));
             analysisMenu.add(buildingsMenu);
             buildingsMenu.add(getDailyEnergyAnalysisMenuItem());
             buildingsMenu.add(getAnnualEnergyAnalysisMenuItem());
@@ -1254,39 +1327,39 @@ public class MainFrame extends JFrame {
             buildingsMenu.add(getDailyEnergyAnalysisForSelectionMenuItem());
             buildingsMenu.add(getAnnualEnergyAnalysisForSelectionMenuItem());
 
-            final JMenu solarPanelsMenu = new JMenu("Solar Panels");
+            final JMenu solarPanelsMenu = new JMenu(I18n.get("menu.solar_panels"));
             analysisMenu.add(solarPanelsMenu);
             solarPanelsMenu.add(getDailyPvAnalysisMenuItem());
             solarPanelsMenu.add(getAnnualPvAnalysisMenuItem());
 
-            final JMenu heliostatsMenu = new JMenu("Heliostats");
+            final JMenu heliostatsMenu = new JMenu(I18n.get("menu.heliostats"));
             analysisMenu.add(heliostatsMenu);
             heliostatsMenu.add(getDailyHeliostatAnalysisMenuItem());
             heliostatsMenu.add(getAnnualHeliostatAnalysisMenuItem());
 
-            final JMenu parabolicTroughsMenu = new JMenu("Parabolic Troughs");
+            final JMenu parabolicTroughsMenu = new JMenu(I18n.get("menu.parabolic_troughs"));
             analysisMenu.add(parabolicTroughsMenu);
             parabolicTroughsMenu.add(getDailyParabolicTroughAnalysisMenuItem());
             parabolicTroughsMenu.add(getAnnualParabolicTroughAnalysisMenuItem());
 
-            final JMenu parabolicDishesMenu = new JMenu("Parabolic Dishes");
+            final JMenu parabolicDishesMenu = new JMenu(I18n.get("menu.parabolic_dishes"));
             analysisMenu.add(parabolicDishesMenu);
             parabolicDishesMenu.add(getDailyParabolicDishAnalysisMenuItem());
             parabolicDishesMenu.add(getAnnualParabolicDishAnalysisMenuItem());
 
-            final JMenu fresnelReflectorsMenu = new JMenu("Linear Fresnel Reflectors");
+            final JMenu fresnelReflectorsMenu = new JMenu(I18n.get("menu.fresnel_reflectors"));
             analysisMenu.add(fresnelReflectorsMenu);
             fresnelReflectorsMenu.add(getDailyFresnelReflectorAnalysisMenuItem());
             fresnelReflectorsMenu.add(getAnnualFresnelReflectorAnalysisMenuItem());
 
             analysisMenu.addSeparator();
 
-            final JMenu sensorsMenu = new JMenu("Sensors");
+            final JMenu sensorsMenu = new JMenu(I18n.get("menu.sensors"));
             analysisMenu.add(sensorsMenu);
             sensorsMenu.add(getDailySensorMenuItem());
             sensorsMenu.add(getAnnualSensorMenuItem());
 
-            final JMenu groupMenu = new JMenu("Group");
+            final JMenu groupMenu = new JMenu(I18n.get("menu.group"));
             analysisMenu.add(groupMenu);
             groupMenu.add(getGroupDailyAnalysisMenuItem());
             groupMenu.add(getGroupAnnualAnalysisMenuItem());
@@ -1302,7 +1375,7 @@ public class MainFrame extends JFrame {
 
     private JMenu getTemplatesMenu() {
         if (examplesMenu == null) {
-            examplesMenu = new JMenu("Examples");
+            examplesMenu = new JMenu(I18n.get("menu.examples"));
             examplesMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -1318,128 +1391,159 @@ public class MainFrame extends JFrame {
                     MainPanel.getInstance().defaultTool();
                 }
             });
-            final JMenu benchmarksMenu = new JMenu("Benchmarks");
+            final JMenu benchmarksMenu = new JMenu(I18n.get("menu.benchmarks"));
+            benchmarksMenu.putClientProperty("i18n.key", "menu.benchmarks");
             examplesMenu.add(benchmarksMenu);
-            final JMenu bestestMenu = new JMenu("Building Energy Simulation Tests");
+            final JMenu bestestMenu = new JMenu(I18n.get("menu.bestest"));
+            bestestMenu.putClientProperty("i18n.key", "menu.bestest");
             benchmarksMenu.add(bestestMenu);
-            addModel(bestestMenu, "BESTEST Case 600", "benchmarks/bestest600.ng3");
-            addModel(bestestMenu, "BESTEST Case 610", "benchmarks/bestest610.ng3");
-            addModel(bestestMenu, "BESTEST Case 620", "benchmarks/bestest620.ng3");
-            addModel(bestestMenu, "BESTEST Case 630", "benchmarks/bestest630.ng3");
-            final JMenu simpleMenu = new JMenu("Simple Buildings");
+            addModel(bestestMenu, "ex.bestest_600", "benchmarks/bestest600.ng3");
+            addModel(bestestMenu, "ex.bestest_610", "benchmarks/bestest610.ng3");
+            addModel(bestestMenu, "ex.bestest_620", "benchmarks/bestest620.ng3");
+            addModel(bestestMenu, "ex.bestest_630", "benchmarks/bestest630.ng3");
+            final JMenu simpleMenu = new JMenu(I18n.get("menu.simple_buildings"));
+            simpleMenu.putClientProperty("i18n.key", "menu.simple_buildings");
             examplesMenu.add(simpleMenu);
-            addModel(simpleMenu, "Apartment 1", "templates/apartment-template-1.ng3");
-            addModel(simpleMenu, "Apartment 2", "templates/apartment-template-2.ng3");
-            addModel(simpleMenu, "Box Gabled Roof", "templates/box-gabled-template.ng3");
-            addModel(simpleMenu, "Bungalow", "templates/bungalow-template.ng3");
-            addModel(simpleMenu, "Butterfly Roof", "templates/butterfly-template.ng3");
-            addModel(simpleMenu, "Cape Cod", "templates/cape-cod-template.ng3");
-            addModel(simpleMenu, "Colonial", "templates/colonial-template.ng3");
-            addModel(simpleMenu, "Combination Roof", "templates/combination-roof-template.ng3");
-            addModel(simpleMenu, "Cross Gabled Roof", "templates/cross-gabled-template.ng3");
-            addModel(simpleMenu, "Cross Hipped Roof", "templates/cross-hipped-template.ng3");
-            addModel(simpleMenu, "Dutch Colonial", "templates/gambrel-template.ng3");
-            addModel(simpleMenu, "Flat Roof", "templates/flat-roof-template.ng3");
-            addModel(simpleMenu, "Gable & Valley Roof", "templates/gable-valley-template.ng3");
-            addModel(simpleMenu, "Gablet Roof", "templates/gablet-template.ng3");
-            addModel(simpleMenu, "Hip Roof", "templates/hip-roof-template.ng3");
-            addModel(simpleMenu, "Hip & Valley Roof", "templates/hip-valley-template.ng3");
-            addModel(simpleMenu, "M-Shaped Roof", "templates/m-shaped-template.ng3");
-            addModel(simpleMenu, "Mansard", "templates/mansard-template.ng3");
-            addModel(simpleMenu, "Saltbox 1", "templates/saltbox-template-1.ng3");
-            addModel(simpleMenu, "Saltbox 2", "templates/saltbox-template-2.ng3");
-            addModel(simpleMenu, "Shed Roof", "templates/shed-roof-template.ng3");
-            addModel(simpleMenu, "Hexagonal House", "templates/hexagonal-template.ng3");
-            addModel(simpleMenu, "H-Shaped House", "templates/h-shape-template.ng3");
-            addModel(simpleMenu, "U-Shaped House", "templates/u-shape-template.ng3");
-            addModel(simpleMenu, "Square Tower", "templates/example-square-tower.ng3");
-            final JMenu complexMenu = new JMenu("Complex Buildings");
+            addModel(simpleMenu, "ex.apartment_1", "templates/apartment-template-1.ng3");
+            addModel(simpleMenu, "ex.apartment_2", "templates/apartment-template-2.ng3");
+            addModel(simpleMenu, "ex.box_gabled_roof", "templates/box-gabled-template.ng3");
+            addModel(simpleMenu, "ex.bungalow", "templates/bungalow-template.ng3");
+            addModel(simpleMenu, "ex.butterfly_roof", "templates/butterfly-template.ng3");
+            addModel(simpleMenu, "ex.cape_cod", "templates/cape-cod-template.ng3");
+            addModel(simpleMenu, "ex.colonial", "templates/colonial-template.ng3");
+            addModel(simpleMenu, "ex.combination_roof", "templates/combination-roof-template.ng3");
+            addModel(simpleMenu, "ex.cross_gabled_roof", "templates/cross-gabled-template.ng3");
+            addModel(simpleMenu, "ex.cross_hipped_roof", "templates/cross-hipped-template.ng3");
+            addModel(simpleMenu, "ex.dutch_colonial", "templates/gambrel-template.ng3");
+            addModel(simpleMenu, "ex.flat_roof", "templates/flat-roof-template.ng3");
+            addModel(simpleMenu, "ex.gable_valley_roof", "templates/gable-valley-template.ng3");
+            addModel(simpleMenu, "ex.gablet_roof", "templates/gablet-template.ng3");
+            addModel(simpleMenu, "ex.hip_roof", "templates/hip-roof-template.ng3");
+            addModel(simpleMenu, "ex.hip_valley_roof", "templates/hip-valley-template.ng3");
+            addModel(simpleMenu, "ex.m_shaped_roof", "templates/m-shaped-template.ng3");
+            addModel(simpleMenu, "ex.mansard", "templates/mansard-template.ng3");
+            addModel(simpleMenu, "ex.saltbox_1", "templates/saltbox-template-1.ng3");
+            addModel(simpleMenu, "ex.saltbox_2", "templates/saltbox-template-2.ng3");
+            addModel(simpleMenu, "ex.shed_roof", "templates/shed-roof-template.ng3");
+            addModel(simpleMenu, "ex.hexagonal_house", "templates/hexagonal-template.ng3");
+            addModel(simpleMenu, "ex.h_shaped_house", "templates/h-shape-template.ng3");
+            addModel(simpleMenu, "ex.u_shaped_house", "templates/u-shape-template.ng3");
+            addModel(simpleMenu, "ex.square_tower", "templates/example-square-tower.ng3");
+            final JMenu complexMenu = new JMenu(I18n.get("menu.complex_buildings"));
+            complexMenu.putClientProperty("i18n.key", "menu.complex_buildings");
             examplesMenu.add(complexMenu);
-            addModel(complexMenu, "Cape Cod with Front Porch", "templates/example-cape-cod-front-porch.ng3");
-            addModel(complexMenu, "Cape Cod with Garage", "templates/example-cape-cod-attached-garage.ng3");
-            addModel(complexMenu, "Cape Cod with Shed and Gable Dormers", "templates/example-cape-cod-shed-gable-dormers.ng3");
-            addModel(complexMenu, "Cape Cod Complex", "templates/example-cape-cod-complex.ng3");
-            addModel(complexMenu, "Colonial with Fence", "templates/example-colonial-fence.ng3");
-            addModel(complexMenu, "Colonial with Front Porch", "templates/example-colonial-front-porch.ng3");
-            addModel(complexMenu, "L-Shaped Colonial", "templates/example-colonial-l-shaped.ng3");
-            addModel(complexMenu, "Dutch Colonial with Front Porch", "templates/example-dutch-colonial.ng3");
-            addModel(complexMenu, "German Pub", "templates/example-german.ng3");
-            addModel(complexMenu, "Federal", "templates/example-federal.ng3");
-            addModel(complexMenu, "Victorian", "templates/example-victorian.ng3");
-            addModel(complexMenu, "Shingle", "templates/example-shingle.ng3");
-            addModel(complexMenu, "Sunroom", "templates/example-sunroom.ng3");
-            addModel(complexMenu, "Barn House", "templates/example-barn-house.ng3");
-            addModel(complexMenu, "Santa Fe Style House", "templates/example-santa-fe.ng3");
-            addModel(complexMenu, "Courtyard House", "templates/example-courtyard-house.ng3");
-            addModel(complexMenu, "Hotel Building", "templates/example-hotel.ng3");
-            addModel(complexMenu, "Hospital Building", "templates/example-hospital.ng3");
-            addModel(complexMenu, "Modern House 1", "templates/example-modern-house-1.ng3");
-            addModel(complexMenu, "Modern House 2", "templates/example-modern-house-2.ng3");
-            addModel(complexMenu, "Mansion 1", "templates/example-mansion-1.ng3");
-            final JMenu famousMenu = new JMenu("Famous Buildings");
+            addModel(complexMenu, "ex.cape_cod_front_porch", "templates/example-cape-cod-front-porch.ng3");
+            addModel(complexMenu, "ex.cape_cod_garage", "templates/example-cape-cod-attached-garage.ng3");
+            addModel(complexMenu, "ex.cape_cod_shed_gable_dormers", "templates/example-cape-cod-shed-gable-dormers.ng3");
+            addModel(complexMenu, "ex.cape_cod_complex", "templates/example-cape-cod-complex.ng3");
+            addModel(complexMenu, "ex.colonial_fence", "templates/example-colonial-fence.ng3");
+            addModel(complexMenu, "ex.colonial_front_porch", "templates/example-colonial-front-porch.ng3");
+            addModel(complexMenu, "ex.colonial_l_shaped", "templates/example-colonial-l-shaped.ng3");
+            addModel(complexMenu, "ex.dutch_colonial_front_porch", "templates/example-dutch-colonial.ng3");
+            addModel(complexMenu, "ex.german_pub", "templates/example-german.ng3");
+            addModel(complexMenu, "ex.federal", "templates/example-federal.ng3");
+            addModel(complexMenu, "ex.victorian", "templates/example-victorian.ng3");
+            addModel(complexMenu, "ex.shingle", "templates/example-shingle.ng3");
+            addModel(complexMenu, "ex.sunroom", "templates/example-sunroom.ng3");
+            addModel(complexMenu, "ex.barn_house", "templates/example-barn-house.ng3");
+            addModel(complexMenu, "ex.santa_fe", "templates/example-santa-fe.ng3");
+            addModel(complexMenu, "ex.courtyard_house", "templates/example-courtyard-house.ng3");
+            addModel(complexMenu, "ex.hotel", "templates/example-hotel.ng3");
+            addModel(complexMenu, "ex.hospital", "templates/example-hospital.ng3");
+            addModel(complexMenu, "ex.modern_house_1", "templates/example-modern-house-1.ng3");
+            addModel(complexMenu, "ex.modern_house_2", "templates/example-modern-house-2.ng3");
+            addModel(complexMenu, "ex.mansion_1", "templates/example-mansion-1.ng3");
+            final JMenu famousMenu = new JMenu(I18n.get("menu.famous_buildings"));
+            famousMenu.putClientProperty("i18n.key", "menu.famous_buildings");
             examplesMenu.add(famousMenu);
-            addModel(famousMenu, "White House", "templates/white-house.ng3");
-            addModel(famousMenu, "Library of Congress", "templates/library-of-congress.ng3");
-            addModel(famousMenu, "Empire State Building", "templates/empire-state-building.ng3");
-            addModel(famousMenu, "One World Trade Center", "templates/one-world-trade-center.ng3");
-            addModel(famousMenu, "Willis Tower", "templates/willis-tower.ng3");
-            addModel(famousMenu, "Apple Headquarters", "templates/apple-headquarters.ng3");
-            addModel(famousMenu, "Huqiu Tower", "templates/chinese-tower-template.ng3");
-            final JMenu multipleMenu = new JMenu("Multiple Buildings");
+            addModel(famousMenu, "ex.white_house", "templates/white-house.ng3");
+            addModel(famousMenu, "ex.library_of_congress", "templates/library-of-congress.ng3");
+            addModel(famousMenu, "ex.empire_state", "templates/empire-state-building.ng3");
+            addModel(famousMenu, "ex.one_world_trade_center", "templates/one-world-trade-center.ng3");
+            addModel(famousMenu, "ex.willis_tower", "templates/willis-tower.ng3");
+            addModel(famousMenu, "ex.apple_headquarters", "templates/apple-headquarters.ng3");
+            addModel(famousMenu, "ex.huqiu_tower", "templates/chinese-tower-template.ng3");
+            final JMenu multipleMenu = new JMenu(I18n.get("menu.multiple_buildings"));
+            multipleMenu.putClientProperty("i18n.key", "menu.multiple_buildings");
             examplesMenu.add(multipleMenu);
-            addModel(multipleMenu, "Campus 1", "templates/example-campus-1.ng3");
-            addModel(multipleMenu, "Campus 2", "templates/example-campus-2.ng3");
-            addModel(multipleMenu, "Street 1", "templates/example-street-1.ng3");
-            addModel(multipleMenu, "Street 2", "templates/example-street-2.ng3");
-            addModel(multipleMenu, "Street 3", "templates/example-street-3.ng3");
-            final JMenu pvSolarMenu = new JMenu("Photovoltaic Systems");
-            addModel(pvSolarMenu, "Solar Canopy: Wavy Top", "templates/example-solar-canopy-wavy-top.ng3");
-            addModel(pvSolarMenu, "Solar Canopy: Curvy Top", "templates/example-solar-canopy-curvy-top.ng3");
-            addModel(pvSolarMenu, "Solar Canopy: Bus Stop", "templates/example-solar-canopy-bus-stop.ng3");
-            addModel(pvSolarMenu, "Solar Canopy: Parking Garage 1", "templates/example-solar-canopy-parking-garage-1.ng3");
-            addModel(pvSolarMenu, "Solar Canopy: Parking Garage 2", "templates/example-solar-canopy-parking-garage-2.ng3");
-            addModel(pvSolarMenu, "Solar Canopy: Overhang", "templates/example-solar-canopy-overhang.ng3");
-            addModel(pvSolarMenu, "Solar Facades: Example 1", "templates/example-solar-facade1.ng3");
-            addModel(pvSolarMenu, "Solar Facades: Example 2", "templates/example-solar-facade2.ng3");
-            addModel(pvSolarMenu, "Solar Facades: Example 3", "templates/example-solar-facade3.ng3");
-            addModel(pvSolarMenu, "Solar Facades: Example 4", "templates/example-solar-facade4.ng3");
-            addModel(pvSolarMenu, "Agrivoltaics: Example 1", "templates/example-agrivoltaics-01.ng3");
+            addModel(multipleMenu, "ex.campus_1", "templates/example-campus-1.ng3");
+            addModel(multipleMenu, "ex.campus_2", "templates/example-campus-2.ng3");
+            addModel(multipleMenu, "ex.street_1", "templates/example-street-1.ng3");
+            addModel(multipleMenu, "ex.street_2", "templates/example-street-2.ng3");
+            addModel(multipleMenu, "ex.street_3", "templates/example-street-3.ng3");
+            final JMenu pvSolarMenu = new JMenu(I18n.get("menu.pv_systems"));
+            pvSolarMenu.putClientProperty("i18n.key", "menu.pv_systems");
+            addModel(pvSolarMenu, "ex.solar_canopy_wavy", "templates/example-solar-canopy-wavy-top.ng3");
+            addModel(pvSolarMenu, "ex.solar_canopy_curvy", "templates/example-solar-canopy-curvy-top.ng3");
+            addModel(pvSolarMenu, "ex.solar_canopy_bus_stop", "templates/example-solar-canopy-bus-stop.ng3");
+            addModel(pvSolarMenu, "ex.solar_canopy_parking_1", "templates/example-solar-canopy-parking-garage-1.ng3");
+            addModel(pvSolarMenu, "ex.solar_canopy_parking_2", "templates/example-solar-canopy-parking-garage-2.ng3");
+            addModel(pvSolarMenu, "ex.solar_canopy_overhang", "templates/example-solar-canopy-overhang.ng3");
+            addModel(pvSolarMenu, "ex.solar_facade_1", "templates/example-solar-facade1.ng3");
+            addModel(pvSolarMenu, "ex.solar_facade_2", "templates/example-solar-facade2.ng3");
+            addModel(pvSolarMenu, "ex.solar_facade_3", "templates/example-solar-facade3.ng3");
+            addModel(pvSolarMenu, "ex.solar_facade_4", "templates/example-solar-facade4.ng3");
+            addModel(pvSolarMenu, "ex.agrivoltaics_1", "templates/example-agrivoltaics-01.ng3");
             examplesMenu.add(pvSolarMenu);
-            final JMenu cspSolarMenu = new JMenu("Concentrated Solar Power Systems");
+            final JMenu cspSolarMenu = new JMenu(I18n.get("menu.csp_systems"));
+            cspSolarMenu.putClientProperty("i18n.key", "menu.csp_systems");
             cspSolarMenu.setEnabled(false);
             examplesMenu.add(cspSolarMenu);
-            final JMenu miscMenu = new JMenu("Miscellaneous");
+            final JMenu miscMenu = new JMenu(I18n.get("menu.miscellaneous"));
+            miscMenu.putClientProperty("i18n.key", "menu.miscellaneous");
             examplesMenu.add(miscMenu);
-            addModel(miscMenu, "Mosque", "templates/mosque-template.ng3");
-            addModel(miscMenu, "Temple", "templates/temple-template.ng3");
-            addModel(miscMenu, "Tibetan Temple", "templates/tibetan-temple-template.ng3");
-            addModel(miscMenu, "Church 1", "templates/church-template-1.ng3");
-            addModel(miscMenu, "Church 2", "templates/church-template-2.ng3");
-            addModel(miscMenu, "Church 3", "templates/church-template-3.ng3");
-            addModel(miscMenu, "Cathedral Church", "templates/cathedral-template.ng3");
-            addModel(miscMenu, "Mexican Church", "templates/mexican-church-template.ng3");
-            addModel(miscMenu, "Dome", "templates/dome-template.ng3");
-            addModel(miscMenu, "Egyptian Pyramid", "templates/egyptian-pyramid-template.ng3");
-            addModel(miscMenu, "Mayan Pyramid", "templates/mayan-pyramid-template.ng3");
-            addModel(miscMenu, "Stadium", "templates/stadium-template.ng3");
-            addModel(miscMenu, "Amphitheatre", "templates/amphitheatre-template.ng3");
-            addModel(miscMenu, "Lighthouse", "templates/example-lighthouse.ng3");
-            addModel(miscMenu, "Volkwagen", "templates/example-volkwagen.ng3");
-            addModel(miscMenu, "Sailboat", "templates/example-sailboat.ng3");
-            addModel(miscMenu, "Drone", "templates/example-drone.ng3");
+            addModel(miscMenu, "ex.mosque", "templates/mosque-template.ng3");
+            addModel(miscMenu, "ex.temple", "templates/temple-template.ng3");
+            addModel(miscMenu, "ex.tibetan_temple", "templates/tibetan-temple-template.ng3");
+            addModel(miscMenu, "ex.church_1", "templates/church-template-1.ng3");
+            addModel(miscMenu, "ex.church_2", "templates/church-template-2.ng3");
+            addModel(miscMenu, "ex.church_3", "templates/church-template-3.ng3");
+            addModel(miscMenu, "ex.cathedral", "templates/cathedral-template.ng3");
+            addModel(miscMenu, "ex.mexican_church", "templates/mexican-church-template.ng3");
+            addModel(miscMenu, "ex.dome", "templates/dome-template.ng3");
+            addModel(miscMenu, "ex.egyptian_pyramid", "templates/egyptian-pyramid-template.ng3");
+            addModel(miscMenu, "ex.mayan_pyramid", "templates/mayan-pyramid-template.ng3");
+            addModel(miscMenu, "ex.stadium", "templates/stadium-template.ng3");
+            addModel(miscMenu, "ex.amphitheatre", "templates/amphitheatre-template.ng3");
+            addModel(miscMenu, "ex.lighthouse", "templates/example-lighthouse.ng3");
+            addModel(miscMenu, "ex.volkswagen", "templates/example-volkwagen.ng3");
+            addModel(miscMenu, "ex.sailboat", "templates/example-sailboat.ng3");
+            addModel(miscMenu, "ex.drone", "templates/example-drone.ng3");
         }
         return examplesMenu;
     }
 
-    private void addModel(final JMenu menu, final String type, final String url) {
-        final JMenuItem mi = new JMenuItem(type);
+    private void refreshMenuLabelsRecursive(final JComponent c) {
+        if (c instanceof JMenu) {
+            final JMenu m = (JMenu) c;
+            final Object key = m.getClientProperty("i18n.key");
+            if (key != null) {
+                m.setText(I18n.get(key.toString()));
+            }
+            for (int i = 0; i < m.getItemCount(); i++) {
+                final JMenuItem item = m.getItem(i);
+                if (item != null) {
+                    refreshMenuLabelsRecursive(item);
+                }
+            }
+        } else if (c instanceof JMenuItem) {
+            final Object key = ((JMenuItem) c).getClientProperty("i18n.key");
+            if (key != null) {
+                ((JMenuItem) c).setText(I18n.get(key.toString()));
+            }
+        }
+    }
+
+    private void addModel(final JMenu menu, final String i18nKey, final String url) {
+        final JMenuItem mi = new JMenuItem(I18n.get(i18nKey));
+        mi.putClientProperty("i18n.key", i18nKey);
         mi.addActionListener(e -> openModel(MainApplication.class.getResource(url)));
         menu.add(mi);
     }
 
     private JMenu getTutorialsMenu() {
         if (tutorialsMenu == null) {
-            tutorialsMenu = new JMenu("Tutorials");
+            tutorialsMenu = new JMenu(I18n.get("menu.tutorials"));
             tutorialsMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -1456,107 +1560,114 @@ public class MainFrame extends JFrame {
                 }
             });
 
-            final JMenu uiBasicsMenu = new JMenu("User Interface Basics");
+            final JMenu uiBasicsMenu = new JMenu(I18n.get("menu.ui_basics"));
+            uiBasicsMenu.putClientProperty("i18n.key", "menu.ui_basics");
             uiBasicsMenu.setEnabled(false);
             tutorialsMenu.add(uiBasicsMenu);
 
-            final JMenu buildingBasicsMenu = new JMenu("Building Science Basics");
+            final JMenu buildingBasicsMenu = new JMenu(I18n.get("menu.building_basics"));
+            buildingBasicsMenu.putClientProperty("i18n.key", "menu.building_basics");
             tutorialsMenu.add(buildingBasicsMenu);
-            addModel(buildingBasicsMenu, "Two Houses of Different Sizes", "tutorials/building-size.ng3");
-            addModel(buildingBasicsMenu, "Two Houses of Different Shapes", "tutorials/building-shape.ng3");
-            addModel(buildingBasicsMenu, "Two Houses with Different Roof Insulations", "tutorials/building-roof-insulation.ng3");
-            addModel(buildingBasicsMenu, "Two Houses with Different Roof Colors", "tutorials/building-cool-roof.ng3");
-            addModel(buildingBasicsMenu, "Two Houses with Different Window SHGCs", "tutorials/building-window-shgc.ng3");
-            addModel(buildingBasicsMenu, "Two Houses with Different Orientations", "tutorials/building-orientation.ng3");
-            addModel(buildingBasicsMenu, "Two Houses with Different Thermostat Settings", "tutorials/building-thermostat.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_sizes", "tutorials/building-size.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_shapes", "tutorials/building-shape.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_roof_insulation", "tutorials/building-roof-insulation.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_roof_colors", "tutorials/building-cool-roof.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_window_shgc", "tutorials/building-window-shgc.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_orientations", "tutorials/building-orientation.ng3");
+            addModel(buildingBasicsMenu, "tut.two_houses_thermostat", "tutorials/building-thermostat.ng3");
             buildingBasicsMenu.addSeparator();
-            addModel(buildingBasicsMenu, "Energy Use at Different Locations", "tutorials/building-location.ng3");
-            addModel(buildingBasicsMenu, "Effect of Environment Albedo", "tutorials/building-albedo.ng3");
-            addModel(buildingBasicsMenu, "Passive Heating with Windows", "tutorials/building-passive-heating.ng3");
-            addModel(buildingBasicsMenu, "Passive Cooling with Trees", "tutorials/building-tree-passive-cooling.ng3");
+            addModel(buildingBasicsMenu, "tut.energy_use_locations", "tutorials/building-location.ng3");
+            addModel(buildingBasicsMenu, "tut.effect_environment_albedo", "tutorials/building-albedo.ng3");
+            addModel(buildingBasicsMenu, "tut.passive_heating_windows", "tutorials/building-passive-heating.ng3");
+            addModel(buildingBasicsMenu, "tut.passive_cooling_trees", "tutorials/building-tree-passive-cooling.ng3");
 
-            final JMenu solarBasicsMenu = new JMenu("Solar Science Basics");
+            final JMenu solarBasicsMenu = new JMenu(I18n.get("menu.solar_basics"));
+            solarBasicsMenu.putClientProperty("i18n.key", "menu.solar_basics");
             tutorialsMenu.add(solarBasicsMenu);
-            addModel(solarBasicsMenu, "Sun Path", "tutorials/sun-path.ng3");
-            addModel(solarBasicsMenu, "Projection Effect", "tutorials/projection-effect.ng3");
-            addModel(solarBasicsMenu, "Air Mass", "tutorials/air-mass.ng3");
-            addModel(solarBasicsMenu, "Weather Effect", "tutorials/weather-effect.ng3");
-            addModel(solarBasicsMenu, "Solar Radiation Pathways", "tutorials/solar-radiation-pathways.ng3");
-            addModel(solarBasicsMenu, "Optimize It", "tutorials/optimize-it.ng3");
+            addModel(solarBasicsMenu, "tut.sun_path", "tutorials/sun-path.ng3");
+            addModel(solarBasicsMenu, "tut.projection_effect", "tutorials/projection-effect.ng3");
+            addModel(solarBasicsMenu, "tut.air_mass", "tutorials/air-mass.ng3");
+            addModel(solarBasicsMenu, "tut.weather_effect", "tutorials/weather-effect.ng3");
+            addModel(solarBasicsMenu, "tut.solar_radiation_pathways", "tutorials/solar-radiation-pathways.ng3");
+            addModel(solarBasicsMenu, "tut.optimize_it", "tutorials/optimize-it.ng3");
             solarBasicsMenu.addSeparator();
-            addModel(solarBasicsMenu, "Solar Box", "tutorials/solar-box.ng3");
-            addModel(solarBasicsMenu, "Solar Irradiance Heat Map", "tutorials/solar-heat-map.ng3");
-            addModel(solarBasicsMenu, "Solar Analysis of Cities", "tutorials/city-block.ng3");
+            addModel(solarBasicsMenu, "tut.solar_box", "tutorials/solar-box.ng3");
+            addModel(solarBasicsMenu, "tut.solar_irradiance_heat_map", "tutorials/solar-heat-map.ng3");
+            addModel(solarBasicsMenu, "tut.solar_analysis_cities", "tutorials/city-block.ng3");
             solarBasicsMenu.addSeparator();
-            addModel(solarBasicsMenu, "Solar Panel Tilt Angles", "tutorials/solar-panel-tilt-angle.ng3");
-            addModel(solarBasicsMenu, "Solar Panel Azimuthal Angles", "tutorials/solar-panel-azimuth-angle.ng3");
-            addModel(solarBasicsMenu, "Solar Panel Orientation", "tutorials/solar-panel-orientation.ng3");
-            addModel(solarBasicsMenu, "Solar Panel Cell Efficiency", "tutorials/solar-panel-cell-efficiency.ng3");
-            addModel(solarBasicsMenu, "Nominal Operating Cell Temperature", "tutorials/solar-panel-noct.ng3");
-            addModel(solarBasicsMenu, "Solar Trackers", "tutorials/solar-trackers.ng3");
+            addModel(solarBasicsMenu, "tut.solar_panel_tilt_angles", "tutorials/solar-panel-tilt-angle.ng3");
+            addModel(solarBasicsMenu, "tut.solar_panel_azimuthal_angles", "tutorials/solar-panel-azimuth-angle.ng3");
+            addModel(solarBasicsMenu, "tut.solar_panel_orientation", "tutorials/solar-panel-orientation.ng3");
+            addModel(solarBasicsMenu, "tut.solar_panel_cell_efficiency", "tutorials/solar-panel-cell-efficiency.ng3");
+            addModel(solarBasicsMenu, "tut.nominal_operating_cell_temp", "tutorials/solar-panel-noct.ng3");
+            addModel(solarBasicsMenu, "tut.solar_trackers", "tutorials/solar-trackers.ng3");
 
             tutorialsMenu.addSeparator();
 
-            final JMenu inquiryMethodMenu = new JMenu("Methods of Scientific Inquiry");
+            final JMenu inquiryMethodMenu = new JMenu(I18n.get("menu.inquiry_method"));
+            inquiryMethodMenu.putClientProperty("i18n.key", "menu.inquiry_method");
             tutorialsMenu.add(inquiryMethodMenu);
-            addModel(inquiryMethodMenu, "U-Value Investigation", "tutorials/guided-inquiry-u-value.ng3");
-            addModel(inquiryMethodMenu, "Passive Solar Investigation", "tutorials/guided-inquiry-passive-solar.ng3");
+            addModel(inquiryMethodMenu, "tut.u_value_investigation", "tutorials/guided-inquiry-u-value.ng3");
+            addModel(inquiryMethodMenu, "tut.passive_solar_investigation", "tutorials/guided-inquiry-passive-solar.ng3");
 
-            final JMenu designMethodMenu = new JMenu("Methods of Engineering Design");
+            final JMenu designMethodMenu = new JMenu(I18n.get("menu.design_method"));
+            designMethodMenu.putClientProperty("i18n.key", "menu.design_method");
             tutorialsMenu.add(designMethodMenu);
-            addModel(designMethodMenu, "Building Location Optimization", "tutorials/optimization-building-locations.ng3");
-            addModel(designMethodMenu, "Building Orientation Optimization", "tutorials/optimization-building-orientation.ng3");
-            addModel(designMethodMenu, "Window Sizing Optimization", "tutorials/optimization-window-sizes.ng3");
-            addModel(designMethodMenu, "Solar Panel Tilt Angle Optimization", "tutorials/optimization-solar-panel-tilt-angle.ng3");
-            addModel(designMethodMenu, "Solar Farm Optimization", "tutorials/optimization-solar-panel-array-rectangular-lot.ng3");
-            addModel(designMethodMenu, "Single Heliostat Optimization", "tutorials/optimization-single-heliostat.ng3");
-            addModel(designMethodMenu, "Concentric Heliostat Field Optimization", "tutorials/optimization-concentric-heliostat-field.ng3");
-            addModel(designMethodMenu, "Spiral Heliostat Field Optimization", "tutorials/optimization-spiral-heliostat-field.ng3");
+            addModel(designMethodMenu, "tut.building_location_optimization", "tutorials/optimization-building-locations.ng3");
+            addModel(designMethodMenu, "tut.building_orientation_optimization", "tutorials/optimization-building-orientation.ng3");
+            addModel(designMethodMenu, "tut.window_sizing_optimization", "tutorials/optimization-window-sizes.ng3");
+            addModel(designMethodMenu, "tut.solar_panel_tilt_optimization", "tutorials/optimization-solar-panel-tilt-angle.ng3");
+            addModel(designMethodMenu, "tut.solar_farm_optimization", "tutorials/optimization-solar-panel-array-rectangular-lot.ng3");
+            addModel(designMethodMenu, "tut.single_heliostat_optimization", "tutorials/optimization-single-heliostat.ng3");
+            addModel(designMethodMenu, "tut.concentric_heliostat_optimization", "tutorials/optimization-concentric-heliostat-field.ng3");
+            addModel(designMethodMenu, "tut.spiral_heliostat_optimization", "tutorials/optimization-spiral-heliostat-field.ng3");
 
             tutorialsMenu.addSeparator();
 
-            final JMenu pvMenu = new JMenu("Photovoltaic Solar Power");
+            final JMenu pvMenu = new JMenu(I18n.get("menu.pv_power"));
+            pvMenu.putClientProperty("i18n.key", "menu.pv_power");
             tutorialsMenu.add(pvMenu);
-            addModel(pvMenu, "Brand Name Solar Panels", "tutorials/solar-panel-brand-names.ng3");
-            addModel(pvMenu, "Single Solar Rack", "tutorials/solar-single-rack.ng3");
-            addModel(pvMenu, "Multiple Solar Racks", "tutorials/solar-multiple-racks.ng3");
-            addModel(pvMenu, "Solar Trackers for Racks", "tutorials/solar-tracker-racks.ng3");
-            addModel(pvMenu, "Solar Canopy Form Factors", "tutorials/solar-canopy-form-factors.ng3");
+            addModel(pvMenu, "tut.brand_name_solar_panels", "tutorials/solar-panel-brand-names.ng3");
+            addModel(pvMenu, "tut.single_solar_rack", "tutorials/solar-single-rack.ng3");
+            addModel(pvMenu, "tut.multiple_solar_racks", "tutorials/solar-multiple-racks.ng3");
+            addModel(pvMenu, "tut.solar_trackers_racks", "tutorials/solar-tracker-racks.ng3");
+            addModel(pvMenu, "tut.solar_canopy_form_factors", "tutorials/solar-canopy-form-factors.ng3");
             pvMenu.addSeparator();
-            addModel(pvMenu, "Rooftop Solar Power System", "tutorials/pv-rooftop-system.ng3");
-            addModel(pvMenu, "Parking Lot Solar Canopy", "tutorials/solar-canopy.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Arrays with Fixed Tilt Angles", "tutorials/pv-fixed-rack-arrays.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Arrays with Seasonally Adjusted Tilt Angles", "tutorials/solar-rack-array-seasonal-tilt.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Horizontal Single-Axis Tracker Arrays", "tutorials/pv-hsat-rack-arrays.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Cost-Effectiveness", "tutorials/solar-rack-why-array.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: The Effect of Inter-Row Spacing", "tutorials/solar-rack-array-row-spacing.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Landscape vs. Portrait Arrays", "tutorials/solar-rack-array-row-spacing-portrait.ng3");
-            addModel(pvMenu, "Photovoltaic Solar Farm: Layout for Dual-Axis Trackers", "tutorials/azdat-layout.ng3");
+            addModel(pvMenu, "tut.rooftop_solar_system", "tutorials/pv-rooftop-system.ng3");
+            addModel(pvMenu, "tut.parking_lot_solar_canopy", "tutorials/solar-canopy.ng3");
+            addModel(pvMenu, "tut.pv_fixed_rack_arrays", "tutorials/pv-fixed-rack-arrays.ng3");
+            addModel(pvMenu, "tut.pv_seasonal_tilt_arrays", "tutorials/solar-rack-array-seasonal-tilt.ng3");
+            addModel(pvMenu, "tut.pv_hsat_arrays", "tutorials/pv-hsat-rack-arrays.ng3");
+            addModel(pvMenu, "tut.pv_cost_effectiveness", "tutorials/solar-rack-why-array.ng3");
+            addModel(pvMenu, "tut.pv_inter_row_spacing", "tutorials/solar-rack-array-row-spacing.ng3");
+            addModel(pvMenu, "tut.pv_landscape_portrait_arrays", "tutorials/solar-rack-array-row-spacing-portrait.ng3");
+            addModel(pvMenu, "tut.pv_dual_axis_layout", "tutorials/azdat-layout.ng3");
 
-            final JMenu cspMenu = new JMenu("Concentrated Solar Power");
+            final JMenu cspMenu = new JMenu(I18n.get("menu.csp_power"));
+            cspMenu.putClientProperty("i18n.key", "menu.csp_power");
             tutorialsMenu.add(cspMenu);
-            addModel(cspMenu, "Parabolic Trough Focal Line", "tutorials/parabolic-trough-focal-line.ng3");
-            addModel(cspMenu, "Parabolic Trough Rim Angle", "tutorials/parabolic-trough-curvature.ng3");
-            addModel(cspMenu, "Parabolic Trough Arrays", "tutorials/parabolic-trough-array.ng3");
-            addModel(cspMenu, "Parabolic Trough Rhomboid Layout", "tutorials/parabolic-trough-rhomboid-layout.ng3");
-            addModel(cspMenu, "Parabolic Troughs with Different Azimuth Angles", "tutorials/parabolic-trough-azimuth-angles.ng3");
+            addModel(cspMenu, "tut.parabolic_trough_focal_line", "tutorials/parabolic-trough-focal-line.ng3");
+            addModel(cspMenu, "tut.parabolic_trough_rim_angle", "tutorials/parabolic-trough-curvature.ng3");
+            addModel(cspMenu, "tut.parabolic_trough_arrays", "tutorials/parabolic-trough-array.ng3");
+            addModel(cspMenu, "tut.parabolic_trough_rhomboid", "tutorials/parabolic-trough-rhomboid-layout.ng3");
+            addModel(cspMenu, "tut.parabolic_trough_azimuth_angles", "tutorials/parabolic-trough-azimuth-angles.ng3");
             cspMenu.addSeparator();
-            addModel(cspMenu, "Parabolic Dish Stirling Engine", "tutorials/parabolic-dish-single.ng3");
-            addModel(cspMenu, "Parabolic Dish Focal Length", "tutorials/parabolic-dish-focal-length.ng3");
-            addModel(cspMenu, "Parabolic Dish Array", "tutorials/parabolic-dish-array.ng3");
+            addModel(cspMenu, "tut.parabolic_dish_stirling", "tutorials/parabolic-dish-single.ng3");
+            addModel(cspMenu, "tut.parabolic_dish_focal_length", "tutorials/parabolic-dish-focal-length.ng3");
+            addModel(cspMenu, "tut.parabolic_dish_array", "tutorials/parabolic-dish-array.ng3");
             cspMenu.addSeparator();
-            addModel(cspMenu, "Linear Fresnel Reflectors", "tutorials/linear-fresnel-reflectors.ng3");
-            addModel(cspMenu, "Linear Fresnel Reflectors: The Effect of Absorber Height", "tutorials/linear-fresnel-reflectors-absorber-height.ng3");
-            addModel(cspMenu, "Linear Fresnel Reflectors: The Effect of Orientation", "tutorials/linear-fresnel-reflectors-orientation.ng3");
-            addModel(cspMenu, "Linear Fresnel Reflectors: Multiple Absorbers", "tutorials/compact-linear-fresnel-reflectors.ng3");
+            addModel(cspMenu, "tut.linear_fresnel_reflectors", "tutorials/linear-fresnel-reflectors.ng3");
+            addModel(cspMenu, "tut.linear_fresnel_absorber_height", "tutorials/linear-fresnel-reflectors-absorber-height.ng3");
+            addModel(cspMenu, "tut.linear_fresnel_orientation", "tutorials/linear-fresnel-reflectors-orientation.ng3");
+            addModel(cspMenu, "tut.linear_fresnel_multiple_absorbers", "tutorials/compact-linear-fresnel-reflectors.ng3");
             cspMenu.addSeparator();
-            addModel(cspMenu, "Concentrated Solar Power Tower", "tutorials/concentrated-solar-power-tower.ng3");
-            addModel(cspMenu, "Cosine Efficiency", "tutorials/csp-cosine-efficiency.ng3");
-            addModel(cspMenu, "Shadowing and Blocking", "tutorials/csp-shadowing-blocking.ng3");
-            addModel(cspMenu, "Shadowing and Blocking (Reduced Heliostat Height)", "tutorials/csp-shadowing-blocking-less.ng3");
-            addModel(cspMenu, "Shadowing and Blocking (Increased Radial Spacing)", "tutorials/csp-shadowing-blocking-even-less.ng3");
-            addModel(cspMenu, "The Effect of Solar Tower Height", "tutorials/csp-tower-height.ng3");
-            addModel(cspMenu, "Fermat Spiral Layout of Heliostats (Sunflower Pattern)", "tutorials/csp-spiral-layout.ng3");
+            addModel(cspMenu, "tut.csp_tower", "tutorials/concentrated-solar-power-tower.ng3");
+            addModel(cspMenu, "tut.cosine_efficiency", "tutorials/csp-cosine-efficiency.ng3");
+            addModel(cspMenu, "tut.shadowing_blocking", "tutorials/csp-shadowing-blocking.ng3");
+            addModel(cspMenu, "tut.shadowing_blocking_reduced", "tutorials/csp-shadowing-blocking-less.ng3");
+            addModel(cspMenu, "tut.shadowing_blocking_spacing", "tutorials/csp-shadowing-blocking-even-less.ng3");
+            addModel(cspMenu, "tut.csp_tower_height", "tutorials/csp-tower-height.ng3");
+            addModel(cspMenu, "tut.fermat_spiral_layout", "tutorials/csp-spiral-layout.ng3");
 
         }
         return tutorialsMenu;
@@ -1564,7 +1675,7 @@ public class MainFrame extends JFrame {
 
     private JMenu getViewMenu() {
         if (viewMenu == null) {
-            viewMenu = new JMenu("View");
+            viewMenu = new JMenu(I18n.get("menu.view"));
             viewMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -1598,13 +1709,13 @@ public class MainFrame extends JFrame {
                 }
             });
 
-            final JMenu solarHeatMapMenu = new JMenu("Solar Irradiance Heat Map Options");
+            final JMenu solarHeatMapMenu = new JMenu(I18n.get("menu.solar_heat_map_options"));
             solarHeatMapMenu.add(getOnlySolarComponentsInSolarMapMenuItem());
             solarHeatMapMenu.add(getSolarAbsorptionHeatMapMenuItem());
             solarHeatMapMenu.add(getOnlyReflectionHeatMapMenuItem());
             solarHeatMapMenu.add(getShowSolarLandMenuItem());
 
-            sunAnglesMenu = new JMenu("Sun Angles");
+            sunAnglesMenu = new JMenu(I18n.get("menu.sun_angles"));
             sunAnglesMenu.add(getZenithAngleMenuItem());
             sunAnglesMenu.add(getElevationAngleMenuItem());
             sunAnglesMenu.add(getAzimuthAngleMenuItem());
@@ -1643,7 +1754,7 @@ public class MainFrame extends JFrame {
     private JMenu getEnvironmentMenu() {
 
         if (environmentMenu == null) {
-            environmentMenu = new JMenu("Set Environment");
+            environmentMenu = new JMenu(I18n.get("menu.set_environment"));
             environmentMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -1676,7 +1787,7 @@ public class MainFrame extends JFrame {
     private JMenu getGroundImageMenu() {
 
         if (groundImageMenu == null) {
-            groundImageMenu = new JMenu("Ground Image");
+            groundImageMenu = new JMenu(I18n.get("menu.ground_image"));
             groundImageMenu.addMenuListener(new MenuListener() {
                 @Override
                 public void menuCanceled(final MenuEvent e) {
@@ -1717,7 +1828,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getUseEarthViewMenuItem() {
         if (useEarthViewMenuItem == null) {
-            useEarthViewMenuItem = new JMenuItem("Use Image from Earth View...");
+            useEarthViewMenuItem = new JMenuItem(I18n.get("menu.use_earth_view"));
             useEarthViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             useEarthViewMenuItem.addActionListener(e -> new MapDialog(MainFrame.this).setVisible(true));
         }
@@ -1726,7 +1837,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getUseImageFileMenuItem() {
         if (useImageFileMenuItem == null) {
-            useImageFileMenuItem = new JMenuItem("Use Image from File...");
+            useImageFileMenuItem = new JMenuItem(I18n.get("menu.use_image_file"));
             useImageFileMenuItem.addActionListener(e -> {
                 final File file = FileChooser.getInstance().showDialog(".png", FileChooser.pngFilter, false);
                 if (file == null) {
@@ -1740,7 +1851,7 @@ public class MainFrame extends JFrame {
                     });
                 } catch (final Throwable t) {
                     t.printStackTrace();
-                    JOptionPane.showMessageDialog(MainFrame.this, t.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.this, t.getMessage(), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                 }
                 Scene.getInstance().setEdited(true);
             });
@@ -1750,9 +1861,9 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRescaleGroundImageMenuItem() {
         if (rescaleGroundImageMenuItem == null) {
-            rescaleGroundImageMenuItem = new JMenuItem("Rescale Image...");
+            rescaleGroundImageMenuItem = new JMenuItem(I18n.get("menu.rescale_image"));
             rescaleGroundImageMenuItem.addActionListener(e -> {
-                final String title = "Scale the ground image";
+                final String title = I18n.get("title.scale_ground_image");
                 while (true) {
                     final String newValue = JOptionPane.showInputDialog(MainFrame.getInstance(), title, Scene.getInstance().getGroundImageScale());
                     if (newValue == null) {
@@ -1761,7 +1872,7 @@ public class MainFrame extends JFrame {
                         try {
                             final double val = Double.parseDouble(newValue);
                             if (val <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "The scaling factor must be positive.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.scaling_factor_positive"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                             } else {
                                 // final RescaleGroundImageCommand c = new RescaleGroundImageCommand();
                                 SceneManager.getTaskManager().update(() -> {
@@ -1772,7 +1883,7 @@ public class MainFrame extends JFrame {
                                 break;
                             }
                         } catch (final NumberFormatException exception) {
-                            JOptionPane.showMessageDialog(MainFrame.getInstance(), newValue + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", newValue), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
@@ -1784,7 +1895,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getClearGroundImageMenuItem() {
         if (clearGroundImageMenuItem == null) {
-            clearGroundImageMenuItem = new JMenuItem("Clear Image");
+            clearGroundImageMenuItem = new JMenuItem(I18n.get("menu.clear_image"));
             clearGroundImageMenuItem.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
                     Scene.getInstance().setGroundImage(null, 1);
@@ -1798,7 +1909,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getShowGroundImageMenuItem() {
         if (showGroundImageMenuItem == null) {
-            showGroundImageMenuItem = new JCheckBoxMenuItem("Show Image");
+            showGroundImageMenuItem = new JCheckBoxMenuItem(I18n.get("menu.show_image"));
             showGroundImageMenuItem.addItemListener(e -> {
                 final boolean b = showGroundImageMenuItem.isSelected();
                 SceneManager.getInstance().getGroundImageLand().setVisible(b);
@@ -1812,7 +1923,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getAxesMenuItem() {
         if (axesMenuItem == null) {
-            axesMenuItem = new JCheckBoxMenuItem("Axes", true);
+            axesMenuItem = new JCheckBoxMenuItem(I18n.get("menu.axes"), true);
             axesMenuItem.addItemListener(e -> {
                 final ShowAxesCommand c = new ShowAxesCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -1828,7 +1939,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getZenithAngleMenuItem() {
         if (zenithAngleMenuItem == null) {
-            zenithAngleMenuItem = new JCheckBoxMenuItem("Zenith Angle");
+            zenithAngleMenuItem = new JCheckBoxMenuItem(I18n.get("menu.zenith_angle"));
             zenithAngleMenuItem.addItemListener(e -> {
                 final ShowZenithAngleCommand c = new ShowZenithAngleCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -1845,7 +1956,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getElevationAngleMenuItem() {
         if (elevationAngleMenuItem == null) {
-            elevationAngleMenuItem = new JCheckBoxMenuItem("Elevation Angle");
+            elevationAngleMenuItem = new JCheckBoxMenuItem(I18n.get("menu.elevation_angle"));
             elevationAngleMenuItem.addItemListener(e -> {
                 final ShowElevationAngleCommand c = new ShowElevationAngleCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -1862,7 +1973,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getAzimuthAngleMenuItem() {
         if (azimuthAngleMenuItem == null) {
-            azimuthAngleMenuItem = new JCheckBoxMenuItem("Azimuth Angle");
+            azimuthAngleMenuItem = new JCheckBoxMenuItem(I18n.get("menu.azimuth_angle"));
             azimuthAngleMenuItem.addItemListener(e -> {
                 final ShowAzimuthAngleCommand c = new ShowAzimuthAngleCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -1879,7 +1990,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getLightBeamsMenuItem() {
         if (lightBeamsMenuItem == null) {
-            lightBeamsMenuItem = new JCheckBoxMenuItem("Reflector Light Beams", true);
+            lightBeamsMenuItem = new JCheckBoxMenuItem(I18n.get("menu.reflector_light_beams"), true);
             lightBeamsMenuItem.addItemListener(e -> {
                 final ShowReflectorLightBeamsCommand c = new ShowReflectorLightBeamsCommand();
                 Scene.getInstance().setLightBeamsVisible(lightBeamsMenuItem.isSelected());
@@ -1896,7 +2007,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getDisableShadowInActionMenuItem() {
         if (disableShadowInActionMenuItem == null) {
-            disableShadowInActionMenuItem = new JCheckBoxMenuItem("Disable Shadows in Action", false);
+            disableShadowInActionMenuItem = new JCheckBoxMenuItem(I18n.get("menu.disable_shadows_in_action"), false);
             disableShadowInActionMenuItem.addItemListener(e -> {
                 Scene.getInstance().setDisableShadowInAction(disableShadowInActionMenuItem.isSelected());
                 Scene.getInstance().setEdited(true);
@@ -1907,7 +2018,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getRoofDashedLineMenuItem() {
         if (roofDashedLineMenuItem == null) {
-            roofDashedLineMenuItem = new JCheckBoxMenuItem("Roof Dashed Lines", false);
+            roofDashedLineMenuItem = new JCheckBoxMenuItem(I18n.get("menu.roof_dashed_lines"), false);
             roofDashedLineMenuItem.addItemListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
                     Scene.getInstance().setDashedLinesOnRoofShown(roofDashedLineMenuItem.isSelected());
@@ -1922,7 +2033,7 @@ public class MainFrame extends JFrame {
 
     public JCheckBoxMenuItem getShadowMenuItem() {
         if (shadowMenuItem == null) {
-            shadowMenuItem = new JCheckBoxMenuItem("Shadows", false);
+            shadowMenuItem = new JCheckBoxMenuItem(I18n.get("menu.shadows"), false);
             shadowMenuItem.addItemListener(e -> {
                 final ShowShadowCommand c = new ShowShadowCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -1938,10 +2049,10 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getSortIdMenuItem() {
         if (sortIdMenuItem == null) {
-            sortIdMenuItem = new JMenuItem("Sort ID");
+            sortIdMenuItem = new JMenuItem(I18n.get("menu.sort_id"));
             sortIdMenuItem.addActionListener(e -> {
-                if (JOptionPane.showConfirmDialog(MainFrame.this, "Sorting IDs may break scripts. Do you want to continue?",
-                        "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
+                if (JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.sort_ids_confirm"),
+                        I18n.get("dialog.confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
                     return;
                 }
                 Scene.getInstance().sortID();
@@ -1953,7 +2064,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getSimulationSettingsMenuItem() {
         if (simulationSettingsMenuItem == null) {
-            simulationSettingsMenuItem = new JMenuItem("Simulation Settings...");
+            simulationSettingsMenuItem = new JMenuItem(I18n.get("menu.simulation_settings"));
             simulationSettingsMenuItem.addActionListener(e -> new SimulationSettingsDialog().setVisible(true));
         }
         return simulationSettingsMenuItem;
@@ -1961,7 +2072,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getVisualizationSettingsMenuItem() {
         if (visualizationSettingsMenuItem == null) {
-            visualizationSettingsMenuItem = new JMenuItem("Visualization Settings...");
+            visualizationSettingsMenuItem = new JMenuItem(I18n.get("menu.visualization_settings"));
             visualizationSettingsMenuItem.addActionListener(e -> new VisualizationSettingsDialog().setVisible(true));
         }
         return visualizationSettingsMenuItem;
@@ -1969,7 +2080,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualEnergyAnalysisMenuItem() {
         if (annualEnergyAnalysisMenuItem == null) {
-            annualEnergyAnalysisMenuItem = new JMenuItem("Annual Energy Analysis for Selected Building...");
+            annualEnergyAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_energy_building"));
             annualEnergyAnalysisMenuItem.setAccelerator(KeyStroke.getKeyStroke("F3"));
             annualEnergyAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
@@ -1977,7 +2088,7 @@ public class MainFrame extends JFrame {
                         return;
                     }
                     if (SceneManager.getInstance().autoSelectBuilding(true) != null) {
-                        new EnergyAnnualAnalysis().show("Annual Energy");
+                        new EnergyAnnualAnalysis().show(I18n.get("analysis.annual_energy"));
                     }
                 }
             });
@@ -1987,7 +2098,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualEnergyAnalysisForSelectionMenuItem() {
         if (annualEnergyAnalysisForSelectionMenuItem == null) {
-            annualEnergyAnalysisForSelectionMenuItem = new JMenuItem("Annual Energy Analysis for Selected Part...");
+            annualEnergyAnalysisForSelectionMenuItem = new JMenuItem(I18n.get("menu.annual_energy_part"));
             annualEnergyAnalysisForSelectionMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2001,9 +2112,9 @@ public class MainFrame extends JFrame {
                             || selectedPart instanceof SolarPanel
                             || selectedPart instanceof Rack
                             || selectedPart instanceof Foundation) {
-                        new EnergyAnnualAnalysis().show("Annual Energy for Selected Part");
+                        new EnergyAnnualAnalysis().show(I18n.get("analysis.annual_energy_selected_part"));
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.this, "You must select a building part first.", "No Selection", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_selection"), I18n.get("msg.no_selection_title"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             });
@@ -2013,7 +2124,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyEnergyAnalysisMenuItem() {
         if (dailyEnergyAnalysisMenuItem == null) {
-            dailyEnergyAnalysisMenuItem = new JMenuItem("Daily Energy Analysis for Selected Building...");
+            dailyEnergyAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_energy_building"));
             dailyEnergyAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2024,7 +2135,7 @@ public class MainFrame extends JFrame {
                         if (SceneManager.getInstance().getSolarHeatMap()) {
                             analysis.updateGraph();
                         }
-                        analysis.show("Daily Energy");
+                        analysis.show(I18n.get("analysis.daily_energy"));
                     }
                 }
             });
@@ -2034,7 +2145,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyEnergyAnalysisForSelectionMenuItem() {
         if (dailyEnergyAnalysisForSelectionMenuItem == null) {
-            dailyEnergyAnalysisForSelectionMenuItem = new JMenuItem("Daily Energy Analysis for Selected Part...");
+            dailyEnergyAnalysisForSelectionMenuItem = new JMenuItem(I18n.get("menu.daily_energy_part"));
             dailyEnergyAnalysisForSelectionMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2048,9 +2159,9 @@ public class MainFrame extends JFrame {
                             || selectedPart instanceof SolarPanel
                             || selectedPart instanceof Rack
                             || selectedPart instanceof Foundation) {
-                        new EnergyDailyAnalysis().show("Daily Energy for Selected Part");
+                        new EnergyDailyAnalysis().show(I18n.get("analysis.daily_energy_selected_part"));
                     } else {
-                        JOptionPane.showMessageDialog(MainFrame.this, "You must select a building part first.", "No Selection", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_selection"), I18n.get("msg.no_selection_title"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             });
@@ -2060,7 +2171,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualPvAnalysisMenuItem() {
         if (annualPvAnalysisMenuItem == null) {
-            annualPvAnalysisMenuItem = new JMenuItem("Annual Yield Analysis of Solar Panels...");
+            annualPvAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_pv"));
             annualPvAnalysisMenuItem.setAccelerator(KeyStroke.getKeyStroke("F4"));
             annualPvAnalysisMenuItem.addActionListener(e -> TaskFactory.annualYieldAnalysisOfSolarPanels());
         }
@@ -2069,7 +2180,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyPvAnalysisMenuItem() {
         if (dailyPvAnalysisMenuItem == null) {
-            dailyPvAnalysisMenuItem = new JMenuItem("Daily Yield Analysis of Solar Panels...");
+            dailyPvAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_pv"));
             dailyPvAnalysisMenuItem.addActionListener(e -> TaskFactory.dailyYieldAnalysisOfSolarPanels());
         }
         return dailyPvAnalysisMenuItem;
@@ -2077,12 +2188,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyHeliostatAnalysisMenuItem() {
         if (dailyHeliostatAnalysisMenuItem == null) {
-            dailyHeliostatAnalysisMenuItem = new JMenuItem("Daily Yield Analysis of Heliostats...");
+            dailyHeliostatAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_heliostat"));
             dailyHeliostatAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(Mirror.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no heliostat to analyze.", "No Heliostat", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_heliostat"), I18n.get("msg.no_heliostat_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2099,7 +2210,7 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(Mirror.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no heliostat on this foundation to analyze.", "No Heliostat", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_heliostat_on_foundation"), I18n.get("msg.no_heliostat_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2117,12 +2228,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualHeliostatAnalysisMenuItem() {
         if (annualHeliostatAnalysisMenuItem == null) {
-            annualHeliostatAnalysisMenuItem = new JMenuItem("Annual Yield Analysis of Heliostats...");
+            annualHeliostatAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_heliostat"));
             annualHeliostatAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(Mirror.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no heliostat to analyze.", "No Heliostat", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_heliostat"), I18n.get("msg.no_heliostat_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2140,7 +2251,7 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(Mirror.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no heliostat on this foundation to analyze.", "No Heliostat", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_heliostat_on_foundation"), I18n.get("msg.no_heliostat_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2154,12 +2265,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyParabolicTroughAnalysisMenuItem() {
         if (dailyParabolicTroughAnalysisMenuItem == null) {
-            dailyParabolicTroughAnalysisMenuItem = new JMenuItem("Daily Yield Analysis of Parabolic Troughs...");
+            dailyParabolicTroughAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_parabolic_trough"));
             dailyParabolicTroughAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(ParabolicTrough.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic trough to analyze.", "No Parabolic Trough", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_trough"), I18n.get("msg.no_parabolic_trough_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2176,8 +2287,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(ParabolicTrough.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic trough on this foundation to analyze.",
-                                        "No Parabolic Trough", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_trough_on_foundation"),
+                                        I18n.get("msg.no_parabolic_trough_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2195,12 +2306,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualParabolicTroughAnalysisMenuItem() {
         if (annualParabolicTroughAnalysisMenuItem == null) {
-            annualParabolicTroughAnalysisMenuItem = new JMenuItem("Annual Yield Analysis of Parabolic Troughs...");
+            annualParabolicTroughAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_parabolic_trough"));
             annualParabolicTroughAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(ParabolicTrough.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic trough to analyze.", "No Parabolic Trough", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_trough"), I18n.get("msg.no_parabolic_trough_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2218,8 +2329,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(ParabolicTrough.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic trough on this foundation to analyze.",
-                                        "No Parabolic Trough", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_trough_on_foundation"),
+                                        I18n.get("msg.no_parabolic_trough_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2233,12 +2344,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyParabolicDishAnalysisMenuItem() {
         if (dailyParabolicDishAnalysisMenuItem == null) {
-            dailyParabolicDishAnalysisMenuItem = new JMenuItem("Daily Yield Analysis of Parabolic Dishes...");
+            dailyParabolicDishAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_parabolic_dish"));
             dailyParabolicDishAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(ParabolicDish.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic dish to analyze.", "No Parabolic Dish", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_dish"), I18n.get("msg.no_parabolic_dish_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2255,8 +2366,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(ParabolicDish.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic dish on this foundation to analyze.",
-                                        "No Parabolic Dish", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_dish_on_foundation"),
+                                        I18n.get("msg.no_parabolic_dish_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2274,12 +2385,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualParabolicDishAnalysisMenuItem() {
         if (annualParabolicDishAnalysisMenuItem == null) {
-            annualParabolicDishAnalysisMenuItem = new JMenuItem("Annual Yield Analysis of Parabolic Dishes...");
+            annualParabolicDishAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_parabolic_dish"));
             annualParabolicDishAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(ParabolicDish.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic dish to analyze.", "No Parabolic Dish", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_dish"), I18n.get("msg.no_parabolic_dish_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2297,8 +2408,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(ParabolicDish.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no parabolic dish on this foundation to analyze.",
-                                        "No Parabolic Dish", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_parabolic_dish_on_foundation"),
+                                        I18n.get("msg.no_parabolic_dish_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2312,12 +2423,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyFresnelReflectorAnalysisMenuItem() {
         if (dailyFresnelReflectorAnalysisMenuItem == null) {
-            dailyFresnelReflectorAnalysisMenuItem = new JMenuItem("Daily Yield Analysis of Fresnel Reflectors...");
+            dailyFresnelReflectorAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_fresnel"));
             dailyFresnelReflectorAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(FresnelReflector.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no Fresnel reflector to analyze.", "No Fresnel Reflector", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_fresnel"), I18n.get("msg.no_fresnel_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2334,8 +2445,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(FresnelReflector.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no Fresnel reflector on this foundation to analyze.",
-                                        "No Fresnel Reflector", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_fresnel_on_foundation"),
+                                        I18n.get("msg.no_fresnel_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2353,12 +2464,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualFresnelReflectorAnalysisMenuItem() {
         if (annualFresnelReflectorAnalysisMenuItem == null) {
-            annualFresnelReflectorAnalysisMenuItem = new JMenuItem("Annual Yield Analysis of Fresnel Reflectors...");
+            annualFresnelReflectorAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_fresnel"));
             annualFresnelReflectorAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     int n = Scene.getInstance().countParts(FresnelReflector.class);
                     if (n <= 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this, "There is no Fresnel reflector to analyze.", "No Fresnel Reflector", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_fresnel"), I18n.get("msg.no_fresnel_title"), JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2376,8 +2487,8 @@ public class MainFrame extends JFrame {
                         if (foundation != null) {
                             n = foundation.countParts(FresnelReflector.class);
                             if (n <= 0) {
-                                JOptionPane.showMessageDialog(MainFrame.this, "There is no Fresnel reflector on this foundation to analyze.",
-                                        "No Fresnel Reflector", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.this, I18n.get("msg.no_fresnel_on_foundation"),
+                                        I18n.get("msg.no_fresnel_title"), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
                         }
@@ -2391,7 +2502,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getGroupDailyAnalysisMenuItem() {
         if (groupDailyAnalysisMenuItem == null) {
-            groupDailyAnalysisMenuItem = new JMenuItem("Daily Analysis for Group...");
+            groupDailyAnalysisMenuItem = new JMenuItem(I18n.get("menu.daily_group"));
             groupDailyAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2411,7 +2522,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getGroupAnnualAnalysisMenuItem() {
         if (groupAnnualAnalysisMenuItem == null) {
-            groupAnnualAnalysisMenuItem = new JMenuItem("Annual Analysis for Group...");
+            groupAnnualAnalysisMenuItem = new JMenuItem(I18n.get("menu.annual_group"));
             groupAnnualAnalysisMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     if (EnergyPanel.getInstance().adjustCellSize()) {
@@ -2431,7 +2542,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailySensorMenuItem() {
         if (dailySensorMenuItem == null) {
-            dailySensorMenuItem = new JMenuItem("Daily Sensor Data...");
+            dailySensorMenuItem = new JMenuItem(I18n.get("menu.daily_sensor"));
             dailySensorMenuItem.addActionListener(e -> TaskFactory.dailySensorData());
         }
         return dailySensorMenuItem;
@@ -2439,7 +2550,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualSensorMenuItem() {
         if (annualSensorMenuItem == null) {
-            annualSensorMenuItem = new JMenuItem("Annual Sensor Data...");
+            annualSensorMenuItem = new JMenuItem(I18n.get("menu.annual_sensor"));
             annualSensorMenuItem.addActionListener(e -> TaskFactory.annualSensorData());
         }
         return annualSensorMenuItem;
@@ -2447,7 +2558,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getSolarRadiationHeatMapMenuItem() {
         if (solarRadiationHeatMapMenuItem == null) {
-            solarRadiationHeatMapMenuItem = new JCheckBoxMenuItem("Solar Irradiance Heat Map");
+            solarRadiationHeatMapMenuItem = new JCheckBoxMenuItem(I18n.get("menu.solar_irradiance_heat_map"));
             solarRadiationHeatMapMenuItem.addActionListener(e -> {
                 SceneManager.getInstance().setSolarHeatMap(solarRadiationHeatMapMenuItem.isSelected());
                 Util.selectSilently(MainPanel.getInstance().getEnergyButton(), solarRadiationHeatMapMenuItem.isSelected());
@@ -2458,7 +2569,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getOnlySolarComponentsInSolarMapMenuItem() {
         if (onlySolarComponentsInSolarMapMenuItem == null) {
-            onlySolarComponentsInSolarMapMenuItem = new JCheckBoxMenuItem("Show Only On Solar Components");
+            onlySolarComponentsInSolarMapMenuItem = new JCheckBoxMenuItem(I18n.get("menu.only_on_solar_components"));
             onlySolarComponentsInSolarMapMenuItem.addItemListener(e -> {
                 final boolean b = onlySolarComponentsInSolarMapMenuItem.isSelected();
                 Scene.getInstance().setOnlySolarComponentsInSolarMap(b);
@@ -2472,7 +2583,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getShowSolarLandMenuItem() {
         if (showSolarLandMenuItem == null) {
-            showSolarLandMenuItem = new JCheckBoxMenuItem("Show on Land");
+            showSolarLandMenuItem = new JCheckBoxMenuItem(I18n.get("menu.show_on_land"));
             showSolarLandMenuItem.addItemListener(e -> {
                 // final ShowSolarLandCommand c = new ShowSolarLandCommand();
                 final boolean b = showSolarLandMenuItem.isSelected();
@@ -2492,7 +2603,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getSolarAbsorptionHeatMapMenuItem() {
         if (solarAbsorptionHeatMapMenuItem == null) {
-            solarAbsorptionHeatMapMenuItem = new JCheckBoxMenuItem("Show Only Absorbed Energy (Absorbers)");
+            solarAbsorptionHeatMapMenuItem = new JCheckBoxMenuItem(I18n.get("menu.only_absorbed_energy"));
             solarAbsorptionHeatMapMenuItem.addActionListener(e -> {
                 Scene.getInstance().setOnlyAbsorptionInSolarMap(solarAbsorptionHeatMapMenuItem.isSelected());
                 if (SceneManager.getInstance().getSolarHeatMap()) {
@@ -2505,7 +2616,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getOnlyReflectionHeatMapMenuItem() {
         if (onlyReflectionHeatMapMenuItem == null) {
-            onlyReflectionHeatMapMenuItem = new JCheckBoxMenuItem("Show Only Reflected Energy (Heliostats and Fresnel Reflectors)");
+            onlyReflectionHeatMapMenuItem = new JCheckBoxMenuItem(I18n.get("menu.only_reflected_energy"));
             onlyReflectionHeatMapMenuItem.addActionListener(e -> {
                 Scene.getInstance().setOnlyReflectedEnergyInMirrorSolarMap(onlyReflectionHeatMapMenuItem.isSelected());
                 if (SceneManager.getInstance().getSolarHeatMap()) {
@@ -2518,7 +2629,7 @@ public class MainFrame extends JFrame {
 
     public JCheckBoxMenuItem getHeatFluxMenuItem() {
         if (showHeatFluxVectorsMenuItem == null) {
-            showHeatFluxVectorsMenuItem = new JCheckBoxMenuItem("Heat Flux Vectors");
+            showHeatFluxVectorsMenuItem = new JCheckBoxMenuItem(I18n.get("menu.heat_flux_vectors"));
             showHeatFluxVectorsMenuItem.addActionListener(e -> {
                 final ShowHeatFluxCommand c = new ShowHeatFluxCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -2534,7 +2645,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getFinancialSettingsMenuItem() {
         if (financialSettingsMenuItem == null) {
-            financialSettingsMenuItem = new JMenuItem("Financial Settings...");
+            financialSettingsMenuItem = new JMenuItem(I18n.get("menu.financial_settings"));
             financialSettingsMenuItem.addActionListener(e -> {
                 FinancialSettingsDialog dialog = new FinancialSettingsDialog();
                 switch (Scene.getInstance().getProjectType()) {
@@ -2553,7 +2664,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getCostBreakdownMenuItem() {
         if (costBreakdownMenuItem == null) {
-            costBreakdownMenuItem = new JMenuItem("Cost Breakdown...");
+            costBreakdownMenuItem = new JMenuItem(I18n.get("menu.cost_breakdown"));
             costBreakdownMenuItem.setAccelerator(KeyStroke.getKeyStroke("F7"));
             costBreakdownMenuItem.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -2581,7 +2692,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getMonthlySunshineHoursMenuItem() {
         if (monthlySunshineHoursMenuItem == null) {
-            monthlySunshineHoursMenuItem = new JMenuItem("Monthly Sunshine Hours...");
+            monthlySunshineHoursMenuItem = new JMenuItem(I18n.get("menu.monthly_sunshine"));
             monthlySunshineHoursMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new MonthlySunshineHours().showDialog();
@@ -2593,7 +2704,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getAnnualEnvironmentalTemperatureMenuItem() {
         if (annualEnvironmentalTemperatureMenuItem == null) {
-            annualEnvironmentalTemperatureMenuItem = new JMenuItem("Annual Environmental Temperature...");
+            annualEnvironmentalTemperatureMenuItem = new JMenuItem(I18n.get("menu.annual_env_temp"));
             annualEnvironmentalTemperatureMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new AnnualEnvironmentalTemperature().showDialog();
@@ -2605,7 +2716,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDailyEnvironmentalTemperatureMenuItem() {
         if (dailyEnvironmentalTemperatureMenuItem == null) {
-            dailyEnvironmentalTemperatureMenuItem = new JMenuItem("Daily Environmental Temperature...");
+            dailyEnvironmentalTemperatureMenuItem = new JMenuItem(I18n.get("menu.daily_env_temp"));
             dailyEnvironmentalTemperatureMenuItem.addActionListener(e -> {
                 if (EnergyPanel.getInstance().checkRegion()) {
                     new DailyEnvironmentalTemperature().showDialog();
@@ -2617,7 +2728,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getAnnotationsMenuItem() {
         if (annotationsMenuItem == null) {
-            annotationsMenuItem = new JCheckBoxMenuItem("Annotations");
+            annotationsMenuItem = new JCheckBoxMenuItem(I18n.get("menu.annotations"));
             annotationsMenuItem.addItemListener(e -> {
                 final ShowAnnotationCommand c = new ShowAnnotationCommand();
                 SceneManager.getTaskManager().update(() -> {
@@ -2636,7 +2747,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getAnnotationsInwardMenuItem() {
         if (annotationsInwardMenuItem == null) {
-            annotationsInwardMenuItem = new JCheckBoxMenuItem("Annotations for Cutouts");
+            annotationsInwardMenuItem = new JCheckBoxMenuItem(I18n.get("menu.annotations_cutouts"));
             annotationsInwardMenuItem.addItemListener(e -> SceneManager.getTaskManager().update(() -> {
                 Scene.setDrawAnnotationsInside(annotationsInwardMenuItem.isSelected());
                 return null;
@@ -2647,7 +2758,7 @@ public class MainFrame extends JFrame {
 
     JMenu getEditMenu() {
         if (editMenu == null) {
-            editMenu = new JMenu("Edit");
+            editMenu = new JMenu(I18n.get("menu.edit"));
             editMenu.addMenuListener(new MenuListener() {
 
                 private void enableMenuItems() {
@@ -2695,7 +2806,7 @@ public class MainFrame extends JFrame {
                 }
             });
 
-            final JMenu clearMenu = new JMenu("Clear");
+            final JMenu clearMenu = new JMenu(I18n.get("menu.clear"));
             clearMenu.add(getRemoveAllFoundationsMenuItem());
             clearMenu.add(getRemoveAllWallsMenuItem());
             clearMenu.add(getRemoveAllWindowsMenuItem());
@@ -2714,21 +2825,21 @@ public class MainFrame extends JFrame {
             clearMenu.add(getRemoveAllEditLocksMenuItem());
             clearMenu.add(getRemoveAllUtilityBillsMenuItem());
 
-            final JMenu moveMenu = new JMenu("Move");
+            final JMenu moveMenu = new JMenu(I18n.get("menu.move"));
             moveMenu.add(getMoveEastMenuItem());
             moveMenu.add(getMoveWestMenuItem());
             moveMenu.add(getMoveNorthMenuItem());
             moveMenu.add(getMoveSouthMenuItem());
 
-            final JMenu rotateMenu = new JMenu("Rotate");
+            final JMenu rotateMenu = new JMenu(I18n.get("menu.rotate"));
             rotateMenu.add(getRotate180MenuItem());
             rotateMenu.add(getRotate90CwMenuItem());
             rotateMenu.add(getRotate90CcwMenuItem());
 
-            final JMenu enableEditPointsMenu = new JMenu("Enable Edit Points");
+            final JMenu enableEditPointsMenu = new JMenu(I18n.get("menu.enable_edit_points"));
             enableEditPointsMenu.add(getEnableAllBaseEditPointsMenuItem());
             enableEditPointsMenu.add(getEnableAllTreeEditPointsMenuItem());
-            final JMenu disableEditPointsMenu = new JMenu("Disable Edit Points");
+            final JMenu disableEditPointsMenu = new JMenu(I18n.get("menu.disable_edit_points"));
             disableEditPointsMenu.add(getDisableAllBaseEditPointsMenuItem());
             disableEditPointsMenu.add(getDisableAllTreeEditPointsMenuItem());
 
@@ -2781,7 +2892,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getUndoMenuItem() {
         if (undoMenuItem == null) {
-            undoMenuItem = new JMenuItem("Undo");
+            undoMenuItem = new JMenuItem(I18n.get("menu.undo"));
             undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             undoMenuItem.setEnabled(false);
             undoMenuItem.addActionListener(e -> {
@@ -2800,7 +2911,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRedoMenuItem() {
         if (redoMenuItem == null) {
-            redoMenuItem = new JMenuItem("Redo");
+            redoMenuItem = new JMenuItem(I18n.get("menu.redo"));
             redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             redoMenuItem.setEnabled(false);
             redoMenuItem.addActionListener(e -> {
@@ -2819,7 +2930,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getCutMenuItem() {
         if (cutMenuItem == null) {
-            cutMenuItem = new JMenuItem("Cut");
+            cutMenuItem = new JMenuItem(I18n.get("menu.cut"));
             cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             cutMenuItem.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -2834,7 +2945,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getCopyMenuItem() {
         if (copyMenuItem == null) {
-            copyMenuItem = new JMenuItem("Copy");
+            copyMenuItem = new JMenuItem(I18n.get("menu.copy"));
             copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             copyMenuItem.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -2848,7 +2959,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPasteMenuItem() {
         if (pasteMenuItem == null) {
-            pasteMenuItem = new JMenuItem("Paste");
+            pasteMenuItem = new JMenuItem(I18n.get("menu.paste"));
             pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             pasteMenuItem.addActionListener(e -> SceneManager.getTaskManager().update(() -> {
                 Scene.getInstance().paste();
@@ -2874,7 +2985,7 @@ public class MainFrame extends JFrame {
             }
         } catch (final Throwable err) {
             err.printStackTrace();
-            JOptionPane.showMessageDialog(this, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, err.getMessage(), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -2941,7 +3052,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPageSetupMenuItem() {
         if (pageSetupMenuItem == null) {
-            pageSetupMenuItem = new JMenuItem("Page Setup...");
+            pageSetupMenuItem = new JMenuItem(I18n.get("menu.page_setup"));
             pageSetupMenuItem.addActionListener(e -> PrintController.getInstance().pageSetup());
         }
         return pageSetupMenuItem;
@@ -2949,7 +3060,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getScaleToFitRadioButtonMenuItem() {
         if (scaleToFitRadioButtonMenuItem == null) {
-            scaleToFitRadioButtonMenuItem = new JRadioButtonMenuItem("Scale To Fit Paper");
+            scaleToFitRadioButtonMenuItem = new JRadioButtonMenuItem(I18n.get("menu.scale_to_fit_paper"));
             scaleToFitRadioButtonMenuItem.addActionListener(e -> PrintController.getInstance().setScaleToFit(true));
             printSizeOptionBbuttonGroup.add(scaleToFitRadioButtonMenuItem);
             scaleToFitRadioButtonMenuItem.setSelected(true);
@@ -2959,7 +3070,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getExactSizeRadioButtonMenuItem() {
         if (exactSizeRadioButtonMenuItem == null) {
-            exactSizeRadioButtonMenuItem = new JRadioButtonMenuItem("Exact Size On Paper");
+            exactSizeRadioButtonMenuItem = new JRadioButtonMenuItem(I18n.get("menu.exact_size_paper"));
             exactSizeRadioButtonMenuItem.addActionListener(e -> PrintController.getInstance().setScaleToFit(false));
             printSizeOptionBbuttonGroup.add(exactSizeRadioButtonMenuItem);
         }
@@ -2968,8 +3079,8 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getImportMenuItem() {
         if (importMenuItem == null) {
-            importMenuItem = new JMenuItem("Import...");
-            importMenuItem.setToolTipText("Import the content in an existing Energy3D file into the clicked location on the land as the center");
+            importMenuItem = new JMenuItem(I18n.get("menu.import"));
+            importMenuItem.setToolTipText(I18n.get("tooltip.import_energy3d"));
             importMenuItem.addActionListener(e -> importFile());
         }
         return importMenuItem;
@@ -2977,8 +3088,8 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getImportColladaMenuItem() {
         if (importColladaMenuItem == null) {
-            importColladaMenuItem = new JMenuItem("Import Collada...");
-            importColladaMenuItem.setToolTipText("Import the content in an existing Collada file into the clicked location on the land as the center");
+            importColladaMenuItem = new JMenuItem(I18n.get("menu.import_collada"));
+            importColladaMenuItem.setToolTipText(I18n.get("tooltip.import_collada"));
             importColladaMenuItem.addActionListener(e -> importColladaFile());
         }
         return importColladaMenuItem;
@@ -2986,7 +3097,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getExportModelMenuItem() {
         if (exportModelMenuItem == null) {
-            exportModelMenuItem = new JMenuItem("Export Scene as 3D Model...");
+            exportModelMenuItem = new JMenuItem(I18n.get("menu.export_model"));
             exportModelMenuItem.addActionListener(e -> exportObjFile());
         }
         return exportModelMenuItem;
@@ -2994,7 +3105,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getSnapMenuItem() {
         if (snapMenuItem == null) {
-            snapMenuItem = new JCheckBoxMenuItem("Snap Walls");
+            snapMenuItem = new JCheckBoxMenuItem(I18n.get("menu.snap_walls"));
             snapMenuItem.setSelected(true);
             snapMenuItem.addActionListener(e -> HousePart.setSnapToObjects(snapMenuItem.isSelected()));
         }
@@ -3003,7 +3114,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getSnapToGridsMenuItem() {
         if (snapToGridsMenuItem == null) {
-            snapToGridsMenuItem = new JCheckBoxMenuItem("Snap To Grids");
+            snapToGridsMenuItem = new JCheckBoxMenuItem(I18n.get("menu.snap_to_grids"));
             snapToGridsMenuItem.setSelected(true);
             snapToGridsMenuItem.addActionListener(e -> Scene.getInstance().setSnapToGrids(snapToGridsMenuItem.isSelected()));
         }
@@ -3012,7 +3123,7 @@ public class MainFrame extends JFrame {
 
     public JCheckBoxMenuItem getTopViewCheckBoxMenuItem() {
         if (topViewCheckBoxMenuItem == null) {
-            topViewCheckBoxMenuItem = new JCheckBoxMenuItem("2D Top View");
+            topViewCheckBoxMenuItem = new JCheckBoxMenuItem(I18n.get("menu.top_view"));
             topViewCheckBoxMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             topViewCheckBoxMenuItem.addActionListener(e -> {
                 final TopViewCommand c = new TopViewCommand();
@@ -3036,7 +3147,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getZoomInMenuItem() {
         if (zoomInMenuItem == null) {
-            zoomInMenuItem = new JMenuItem("Zoom In");
+            zoomInMenuItem = new JMenuItem(I18n.get("menu.zoom_in"));
             zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             zoomInMenuItem.addActionListener(e -> {
                 final ZoomCommand c = new ZoomCommand(true);
@@ -3052,7 +3163,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getZoomOutMenuItem() {
         if (zoomOutMenuItem == null) {
-            zoomOutMenuItem = new JMenuItem("Zoom Out");
+            zoomOutMenuItem = new JMenuItem(I18n.get("menu.zoom_out"));
             zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             zoomOutMenuItem.addActionListener(e -> {
                 final ZoomCommand c = new ZoomCommand(false);
@@ -3068,7 +3179,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getDefaultMenuItem() {
         if (defaultMenuItem == null) {
-            defaultMenuItem = new JRadioButtonMenuItem("Default");
+            defaultMenuItem = new JRadioButtonMenuItem(I18n.get("menu.default_env"));
             defaultMenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -3087,7 +3198,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getDesertMenuItem() {
         if (desertMenuItem == null) {
-            desertMenuItem = new JRadioButtonMenuItem("Desert");
+            desertMenuItem = new JRadioButtonMenuItem(I18n.get("menu.desert"));
             desertMenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -3106,7 +3217,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getGrasslandMenuItem() {
         if (grasslandMenuItem == null) {
-            grasslandMenuItem = new JRadioButtonMenuItem("Grassland");
+            grasslandMenuItem = new JRadioButtonMenuItem(I18n.get("menu.grassland"));
             grasslandMenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -3125,7 +3236,7 @@ public class MainFrame extends JFrame {
 
     private JRadioButtonMenuItem getForestMenuItem() {
         if (forestMenuItem == null) {
-            forestMenuItem = new JRadioButtonMenuItem("Forest");
+            forestMenuItem = new JRadioButtonMenuItem(I18n.get("menu.forest"));
             forestMenuItem.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     final ChangeEnvironmentCommand c = new ChangeEnvironmentCommand();
@@ -3162,7 +3273,7 @@ public class MainFrame extends JFrame {
             };
         } else {
             if (selectedPart.getTextureType() != HousePart.TEXTURE_NONE && selectedPart.getTextureType() != HousePart.TEXTURE_EDGE) { // when the user wants to set the color, automatically switch to no texture
-                if (JOptionPane.showConfirmDialog(this, "To set color for the selected element, we have to remove its texture. Is that OK?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+                if (JOptionPane.showConfirmDialog(this, I18n.get("msg.remove_texture_for_color"), I18n.get("dialog.confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
                     return;
                 }
             }
@@ -3186,14 +3297,14 @@ public class MainFrame extends JFrame {
                     final ColorRGBA color = new ColorRGBA(newColor[0], newColor[1], newColor[2], newColor[3]);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
 
                     if (selectedPart instanceof Wall) {
 
-                        final JRadioButton rb1 = new JRadioButton("Only this Wall", true);
-                        final JRadioButton rb2 = new JRadioButton("All Walls Connected to This One (Direct and Indirect)");
-                        final JRadioButton rb3 = new JRadioButton("All Walls of this Building");
-                        final JRadioButton rb4 = new JRadioButton("All Walls");
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_wall"), true);
+                        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_walls_connected"));
+                        final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_walls_building"));
+                        final JRadioButton rb4 = new JRadioButton(I18n.get("scope.all_walls"));
                         panel.add(rb1);
                         panel.add(rb2);
                         panel.add(rb3);
@@ -3203,9 +3314,9 @@ public class MainFrame extends JFrame {
                         bg.add(rb2);
                         bg.add(rb3);
                         bg.add(rb4);
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Wall Color");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.wall_color"));
                         while (true) {
                             changed = false;
                             dialog.setVisible(true);
@@ -3287,16 +3398,16 @@ public class MainFrame extends JFrame {
 
                     } else if (selectedPart instanceof Roof) {
 
-                        final JRadioButton rb1 = new JRadioButton("Only this Roof", true);
-                        final JRadioButton rb2 = new JRadioButton("All Roofs");
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_roof"), true);
+                        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_roofs"));
                         panel.add(rb1);
                         panel.add(rb2);
                         final ButtonGroup bg = new ButtonGroup();
                         bg.add(rb1);
                         bg.add(rb2);
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Roof Color");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.roof_color"));
                         while (true) {
                             changed = false;
                             dialog.setVisible(true);
@@ -3344,16 +3455,16 @@ public class MainFrame extends JFrame {
 
                     } else if (selectedPart instanceof Foundation) {
 
-                        final JRadioButton rb1 = new JRadioButton("Only this Foundation", true);
-                        final JRadioButton rb2 = new JRadioButton("All Foundations");
+                        final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_foundation"), true);
+                        final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_foundations"));
                         panel.add(rb1);
                         panel.add(rb2);
                         final ButtonGroup bg = new ButtonGroup();
                         bg.add(rb1);
                         bg.add(rb2);
-                        final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                        final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                         final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Foundation Color");
+                        final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.foundation_color"));
                         while (true) {
                             changed = false;
                             dialog.setVisible(true);
@@ -3428,7 +3539,7 @@ public class MainFrame extends JFrame {
 
             };
         }
-        JColorChooser.createDialog(this, "Select Color", true, colorChooser, colorActionListener, null).setVisible(true);
+        JColorChooser.createDialog(this, I18n.get("dialog.select_color"), true, colorChooser, colorActionListener, null).setVisible(true);
     }
 
     public void open(final String filename) {
@@ -3447,7 +3558,7 @@ public class MainFrame extends JFrame {
     void openModel(final URL url) {
         boolean ok = false;
         if (Scene.getInstance().isEdited()) {
-            final int save = JOptionPane.showConfirmDialog(MainFrame.this, "Do you want to save changes?", "Save",
+            final int save = JOptionPane.showConfirmDialog(MainFrame.this, I18n.get("msg.save_changes"), I18n.get("menu.save"),
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (save == JOptionPane.YES_OPTION) {
                 save();
@@ -3486,7 +3597,7 @@ public class MainFrame extends JFrame {
             }
         }
         if (Scene.getInstance().isEdited()) {
-            final int save = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            final int save = JOptionPane.showConfirmDialog(this, I18n.get("msg.save_changes"), I18n.get("menu.save"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (save == JOptionPane.YES_OPTION) {
                 save();
                 while (Scene.isSaving()) {
@@ -3505,7 +3616,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getExportLogMenuItem() {
         if (exportLogMenuItem == null) {
-            exportLogMenuItem = new JMenuItem("Export Log As Zip...");
+            exportLogMenuItem = new JMenuItem(I18n.get("menu.export_log"));
             exportLogMenuItem.addActionListener(e -> {
                 final File file = FileChooser.getInstance().showDialog(".zip", FileChooser.zipFilter, true);
                 if (file == null) {
@@ -3515,7 +3626,7 @@ public class MainFrame extends JFrame {
                     new LogZipper(file).createDialog();
                 } catch (final Throwable err) {
                     err.printStackTrace();
-                    JOptionPane.showMessageDialog(MainFrame.this, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.this, err.getMessage(), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                 }
             });
         }
@@ -3524,7 +3635,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getCopyImageMenuItem() {
         if (copyImageMenuItem == null) {
-            copyImageMenuItem = new JMenuItem("Copy Image");
+            copyImageMenuItem = new JMenuItem(I18n.get("menu.copy_image"));
             copyImageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, (Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK) | KeyEvent.ALT_MASK));
             copyImageMenuItem.addActionListener(e -> new ClipImage().copyImageToClipboard(MainPanel.getInstance().getCanvasPanel()));
         }
@@ -3533,7 +3644,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getExportImageMenuItem() {
         if (exportImageMenuItem == null) {
-            exportImageMenuItem = new JMenuItem("Export Scene As Image...");
+            exportImageMenuItem = new JMenuItem(I18n.get("menu.export_image"));
             exportImageMenuItem.addActionListener(e -> exportImage());
         }
         return exportImageMenuItem;
@@ -3552,13 +3663,13 @@ public class MainFrame extends JFrame {
             System.out.println("done");
         } catch (final Throwable err) {
             err.printStackTrace();
-            JOptionPane.showMessageDialog(this, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, err.getMessage(), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private JMenuItem getSpecificationsMenuItem() {
         if (specificationsMenuItem == null) {
-            specificationsMenuItem = new JMenuItem("Specifications...");
+            specificationsMenuItem = new JMenuItem(I18n.get("menu.specifications"));
             specificationsMenuItem.addActionListener(e -> {
                 final SpecsDialog specsDialog = new SpecsDialog();
                 switch (Scene.getInstance().getProjectType()) {
@@ -3579,12 +3690,12 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getOverallUtilityBillMenuItem() {
         if (overallUtilityBillMenuItem == null) {
-            overallUtilityBillMenuItem = new JMenuItem("Overall Utility Bill...");
+            overallUtilityBillMenuItem = new JMenuItem(I18n.get("menu.overall_utility_bill"));
             overallUtilityBillMenuItem.addActionListener(e -> {
                 UtilityBill b = Scene.getInstance().getUtilityBill();
                 if (b == null) {
-                    if (JOptionPane.showConfirmDialog(MainFrame.this, "<html>No overall utility bill is found. Create one?" + "<br>(This applies to all the structures in this scene.)</html>",
-                            "Overall Utility Bill", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.this, "<html>" + I18n.get("msg.no_overall_utility_bill") + "</html>",
+                            I18n.get("dialog.overall_utility_bill"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
                         return;
                     }
                     b = new UtilityBill();
@@ -3598,7 +3709,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getSetRegionMenuItem() {
         if (setRegionMenuItem == null) {
-            setRegionMenuItem = new JMenuItem("Set Region...");
+            setRegionMenuItem = new JMenuItem(I18n.get("menu.set_region"));
             setRegionMenuItem.addActionListener(e -> new GlobalMap(MainFrame.this).setVisible(true));
         }
         return setRegionMenuItem;
@@ -3606,7 +3717,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getPropertiesMenuItem() {
         if (propertiesMenuItem == null) {
-            propertiesMenuItem = new JMenuItem("Properties...");
+            propertiesMenuItem = new JMenuItem(I18n.get("menu.properties"));
             propertiesMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             propertiesMenuItem.addActionListener(e -> new PropertiesDialog().setVisible(true));
         }
@@ -3615,7 +3726,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getNoteCheckBoxMenuItem() {
         if (noteCheckBoxMenuItem == null) {
-            noteCheckBoxMenuItem = new JCheckBoxMenuItem("Show Note");
+            noteCheckBoxMenuItem = new JCheckBoxMenuItem(I18n.get("menu.show_note"));
             noteCheckBoxMenuItem.setAccelerator(KeyStroke.getKeyStroke("F11"));
             noteCheckBoxMenuItem.addActionListener(e -> {
                 MainPanel.getInstance().setNoteVisible(noteCheckBoxMenuItem.isSelected());
@@ -3627,7 +3738,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getInfoPanelCheckBoxMenuItem() {
         if (infoPanelCheckBoxMenuItem == null) {
-            infoPanelCheckBoxMenuItem = new JCheckBoxMenuItem("Show Information Panel", true);
+            infoPanelCheckBoxMenuItem = new JCheckBoxMenuItem(I18n.get("menu.show_info_panel"), true);
             infoPanelCheckBoxMenuItem.addActionListener(e -> {
                 MainPanel.getInstance().setSplitComponentVisible(infoPanelCheckBoxMenuItem.isSelected(), MainPanel.getInstance().getEnergyCanvasNoteSplitPane(), EnergyPanel.getInstance());
                 ((Component) SceneManager.getInstance().getCanvas()).requestFocusInWindow();
@@ -3638,7 +3749,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem getAutoRecomputeEnergyMenuItem() {
         if (autoRecomputeEnergyMenuItem == null) {
-            autoRecomputeEnergyMenuItem = new JCheckBoxMenuItem("Automatically Recalculte Energy");
+            autoRecomputeEnergyMenuItem = new JCheckBoxMenuItem(I18n.get("menu.auto_recompute_energy_label"));
             autoRecomputeEnergyMenuItem.addItemListener(e -> EnergyPanel.setAutoRecomputeEnergy(autoRecomputeEnergyMenuItem.isSelected()));
         }
         return autoRecomputeEnergyMenuItem;
@@ -3646,7 +3757,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllRoofsMenuItem() {
         if (removeAllRoofsMenuItem == null) {
-            removeAllRoofsMenuItem = new JMenuItem("Remove All Roofs");
+            removeAllRoofsMenuItem = new JMenuItem(I18n.get("menu.remove_all_roofs"));
             removeAllRoofsMenuItem.addActionListener(e -> Scene.getInstance().removeAllRoofs());
         }
         return removeAllRoofsMenuItem;
@@ -3654,7 +3765,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllFloorsMenuItem() {
         if (removeAllFloorsMenuItem == null) {
-            removeAllFloorsMenuItem = new JMenuItem("Remove All Floors");
+            removeAllFloorsMenuItem = new JMenuItem(I18n.get("menu.remove_all_floors"));
             removeAllFloorsMenuItem.addActionListener(e -> Scene.getInstance().removeAllFloors());
         }
         return removeAllFloorsMenuItem;
@@ -3662,7 +3773,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllSolarPanelsMenuItem() {
         if (removeAllSolarPanelsMenuItem == null) {
-            removeAllSolarPanelsMenuItem = new JMenuItem("Remove All Solar Panels");
+            removeAllSolarPanelsMenuItem = new JMenuItem(I18n.get("menu.remove_all_solar_panels"));
             removeAllSolarPanelsMenuItem.addActionListener(e -> Scene.getInstance().removeAllSolarPanels(null));
         }
         return removeAllSolarPanelsMenuItem;
@@ -3670,7 +3781,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllRacksMenuItem() {
         if (removeAllRacksMenuItem == null) {
-            removeAllRacksMenuItem = new JMenuItem("Remove All Solar Panel Packs");
+            removeAllRacksMenuItem = new JMenuItem(I18n.get("menu.remove_all_racks"));
             removeAllRacksMenuItem.addActionListener(e -> Scene.getInstance().removeAllRacks());
         }
         return removeAllRacksMenuItem;
@@ -3678,7 +3789,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllHeliostatsMenuItem() {
         if (removeAllHeliostatsMenuItem == null) {
-            removeAllHeliostatsMenuItem = new JMenuItem("Remove All Heliostats");
+            removeAllHeliostatsMenuItem = new JMenuItem(I18n.get("menu.remove_all_heliostats"));
             removeAllHeliostatsMenuItem.addActionListener(e -> Scene.getInstance().removeAllHeliostats());
         }
         return removeAllHeliostatsMenuItem;
@@ -3686,7 +3797,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllParabolicTroughsMenuItem() {
         if (removeAllParabolicTroughsMenuItem == null) {
-            removeAllParabolicTroughsMenuItem = new JMenuItem("Remove All Parabolic Troughs");
+            removeAllParabolicTroughsMenuItem = new JMenuItem(I18n.get("menu.remove_all_parabolic_troughs"));
             removeAllParabolicTroughsMenuItem.addActionListener(e -> Scene.getInstance().removeAllParabolicTroughs());
         }
         return removeAllParabolicTroughsMenuItem;
@@ -3694,7 +3805,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllParabolicDishesMenuItem() {
         if (removeAllParabolicDishesMenuItem == null) {
-            removeAllParabolicDishesMenuItem = new JMenuItem("Remove All Parabolic Dishes");
+            removeAllParabolicDishesMenuItem = new JMenuItem(I18n.get("menu.remove_all_parabolic_dishes"));
             removeAllParabolicDishesMenuItem.addActionListener(e -> Scene.getInstance().removeAllParabolicDishes());
         }
         return removeAllParabolicDishesMenuItem;
@@ -3702,7 +3813,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllFresnelReflectorsMenuItem() {
         if (removeAllFresnelReflectorsMenuItem == null) {
-            removeAllFresnelReflectorsMenuItem = new JMenuItem("Remove All Fresnel Reflectors");
+            removeAllFresnelReflectorsMenuItem = new JMenuItem(I18n.get("menu.remove_all_fresnel_reflectors"));
             removeAllFresnelReflectorsMenuItem.addActionListener(e -> Scene.getInstance().removeAllFresnelReflectors());
         }
         return removeAllFresnelReflectorsMenuItem;
@@ -3710,7 +3821,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllSensorsMenuItem() {
         if (removeAllSensorsMenuItem == null) {
-            removeAllSensorsMenuItem = new JMenuItem("Remove All Sensors");
+            removeAllSensorsMenuItem = new JMenuItem(I18n.get("menu.remove_all_sensors"));
             removeAllSensorsMenuItem.addActionListener(e -> Scene.getInstance().removeAllSensors());
         }
         return removeAllSensorsMenuItem;
@@ -3718,7 +3829,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllWallsMenuItem() {
         if (removeAllWallsMenuItem == null) {
-            removeAllWallsMenuItem = new JMenuItem("Remove All Walls");
+            removeAllWallsMenuItem = new JMenuItem(I18n.get("menu.remove_all_walls"));
             removeAllWallsMenuItem.addActionListener(e -> Scene.getInstance().removeAllWalls()); // actual scene removal already runs in the Task Manager thread
         }
         return removeAllWallsMenuItem;
@@ -3726,7 +3837,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllWindowsMenuItem() {
         if (removeAllWindowsMenuItem == null) {
-            removeAllWindowsMenuItem = new JMenuItem("Remove All Windows");
+            removeAllWindowsMenuItem = new JMenuItem(I18n.get("menu.remove_all_windows"));
             removeAllWindowsMenuItem.addActionListener(e -> Scene.getInstance().removeAllWindows());
         }
         return removeAllWindowsMenuItem;
@@ -3734,7 +3845,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllWindowShuttersMenuItem() {
         if (removeAllWindowShuttersMenuItem == null) {
-            removeAllWindowShuttersMenuItem = new JMenuItem("Remove All Window Shutters");
+            removeAllWindowShuttersMenuItem = new JMenuItem(I18n.get("menu.remove_all_shutters"));
             removeAllWindowShuttersMenuItem.addActionListener(e -> Scene.getInstance().removeAllWindowShutters());
         }
         return removeAllWindowShuttersMenuItem;
@@ -3742,7 +3853,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllFoundationsMenuItem() {
         if (removeAllFoundationsMenuItem == null) {
-            removeAllFoundationsMenuItem = new JMenuItem("Remove All Foundations");
+            removeAllFoundationsMenuItem = new JMenuItem(I18n.get("menu.remove_all_foundations"));
             removeAllFoundationsMenuItem.addActionListener(e -> Scene.getInstance().removeAllFoundations());
         }
         return removeAllFoundationsMenuItem;
@@ -3750,7 +3861,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllTreesMenuItem() {
         if (removeAllTreesMenuItem == null) {
-            removeAllTreesMenuItem = new JMenuItem("Remove All Trees");
+            removeAllTreesMenuItem = new JMenuItem(I18n.get("menu.remove_all_trees"));
             removeAllTreesMenuItem.addActionListener(e -> Scene.getInstance().removeAllTrees());
         }
         return removeAllTreesMenuItem;
@@ -3758,7 +3869,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllHumansMenuItem() {
         if (removeAllHumansMenuItem == null) {
-            removeAllHumansMenuItem = new JMenuItem("Remove All Humans");
+            removeAllHumansMenuItem = new JMenuItem(I18n.get("menu.remove_all_humans"));
             removeAllHumansMenuItem.addActionListener(e -> Scene.getInstance().removeAllHumans());
         }
         return removeAllHumansMenuItem;
@@ -3766,7 +3877,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllUtilityBillsMenuItem() {
         if (removeAllUtilityBillsMenuItem == null) {
-            removeAllUtilityBillsMenuItem = new JMenuItem("Remove All Utility Bills");
+            removeAllUtilityBillsMenuItem = new JMenuItem(I18n.get("menu.remove_all_utility_bills"));
             removeAllUtilityBillsMenuItem.addActionListener(e -> {
                 final ArrayList<Foundation> list = new ArrayList<>();
                 for (final HousePart p : Scene.getInstance().getParts()) {
@@ -3775,10 +3886,10 @@ public class MainFrame extends JFrame {
                     }
                 }
                 if (list.isEmpty()) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "There is no utilitiy bill to remove.", "No Utility Bill", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_utility_bill"), I18n.get("dialog.no_utility_bill"), JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), "Do you really want to remove all " + list.size() + " utility bills associated with buildings in this scene?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), I18n.get("msg.remove_all_utility_bills", Integer.toString(list.size())), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                     for (final Foundation f : list) {
                         f.setUtilityBill(null);
                     }
@@ -3791,7 +3902,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRotate180MenuItem() {
         if (rotate180MenuItem == null) {
-            rotate180MenuItem = new JMenuItem("180\u00B0");
+            rotate180MenuItem = new JMenuItem(I18n.get("menu.rotate_180"));
             rotate180MenuItem.addActionListener(e -> SceneManager.getInstance().rotate(Math.PI));
         }
         return rotate180MenuItem;
@@ -3799,7 +3910,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRotate90CwMenuItem() {
         if (rotate90CwMenuItem == null) {
-            rotate90CwMenuItem = new JMenuItem("90\u00B0 Clockwise");
+            rotate90CwMenuItem = new JMenuItem(I18n.get("menu.rotate_90_cw"));
             rotate90CwMenuItem.addActionListener(e -> SceneManager.getInstance().rotate(-Math.PI / 2));
         }
         return rotate90CwMenuItem;
@@ -3807,7 +3918,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRotate90CcwMenuItem() {
         if (rotate90CcwMenuItem == null) {
-            rotate90CcwMenuItem = new JMenuItem("90\u00B0 Counter Clockwise");
+            rotate90CcwMenuItem = new JMenuItem(I18n.get("menu.rotate_90_ccw"));
             rotate90CcwMenuItem.addActionListener(e -> SceneManager.getInstance().rotate(Math.PI / 2));
         }
         return rotate90CcwMenuItem;
@@ -3815,7 +3926,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getMoveEastMenuItem() {
         if (moveEastMenuItem == null) {
-            moveEastMenuItem = new JMenuItem("Move East (or Press 'E' Key)");
+            moveEastMenuItem = new JMenuItem(I18n.get("menu.move_east"));
             moveEastMenuItem.addActionListener(e -> {
                 if (MainPanel.getInstance().getNoteTextArea().hasFocus()) {
                     return;
@@ -3831,7 +3942,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getMoveWestMenuItem() {
         if (moveWestMenuItem == null) {
-            moveWestMenuItem = new JMenuItem("Move West (or Press 'W' Key)");
+            moveWestMenuItem = new JMenuItem(I18n.get("menu.move_west"));
             moveWestMenuItem.addActionListener(e -> {
                 if (MainPanel.getInstance().getNoteTextArea().hasFocus()) {
                     return;
@@ -3847,7 +3958,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getMoveSouthMenuItem() {
         if (moveSouthMenuItem == null) {
-            moveSouthMenuItem = new JMenuItem("Move South (or Press 'S' Key)");
+            moveSouthMenuItem = new JMenuItem(I18n.get("menu.move_south"));
             moveSouthMenuItem.addActionListener(e -> {
                 if (MainPanel.getInstance().getNoteTextArea().hasFocus()) {
                     return;
@@ -3863,7 +3974,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getMoveNorthMenuItem() {
         if (moveNorthMenuItem == null) {
-            moveNorthMenuItem = new JMenuItem("Move North (or Press 'N' Key)");
+            moveNorthMenuItem = new JMenuItem(I18n.get("menu.move_north"));
             moveNorthMenuItem.addActionListener(e -> {
                 if (MainPanel.getInstance().getNoteTextArea().hasFocus()) {
                     return;
@@ -3879,7 +3990,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getFixProblemsMenuItem() {
         if (fixProblemsMenuItem == null) {
-            fixProblemsMenuItem = new JMenuItem("Fix Problems");
+            fixProblemsMenuItem = new JMenuItem(I18n.get("menu.fix_problems"));
             fixProblemsMenuItem.addActionListener(e -> SceneManager.getTaskManager().update(() -> {
                 Scene.getInstance().fixProblems(true);
                 return null;
@@ -3890,7 +4001,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getRemoveAllEditLocksMenuItem() {
         if (removeAllEditLocksMenuItem == null) {
-            removeAllEditLocksMenuItem = new JMenuItem("Remove All Edit Locks");
+            removeAllEditLocksMenuItem = new JMenuItem(I18n.get("menu.remove_all_edit_locks"));
             removeAllEditLocksMenuItem.addActionListener(e -> Scene.getInstance().lockAll(false));
         }
         return removeAllEditLocksMenuItem;
@@ -3898,7 +4009,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getEnableAllBaseEditPointsMenuItem() {
         if (enableAllBaseEditPointsMenuItem == null) {
-            enableAllBaseEditPointsMenuItem = new JMenuItem("All Bases");
+            enableAllBaseEditPointsMenuItem = new JMenuItem(I18n.get("menu.all_bases"));
             enableAllBaseEditPointsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK));
             enableAllBaseEditPointsMenuItem.addActionListener(e -> {
                 final List<Foundation> foundations = Scene.getInstance().getAllFoundations();
@@ -3916,7 +4027,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDisableAllBaseEditPointsMenuItem() {
         if (disableAllBaseEditPointsMenuItem == null) {
-            disableAllBaseEditPointsMenuItem = new JMenuItem("All Bases");
+            disableAllBaseEditPointsMenuItem = new JMenuItem(I18n.get("menu.all_bases"));
             disableAllBaseEditPointsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, (Config.isMac() ? KeyEvent.META_MASK : KeyEvent.CTRL_MASK) | KeyEvent.SHIFT_MASK));
             disableAllBaseEditPointsMenuItem.addActionListener(e -> {
                 final List<Foundation> foundations = Scene.getInstance().getAllFoundations();
@@ -3934,7 +4045,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getEnableAllTreeEditPointsMenuItem() {
         if (enableAllTreeEditPointsMenuItem == null) {
-            enableAllTreeEditPointsMenuItem = new JMenuItem("All Trees");
+            enableAllTreeEditPointsMenuItem = new JMenuItem(I18n.get("menu.all_trees"));
             enableAllTreeEditPointsMenuItem.addActionListener(e -> {
                 final List<Tree> trees = Scene.getInstance().getAllTrees();
                 SceneManager.getTaskManager().update(() -> {
@@ -3951,7 +4062,7 @@ public class MainFrame extends JFrame {
 
     private JMenuItem getDisableAllTreeEditPointsMenuItem() {
         if (disableAllTreeEditPointsMenuItem == null) {
-            disableAllTreeEditPointsMenuItem = new JMenuItem("All Trees");
+            disableAllTreeEditPointsMenuItem = new JMenuItem(I18n.get("menu.all_trees"));
             disableAllTreeEditPointsMenuItem.addActionListener(e -> {
                 final List<Tree> trees = Scene.getInstance().getAllTrees();
                 SceneManager.getTaskManager().update(() -> {

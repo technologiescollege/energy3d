@@ -28,6 +28,7 @@ import org.concord.energy3d.simulation.Graph;
 import org.concord.energy3d.simulation.HeliostatDailyAnalysis;
 import org.concord.energy3d.simulation.ParabolicDishDailyAnalysis;
 import org.concord.energy3d.simulation.ParabolicTroughDailyAnalysis;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.simulation.PartEnergyDailyGraph;
 import org.concord.energy3d.simulation.SolarRadiation;
 
@@ -49,7 +50,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
         buttonPanel = new Box(BoxLayout.Y_AXIS);
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(Box.createVerticalGlue());
-        final JButton button = new JButton("Show");
+        final JButton button = new JButton(I18n.get("common.show"));
         button.setAlignmentX(CENTER_ALIGNMENT);
         button.addActionListener(e -> {
             SceneManager.getInstance().autoSelectBuilding(true);
@@ -165,7 +166,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
                 for (final ParabolicTrough t : troughs) {
                     output += t.getSolarPotentialNow() * t.getSystemEfficiency();
                 }
-                graph.addData("Solar", output);
+                graph.addData(I18n.get("chart.series.solar"), output);
             }
         } else {
             final List<ParabolicDish> dishes = base.getParabolicDishes();
@@ -176,7 +177,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
                     for (final ParabolicDish d : dishes) {
                         output += d.getSolarPotentialNow() * d.getSystemEfficiency();
                     }
-                    graph.addData("Solar", output);
+                    graph.addData(I18n.get("chart.series.solar"), output);
                 }
             } else {
                 final List<FresnelReflector> fresnels = base.getFresnelReflectors();
@@ -187,7 +188,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
                         for (final FresnelReflector r : fresnels) {
                             output += r.getSolarPotentialNow() * r.getSystemEfficiency();
                         }
-                        graph.addData("Solar", output);
+                        graph.addData(I18n.get("chart.series.solar"), output);
                     }
                 } else {
                     final List<Mirror> mirrors = base.getHeliostats();
@@ -198,7 +199,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
                             for (final Mirror m : mirrors) {
                                 output += m.getSolarPotentialNow() * m.getSystemEfficiency();
                             }
-                            graph.addData("Solar", output);
+                            graph.addData(I18n.get("chart.series.solar"), output);
                         }
                     }
                 }
@@ -227,7 +228,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
         String s = "{";
         if (base != null) {
             s += "\"Foundation\": " + base.getId();
-            final List<Double> data = graph.getData("Solar");
+            final List<Double> data = graph.getData(I18n.get("chart.series.solar"));
             if (data != null) {
                 s += ", \"Solar\": {";
                 s += "\"Hourly\": [";
@@ -236,7 +237,7 @@ public class CspProjectDailyEnergyGraph extends JPanel {
                 }
                 s = s.substring(0, s.length() - 1);
                 s += "]\n";
-                s += ", \"Total\": " + Graph.ENERGY_FORMAT.format(getResult("Solar"));
+                s += ", \"Total\": " + Graph.ENERGY_FORMAT.format(getResult(I18n.get("chart.series.solar")));
                 s += "}";
             }
         } else {

@@ -28,6 +28,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.BugReporter;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -77,7 +78,7 @@ public class GroupAnnualAnalysis extends AnnualAnalysis {
 
     @Override
     void runAnalysis(final JDialog parent) {
-        graph.info = "Calculating...";
+        graph.info = I18n.get("msg.calculating");
         graph.repaint();
         onStart();
         for (final int m : MONTHS) {
@@ -234,54 +235,54 @@ public class GroupAnnualAnalysis extends AnnualAnalysis {
 
     @Override
     public String toJson() {
-        String type = "Unknown";
+        String type = I18n.get("part.unknown");
         final ArrayList<String> names = new ArrayList<>();
         for (final HousePart p : selectedParts) {
             if (p instanceof SolarPanel) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Solar Panel";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.single_solar_panel");
             } else if (p instanceof Rack) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Rack";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.solar_panel_rack");
             } else if (p instanceof Mirror) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Mirror";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.heliostat");
             } else if (p instanceof ParabolicTrough) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Parabolic Trough";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.parabolic_trough");
             } else if (p instanceof ParabolicDish) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Parabolic Dish";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.parabolic_dish");
             } else if (p instanceof FresnelReflector) {
-                names.add("Solar " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
-                type = "Fresnel Reflector";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                type = I18n.get("part.fresnel_reflector");
             } else if (p instanceof Wall) {
-                names.add("Heat Gain " + p.getId());
-                type = "Wall";
+                names.add(I18n.get("series.heat_gain") + " " + p.getId());
+                type = I18n.get("part.wall");
             } else if (p instanceof Roof) {
-                names.add("Heat Gain " + p.getId());
-                type = "Roof";
+                names.add(I18n.get("series.heat_gain") + " " + p.getId());
+                type = I18n.get("part.roof");
             } else if (p instanceof Door) {
-                names.add("Heat Gain " + p.getId());
-                type = "Door";
+                names.add(I18n.get("series.heat_gain") + " " + p.getId());
+                type = I18n.get("part.door");
             } else if (p instanceof Window) {
-                names.add("Solar " + p.getId());
-                names.add("Heat Gain " + p.getId());
-                type = "Window";
+                names.add(I18n.get("chart.series.solar") + " " + p.getId());
+                names.add(I18n.get("series.heat_gain") + " " + p.getId());
+                type = I18n.get("part.window");
             } else if (p instanceof Foundation) {
                 final Foundation foundation = (Foundation) p;
                 switch (foundation.getProjectType()) {
                     case Foundation.TYPE_PV_PROJECT:
-                        names.add("PV " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                        names.add(I18n.get("panel.title_pv") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
                         break;
                     case Foundation.TYPE_CSP_PROJECT:
-                        names.add("CSP " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
+                        names.add(I18n.get("panel.title_csp") + " " + p.getId() + (p.getLabelCustom() ? graph.getDataNameDelimiter() + p.getLabelCustomText() : ""));
                         break;
                     case Foundation.TYPE_BUILDING:
-                        names.add("Building " + p.getId());
+                        names.add(I18n.get("panel.title_building") + " " + p.getId());
                         break;
                 }
-                type = "Foundation";
+                type = I18n.get("part.foundation");
             }
         }
         String s = "{\"Type\": \"" + type + "\", \"Months\": " + getNumberOfDataPoints();

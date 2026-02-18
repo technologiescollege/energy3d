@@ -7,6 +7,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.Rack;
+import org.concord.energy3d.util.I18n;
 
 public class SetTemperatureCoefficientPmaxForRacksOnFoundationCommand extends MyAbstractUndoableEdit {
 
@@ -53,7 +54,7 @@ public class SetTemperatureCoefficientPmaxForRacksOnFoundationCommand extends My
 
 	@Override
 	public String getPresentationName() {
-		return "Set Temperature Coefficient of Pmax for All Racks on Selected Foundation";
+		return I18n.get("undo.set_temperature_coefficient_pmax_all_racks_foundation");
 	}
 
 }

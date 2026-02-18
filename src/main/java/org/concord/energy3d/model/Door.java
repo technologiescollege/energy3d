@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -67,7 +68,7 @@ public class Door extends HousePart implements Thermal {
         mesh.setUserData(new UserData(this));
         root.attachChild(mesh);
 
-        outlineMesh = new Line("Door (Outline)");
+        outlineMesh = new Line(I18n.get("node.door_outline"));
         outlineMesh.setLineWidth(1);
         outlineMesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(6 + 2 * 4));
         outlineMesh.setDefaultColor(ColorRGBA.BLACK);
@@ -344,7 +345,7 @@ public class Door extends HousePart implements Thermal {
                     c.points.get(i).setX(points.get(i).getX() + shift);
                 }
                 if (c.overlap()) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new door is too close to an existing door or window.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.door_too_close"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             }

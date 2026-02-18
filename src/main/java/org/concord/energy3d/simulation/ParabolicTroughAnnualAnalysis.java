@@ -17,6 +17,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.BugReporter;
+import org.concord.energy3d.util.I18n;
 
 /**
  * For fast feedback, only 12 days are calculated.
@@ -39,7 +40,7 @@ public class ParabolicTroughAnnualAnalysis extends AnnualAnalysis {
 
     @Override
     void runAnalysis(final JDialog parent) {
-        graph.info = "Calculating...";
+        graph.info = I18n.get("msg.calculating");
         graph.repaint();
         onStart();
         final EnergyPanel e = EnergyPanel.getInstance();
@@ -151,19 +152,19 @@ public class ParabolicTroughAnnualAnalysis extends AnnualAnalysis {
         final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
         String s = null;
         int cost = -1;
-        String title = "Annual Yield of All Parabolic Troughs (" + Scene.getInstance().countParts(ParabolicTrough.class) + " Troughs)";
+        String title = I18n.get("title.annual_yield_all_parabolic_troughs", Integer.toString(Scene.getInstance().countParts(ParabolicTrough.class)));
         if (selectedPart != null) {
             if (selectedPart instanceof ParabolicTrough) {
                 cost = (int) CspProjectCost.getPartCost(selectedPart);
                 s = selectedPart.toString().substring(0, selectedPart.toString().indexOf(')') + 1);
-                title = "Annual Yield";
+                title = I18n.get("title.annual_yield");
             } else if (selectedPart instanceof Foundation) {
-                title = "Annual Yield of Selected Foundation (" + ((Foundation) selectedPart).countParts(ParabolicTrough.class) + " Parabolic Troughs)";
+                title = I18n.get("title.annual_yield_of_foundation", Integer.toString(((Foundation) selectedPart).countParts(ParabolicTrough.class)), I18n.get("part.parabolic_troughs"));
             } else if (selectedPart.getTopContainer() != null) {
-                title = "Annual Yield of Selected Foundation (" + selectedPart.getTopContainer().countParts(ParabolicTrough.class) + " Parabolic Troughs)";
+                title = I18n.get("title.annual_yield_of_foundation", Integer.toString(selectedPart.getTopContainer().countParts(ParabolicTrough.class)), I18n.get("part.parabolic_troughs"));
             }
         }
-        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + " (Cost: $" + cost + ")");
+        final JDialog dialog = createDialog(s == null ? title : title + ": " + s + I18n.get("msg.cost_suffix", String.valueOf(cost)));
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
         menuBar.add(createOptionsMenu(dialog, null, true, true));

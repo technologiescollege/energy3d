@@ -41,6 +41,7 @@ import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -76,11 +77,11 @@ public abstract class Graph extends JPanel {
     double ymax = 0.001;
     double dx;
     double dy;
-    String info = "No new data";
+    String info = I18n.get("msg.no_new_data");
     int symbolSize = 8;
     int numberOfTicks = 12;
-    String xAxisLabel = "Month";
-    String yAxisLabel = "Energy (kWh)";
+    String xAxisLabel = I18n.get("axis.month");
+    String yAxisLabel = I18n.get("axis.energy");
     byte instrumentType = DEFAULT;
     static Map<String, Color> colors;
     JDialog parent;
@@ -123,11 +124,11 @@ public abstract class Graph extends JPanel {
             public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 popupMenu.removeAll();
 
-                final JMenu chartMenu = new JMenu("Chart");
+                final JMenu chartMenu = new JMenu(I18n.get("menu.chart"));
                 final ButtonGroup chartGroup = new ButtonGroup();
                 popupMenu.add(chartMenu);
 
-                final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem("Bar");
+                final JRadioButtonMenuItem miBar = new JRadioButtonMenuItem(I18n.get("menu.bar"));
                 miBar.addItemListener(e1 -> {
                     if (e1.getStateChange() == ItemEvent.SELECTED) {
                         setGraphType(Graph.BAR_CHART);
@@ -138,7 +139,7 @@ public abstract class Graph extends JPanel {
                 chartGroup.add(miBar);
                 miBar.setSelected(graphType == BAR_CHART);
 
-                final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem("Line");
+                final JRadioButtonMenuItem miLine = new JRadioButtonMenuItem(I18n.get("menu.line"));
                 miLine.addItemListener(e1 -> {
                     if (e1.getStateChange() == ItemEvent.SELECTED) {
                         setGraphType(Graph.LINE_CHART);
@@ -149,7 +150,7 @@ public abstract class Graph extends JPanel {
                 chartGroup.add(miLine);
                 miLine.setSelected(graphType == LINE_CHART);
 
-                final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem("Area");
+                final JRadioButtonMenuItem miArea = new JRadioButtonMenuItem(I18n.get("menu.area"));
                 miArea.addItemListener(e1 -> {
                     if (e1.getStateChange() == ItemEvent.SELECTED) {
                         setGraphType(Graph.AREA_CHART);
@@ -162,7 +163,7 @@ public abstract class Graph extends JPanel {
 
                 if (Graph.this instanceof DailyGraph) {
                     final DailyGraph g = (DailyGraph) Graph.this;
-                    final JCheckBoxMenuItem miMilitaryTime = new JCheckBoxMenuItem("Military Time");
+                    final JCheckBoxMenuItem miMilitaryTime = new JCheckBoxMenuItem(I18n.get("menu.military_time"));
                     miMilitaryTime.setSelected(g.getMilitaryTime());
                     miMilitaryTime.addItemListener(e1 -> {
                         g.setMilitaryTime(miMilitaryTime.isSelected());
@@ -170,21 +171,21 @@ public abstract class Graph extends JPanel {
                     });
                     popupMenu.add(miMilitaryTime);
                 }
-                JMenuItem mi = new JMenuItem("View Raw Data...");
+                JMenuItem mi = new JMenuItem(I18n.get("menu.view_raw_data"));
                 mi.addActionListener(e1 -> DataViewer.viewRawData(popup ? parent : MainFrame.getInstance(), Graph.this, false));
                 popupMenu.add(mi);
-                mi = new JMenuItem("Copy Image");
+                mi = new JMenuItem(I18n.get("menu.copy_image"));
                 mi.addActionListener(e1 -> new ClipImage().copyImageToClipboard(Graph.this));
                 popupMenu.add(mi);
                 popupMenu.addSeparator();
                 if (!popup) {
-                    mi = new JMenuItem("Keep Current Results in Graph");
+                    mi = new JMenuItem(I18n.get("menu.keep_current_results"));
                     mi.addActionListener(e1 -> keepResults());
                     popupMenu.add(mi);
-                    mi = new JMenuItem("Clear Previous Results in Graph");
+                    mi = new JMenuItem(I18n.get("menu.clear_previous_results"));
                     mi.addActionListener(e1 -> {
                         final int i = JOptionPane.showConfirmDialog(JOptionPane.getFrameForComponent(Graph.this),
-                                "Are you sure that you want to clear all the previous results\nrelated to the selected object?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                                I18n.get("msg.confirm_clear_previous_results"), I18n.get("dialog.confirm"), JOptionPane.YES_NO_OPTION);
                         if (i != JOptionPane.YES_OPTION) {
                             return;
                         }
@@ -268,7 +269,7 @@ public abstract class Graph extends JPanel {
                 }
             }
             if (!inSymbol) {
-                setToolTipText("<html>Move mouse for more information.<br>Right-click for more options." + (popup ? "" : "<br>Double-click to enlarge this graph.") + "</html>");
+                setToolTipText("<html>" + I18n.get("tooltip.graph_interaction") + (popup ? "" : "<br>" + I18n.get("tooltip.double_click_enlarge_graph")) + "</html>");
             }
         }
     }
@@ -315,7 +316,7 @@ public abstract class Graph extends JPanel {
             left = 65;
         }
         if (!popup) {
-            setToolTipText("Double-click to enlarge this graph");
+            setToolTipText(I18n.get("tooltip.double_click_enlarge_graph"));
         }
     }
 
@@ -560,7 +561,7 @@ public abstract class Graph extends JPanel {
             if (today == null) {
                 today = Heliodon.getInstance().getCalendar();
             }
-            final String cityAndDate = "Weather data from " + city + (this instanceof DailyGraph ? " - " + new SimpleDateFormat("MMM").format(today.getTime()) + " " + today.get(Calendar.DAY_OF_MONTH) : "");
+            final String cityAndDate = (this instanceof DailyGraph ? I18n.get("msg.weather_data_from", city) + " - " + new SimpleDateFormat("MMM").format(today.getTime()) + " " + today.get(Calendar.DAY_OF_MONTH) : I18n.get("msg.weather_data_from", city));
             g2.drawString(cityAndDate, (width - fm.stringWidth(cityAndDate)) / 2, popup ? 20 : 10);
         }
 
@@ -731,6 +732,25 @@ public abstract class Graph extends JPanel {
 
     }
 
+    /**
+     * Traduit les préfixes des noms de séries de graphiques.
+     * Par exemple : "Solar 1" → "Solaire 1" (en français)
+     */
+    private String translateSeriesName(final String name) {
+        if (name.startsWith("Solar ")) {
+            return I18n.get("chart.series.solar") + " " + name.substring(6);
+        } else if (name.startsWith("Heat Gain ")) {
+            return I18n.get("series.heat_gain") + " " + name.substring(10);
+        } else if (name.startsWith("Building ")) {
+            return I18n.get("panel.title_building") + " " + name.substring(9);
+        } else if (name.startsWith("PV ")) {
+            return I18n.get("panel.title_pv") + " " + name.substring(3);
+        } else if (name.startsWith("CSP ")) {
+            return I18n.get("panel.title_csp") + " " + name.substring(4);
+        }
+        return name;
+    }
+
     void drawBuildingLegends(final Graphics2D g2) {
 
         g2.setFont(new Font("Arial", Font.PLAIN, popup ? 10 : 8));
@@ -739,12 +759,13 @@ public abstract class Graph extends JPanel {
         int y0 = top - 10;
         legendX = x0;
         legendY = y0;
-        legendText = "<html><h4>Energy (kWh):</h4><hr><ul>";
+        legendText = "<html><h4>" + I18n.get("chart.legend.energy") + "</h4><hr><ul>";
 
         String s = "Windows";
         if (!isDataHidden(s)) {
             drawDiamond(g2, x0 + 4, y0 + 3, popup ? 5 : 2, colors.get(s));
-            final String t = s + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
+            final String displayLabel = I18n.get("chart.series.windows");
+            final String t = displayLabel + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
             g2.drawString("* " + t, x0 + 14, y0 + 8);
             legendText += "<li>" + t;
         }
@@ -753,7 +774,8 @@ public abstract class Graph extends JPanel {
         y0 += 12;
         if (!isDataHidden(s)) {
             drawSquare(g2, x0, y0, popup ? 8 : 4, colors.get(s));
-            final String t = s + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
+            final String displayLabel = I18n.get("chart.series.solar_panels");
+            final String t = displayLabel + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
             g2.drawString("\u2212 " + t, x0 + 14, y0 + 8);
             legendText += "<li>" + t;
         }
@@ -762,7 +784,8 @@ public abstract class Graph extends JPanel {
         y0 += 12;
         if (!isDataHidden(s)) {
             drawTriangleUp(g2, x0, y0, popup ? 8 : 4, colors.get(s));
-            final String t = s + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
+            final String displayLabel = I18n.get("chart.series.heater");
+            final String t = displayLabel + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
             g2.drawString("\u002b " + t, x0 + 14, y0 + 8);
             legendText += "<li>" + t;
         }
@@ -771,7 +794,8 @@ public abstract class Graph extends JPanel {
         y0 += 12;
         if (!isDataHidden(s)) {
             drawTriangleDown(g2, x0, y0, popup ? 8 : 4, colors.get(s));
-            final String t = s + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
+            final String displayLabel = I18n.get("chart.series.ac");
+            final String t = displayLabel + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
             g2.drawString("\u002b " + t, x0 + 14, y0 + 8);
             legendText += "<li>" + t;
         }
@@ -781,7 +805,8 @@ public abstract class Graph extends JPanel {
         if (!isDataHidden(s)) {
             drawCircle(g2, x0, y0, popup ? 8 : 4, colors.get(s));
             g2.setFont(new Font("Arial", Font.BOLD, popup ? 11 : 8));
-            final String t = s + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
+            final String displayLabel = I18n.get("chart.series.net");
+            final String t = displayLabel + " (" + ONE_DECIMAL.format(getSum(s)) + ")";
             g2.drawString("\u003d " + t, x0 + 14, y0 + 8);
             legendText += "<li>" + t;
         }
@@ -970,23 +995,25 @@ public abstract class Graph extends JPanel {
         int y0 = top - 10;
         legendX = x0;
         legendY = y0;
-        legendText = "<html><h4>Energy (kWh):</h4><hr><ul>";
+        legendText = "<html><h4>" + I18n.get("chart.legend.energy") + "</h4><hr><ul>";
 
         switch (instrumentType) {
             case SENSOR:
                 String s = "Light";
                 if (containsSensorType(s)) {
                     drawDiamond(g2, x0 + 4, y0 + 4, 5, colors.get("Solar"));
-                    g2.drawString(s, x0 + 14, y0 + 8);
-                    legendText += "<li>" + s;
+                    final String displayLabel = I18n.get("series.light");
+                    g2.drawString(displayLabel, x0 + 14, y0 + 8);
+                    legendText += "<li>" + displayLabel;
                 }
                 s = "Heat Flux";
                 y0 += 12;
                 if (containsSensorType(s)) {
                     y0 += 14;
                     drawSquare(g2, x0, y0, 8, colors.get("Heat Gain"));
-                    g2.drawString(s, x0 + 14, y0 + 8);
-                    legendText += "<li>" + s;
+                    final String displayLabel = I18n.get("series.heat_flux");
+                    g2.drawString(displayLabel, x0 + 14, y0 + 8);
+                    legendText += "<li>" + displayLabel;
                 }
                 break;
             default:
@@ -995,11 +1022,11 @@ public abstract class Graph extends JPanel {
                 if (data.containsKey(s) && !isDataHidden(s)) {
                     drawDiamond(g2, x0 + 4, y0 + 4, 5, colors.get(s));
                     final double sum = getSum(s);
-                    s += " (" + TWO_DECIMALS.format(sum) + ")";
-                    g2.drawString(s, x0 + 14, y0 + 8);
+                    final String displayLabel = I18n.get("chart.series.solar");
+                    final String displayText = displayLabel + " (" + TWO_DECIMALS.format(sum) + ")";
+                    g2.drawString(displayText, x0 + 14, y0 + 8);
                     found = true;
-                    s = "Solar (" + FIVE_DECIMALS.format(sum) + ")";
-                    legendText += "<li>" + s;
+                    legendText += "<li>" + displayLabel + " (" + FIVE_DECIMALS.format(sum) + ")";
                 }
                 s = "Heat Gain";
                 y0 += 12;
@@ -1007,21 +1034,22 @@ public abstract class Graph extends JPanel {
                     y0 += 14;
                     drawSquare(g2, x0, y0, 8, colors.get(s));
                     final double sum = getSum(s);
-                    s += " (" + TWO_DECIMALS.format(sum) + ")";
-                    g2.drawString(s, x0 + 14, y0 + 8);
+                    final String displayLabel = I18n.get("series.heat_gain");
+                    final String displayText = displayLabel + " (" + TWO_DECIMALS.format(sum) + ")";
+                    g2.drawString(displayText, x0 + 14, y0 + 8);
                     found = true;
-                    s = "Heat Gain (" + FIVE_DECIMALS.format(sum) + ")";
-                    legendText += "<li>" + s;
+                    legendText += "<li>" + displayLabel + " (" + FIVE_DECIMALS.format(sum) + ")";
                 }
                 s = "Utility";
                 y0 += 12;
                 if (data.containsKey(s) && !isDataHidden(s)) {
                     y0 += 14;
                     drawCircle(g2, x0, y0, 8, colors.get(s));
-                    s += " (" + TWO_DECIMALS.format(getSum(s)) + ")";
-                    g2.drawString(s, x0 + 14, y0 + 8);
+                    final String displayLabel = I18n.get("series.utility");
+                    final String displayText = displayLabel + " (" + TWO_DECIMALS.format(getSum(s)) + ")";
+                    g2.drawString(displayText, x0 + 14, y0 + 8);
                     found = true;
-                    legendText += "<li>" + s;
+                    legendText += "<li>" + displayText;
                 }
                 if (!found) {
                     final ArrayList<String> set = new ArrayList<String>(data.keySet());
@@ -1042,6 +1070,7 @@ public abstract class Graph extends JPanel {
                         if (i2 != -1) {
                             k2 = k2.substring(i2 + 1);
                         }
+                        k2 = translateSeriesName(k2);
                         s = k2 + " (" + TWO_DECIMALS.format(getSum(k)) + ")";
                         g2.drawString(s, x0 + 14, y0 + 8);
                         y0 += 12;

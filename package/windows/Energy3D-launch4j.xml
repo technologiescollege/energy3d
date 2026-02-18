@@ -27,12 +27,12 @@
     <opt>-Xmx512m</opt>
   </jre>
   <versionInfo>
-    <fileVersion>8.0.0.0</fileVersion>
-    <txtFileVersion>8.0</txtFileVersion>
+    <fileVersion>8.8.0.0</fileVersion>
+    <txtFileVersion>8.8.0</txtFileVersion>
     <fileDescription>Energy3D - Solar Energy Design</fileDescription>
     <copyright>Concord Consortium</copyright>
-    <productVersion>8.0.0.0</productVersion>
-    <txtProductVersion>8.0</txtProductVersion>
+    <productVersion>8.8.0.0</productVersion>
+    <txtProductVersion>8.8.0</txtProductVersion>
     <productName>Energy3D</productName>
     <companyName>Concord Consortium Inc.</companyName>
     <internalName>Energy3D</internalName>

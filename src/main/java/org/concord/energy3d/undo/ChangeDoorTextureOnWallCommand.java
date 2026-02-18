@@ -9,6 +9,7 @@ import org.concord.energy3d.model.Door;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeDoorTextureOnWallCommand extends MyAbstractUndoableEdit {
 
@@ -60,7 +61,7 @@ public class ChangeDoorTextureOnWallCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Texture Change for All Doors on Wall";
+		return I18n.get("undo.texture_change_all_doors_wall");
 	}
 
 }

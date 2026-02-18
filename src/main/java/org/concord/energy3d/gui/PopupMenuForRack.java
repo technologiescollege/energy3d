@@ -48,6 +48,7 @@ import org.concord.energy3d.undo.ChangePoleHeightCommand;
 import org.concord.energy3d.undo.ChangeFoundationRackAzimuthCommand;
 import org.concord.energy3d.undo.ChangeFoundationSolarCollectorPoleHeightCommand;
 import org.concord.energy3d.undo.ChangePoleHeightForAllSolarCollectorsCommand;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.undo.ChangePoleSettingsForAllRacksCommand;
 import org.concord.energy3d.undo.ChangePoleSettingsForRacksOnFoundationCommand;
 import org.concord.energy3d.undo.ChangeRackPoleSettingsCommand;
@@ -106,9 +107,9 @@ class PopupMenuForRack extends PopupMenuFactory {
 
         if (popupMenuForRack == null) {
 
-            final JMenu trackerMenu = new JMenu("Tracker");
+            final JMenu trackerMenu = new JMenu(I18n.get("menu.tracker"));
 
-            final JMenuItem miPaste = new JMenuItem("Paste");
+            final JMenuItem miPaste = new JMenuItem(I18n.get("menu.paste"));
             miPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Config.isMac() ? KeyEvent.META_MASK : InputEvent.CTRL_MASK));
             miPaste.addActionListener(e -> {
                 SceneManager.getTaskManager().update(() -> {
@@ -118,7 +119,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenuItem miClear = new JMenuItem("Clear");
+            final JMenuItem miClear = new JMenuItem(I18n.get("menu.clear"));
             miClear.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof Rack)) {
@@ -137,16 +138,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                 });
             });
 
-            final JMenuItem miFixedTiltAngle = new JMenuItem("Fixed Tilt Angle...");
+            final JMenuItem miFixedTiltAngle = new JMenuItem(I18n.get("menu.fixed_tilt_angle"));
             miFixedTiltAngle.addActionListener(e -> RackFixedTiltAngleChanger.getInstance().change());
 
-            final JMenuItem miSeasonalTiltAngle = new JMenuItem("Seasonally Adjusted Tilt Angles...");
+            final JMenuItem miSeasonalTiltAngle = new JMenuItem(I18n.get("menu.seasonally_adjusted_tilt_angles"));
             miSeasonalTiltAngle.addActionListener(e -> RackSeasonalTiltAnglesChanger.getInstance().change());
 
-            final JMenuItem miAzimuth = new JMenuItem("Azimuth...");
+            final JMenuItem miAzimuth = new JMenuItem(I18n.get("menu.azimuth"));
             miAzimuth.addActionListener(e -> RackAzimuthChanger.getInstance().change());
 
-            final JMenuItem miRotate = new JMenuItem("Rotate 90\u00B0");
+            final JMenuItem miRotate = new JMenuItem(I18n.get("menu.rotate_90"));
             miRotate.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -163,10 +164,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -187,9 +188,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Rotate 90\u00B0 for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Rotate Rack");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.rotate_90_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.rotate_rack"));
                     while (true) {
                         dialog.setVisible(true);
                         final Object choice = optionPane.getValue();
@@ -254,7 +255,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miRackWidth = new JMenuItem("Width...");
+            final JMenuItem miRackWidth = new JMenuItem(I18n.get("menu.width"));
             miRackWidth.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -272,7 +273,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final JPanel inputPanel = new JPanel(new SpringLayout());
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    final JLabel label = new JLabel("Width (m): ", JLabel.TRAILING);
+                    final JLabel label = new JLabel(I18n.get("label.width_m"), JLabel.TRAILING);
                     inputPanel.add(label);
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(rack.getRackHeight())); // rack uses width and height, which should have been named length and width
                     label.setLabelFor(inputField);
@@ -280,10 +281,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     SpringUtilities.makeCompactGrid(inputPanel, 1, 2, 6, 6, 6, 6);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -304,9 +305,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set width for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Rack Width");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_width_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.rack_width"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -319,12 +320,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0.5 || val > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Width must be between 0.5 and 50 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.rack_width_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = val != rack.getRackHeight();
                                     final double val2 = val;
@@ -337,8 +338,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 rack.draw();
                                                 if (rack.checkContainerIntersection()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "This width cannot be set as the rack would cut into the underlying surface.",
-                                                                "Illegal Size", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_width_single"),
+                                                                I18n.get("msg.illegal_size"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -364,8 +365,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 foundation.setWidthForRacks(val2);
                                                 if (foundation.checkContainerIntersectionForRacks()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "This width cannot be set as one or more racks would cut into the underlying surface.",
-                                                                "Illegal Size", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_width_multiple"),
+                                                                I18n.get("msg.illegal_size"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -390,8 +391,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 Scene.getInstance().setWidthForAllRacks(val2);
                                                 if (Scene.getInstance().checkContainerIntersectionForAllRacks()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "This width cannot be set as one or more racks would cut into the underlying surface.",
-                                                                "Illegal Size", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_width_multiple"),
+                                                                I18n.get("msg.illegal_size"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -415,7 +416,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miRackLength = new JMenuItem("Length...");
+            final JMenuItem miRackLength = new JMenuItem(I18n.get("menu.length"));
             miRackLength.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -433,7 +434,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final JPanel inputPanel = new JPanel(new SpringLayout());
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    final JLabel label = new JLabel("Length (m): ", JLabel.TRAILING);
+                    final JLabel label = new JLabel(I18n.get("label.length_m"), JLabel.TRAILING);
                     inputPanel.add(label);
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(rack.getRackWidth())); // rack uses width and height, which should have been named length and width
                     label.setLabelFor(inputField);
@@ -441,10 +442,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     SpringUtilities.makeCompactGrid(inputPanel, 1, 2, 6, 6, 6, 6);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -465,9 +466,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set length for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Rack Length");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_length_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.rack_length"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -482,12 +483,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 1 || val > 1000) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Length must be between 1 and 1000 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.rack_length_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = val != rack.getRackWidth();
                                     final double val2 = val;
@@ -554,7 +555,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleHeight = new JMenuItem("Pole Height...");
+            final JMenuItem miPoleHeight = new JMenuItem(I18n.get("menu.pole_height"));
             miPoleHeight.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -572,10 +573,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String footnote = "<html><hr><font size=2></html>";
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -599,9 +600,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final JTextField inputField = new JTextField(rack.getPoleHeight() * Scene.getInstance().getScale() + "");
                     gui.add(inputField, BorderLayout.SOUTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Pole Height");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.pole_height"));
 
                     while (true) {
                         inputField.selectAll();
@@ -616,12 +617,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 val = Double.parseDouble(inputField.getText()) / Scene.getInstance().getScale();
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (val < 0 || val * Scene.getInstance().getScale() > 10) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height must be between 0 and 10 meters.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_height_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = val != rack.getPoleHeight();
                                     final double poleHeight = val;
@@ -633,8 +634,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 rack.draw();
                                                 if (rack.checkContainerIntersection()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "The pole height cannot be set this low as the rack would cut into the underlying surface.",
-                                                                "Illegal Pole Height", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_pole_height_single"),
+                                                                I18n.get("msg.illegal_pole_height"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -660,8 +661,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 foundation.setPoleHeightForRacks(poleHeight);
                                                 if (foundation.checkContainerIntersectionForRacks()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Pole heights cannot be set this low as one or more racks would cut into the underlying surface.",
-                                                                "Illegal Pole Height", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_pole_height_multiple"),
+                                                                I18n.get("msg.illegal_pole_height"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -686,8 +687,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                                                 Scene.getInstance().setPoleHeightForAllRacks(poleHeight);
                                                 if (Scene.getInstance().checkContainerIntersectionForAllRacks()) {
                                                     EventQueue.invokeLater(() -> {
-                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Pole heights cannot be set this low as one or more racks would cut into the underlying surface.",
-                                                                "Illegal Pole Height", JOptionPane.ERROR_MESSAGE);
+                                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.illegal_rack_pole_height_multiple"),
+                                                                I18n.get("msg.illegal_pole_height"), JOptionPane.ERROR_MESSAGE);
                                                         c.undo();
                                                     });
                                                 } else {
@@ -711,7 +712,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miPoleSpacing = new JMenuItem("Pole Settings...");
+            final JMenuItem miPoleSpacing = new JMenuItem(I18n.get("menu.pole_settings"));
             miPoleSpacing.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -724,28 +725,28 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     final Rack rack = (Rack) selectedPart;
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
-                    final String title = "<html>Pole Settings of " + partInfo + "</html>";
+                    final String title = "<html>" + I18n.get("title.pole_settings_of", partInfo) + "</html>";
 
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(3, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Distance X (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.distance_x_m")));
                     final JTextField dxField = new JTextField(threeDecimalsFormat.format(rack.getPoleDistanceX()));
                     inputPanel.add(dxField);
-                    inputPanel.add(new JLabel("Distance Y (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.distance_y_m")));
                     final JTextField dyField = new JTextField(threeDecimalsFormat.format(rack.getPoleDistanceY()));
                     inputPanel.add(dyField);
-                    inputPanel.add(new JLabel("Visible: "));
-                    final JComboBox<String> visibleComboBox = new JComboBox<String>(new String[]{"Yes", "No"});
+                    inputPanel.add(new JLabel(I18n.get("label.visible")));
+                    final JComboBox<String> visibleComboBox = new JComboBox<String>(new String[]{I18n.get("common.yes"), I18n.get("common.no")});
                     visibleComboBox.setSelectedIndex(rack.isPoleVisible() ? 0 : 1);
                     inputPanel.add(visibleComboBox);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -766,9 +767,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Pole Settings");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.pole_settings"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -782,14 +783,14 @@ class PopupMenuForRack extends PopupMenuFactory {
                                 dx = Double.parseDouble(dxField.getText());
                                 dy = Double.parseDouble(dyField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (dx < 1 || dx > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Dx must be between 1 and 50 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_distance_x_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (dy < 1 || dy > 50) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Dy must be between 1 and 50 m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.pole_distance_y_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     final boolean visible = visibleComboBox.getSelectedIndex() == 0;
                                     boolean changed = dx != rack.getPoleDistanceX() || dy != rack.getPoleDistanceY();
@@ -861,7 +862,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanels = new JMenuItem("Select Solar Panels...");
+            final JMenuItem miSolarPanels = new JMenuItem(I18n.get("menu.select_solar_panels"));
             miSolarPanels.addActionListener(new ActionListener() {
 
                 private Rack rack;
@@ -888,16 +889,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                     rack = (Rack) selectedPart;
                     final int n = rack.getChildren().size();
                     if (n > 0 && JOptionPane.showConfirmDialog(MainFrame.getInstance(),
-                            "All existing " + n + " solar panels on this rack must be removed before\na new layout can be applied. Do you want to continue?",
-                            "Confirmation", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                            I18n.get("msg.confirm_remove_solar_panels_for_layout", n),
+                            I18n.get("dialog.confirm"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     final SolarPanel solarPanel = rack.getSolarPanel();
                     final JPanel panel = new JPanel(new SpringLayout());
 
-                    panel.add(new JLabel("Model"));
+                    panel.add(new JLabel(I18n.get("label.model")));
                     modelComboBox = new JComboBox<String>();
-                    modelComboBox.addItem("Custom");
+                    modelComboBox.addItem(I18n.get("model.custom"));
                     final Map<String, PvModuleSpecs> modules = PvModulesData.getInstance().getModules();
                     for (final String key : modules.keySet()) {
                         modelComboBox.addItem(key);
@@ -931,10 +932,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     panel.add(modelComboBox);
 
                     // the following properties should be disabled when the model is not custom
-                    panel.add(new JLabel("Panel Size:"));
+                    panel.add(new JLabel(I18n.get("label.panel_size")));
                     sizeComboBox = new JComboBox<String>(solarPanelNominalSize.getStrings());
                     final PvModuleSpecs specs = solarPanel.getPvModuleSpecs();
-                    final boolean isCustom = "Custom".equals(specs.getModel());
+                    final boolean isCustom = I18n.get("model.custom").equals(specs.getModel());
                     final double width = isCustom ? solarPanel.getPanelWidth() : specs.getNominalWidth();
                     final double height = isCustom ? solarPanel.getPanelHeight() : specs.getNominalLength();
                     final int nItems = sizeComboBox.getItemCount();
@@ -944,25 +945,25 @@ class PopupMenuForRack extends PopupMenuFactory {
                         }
                     }
                     panel.add(sizeComboBox);
-                    panel.add(new JLabel("Cell Type:"));
-                    cellTypeComboBox = new JComboBox<String>(new String[]{"Polycrystalline", "Monocrystalline", "Thin Film"});
+                    panel.add(new JLabel(I18n.get("label.cell_type")));
+                    cellTypeComboBox = new JComboBox<String>(new String[]{I18n.get("cell_type.polycrystalline"), I18n.get("cell_type.monocrystalline"), I18n.get("cell_type.thin_film")});
                     cellTypeComboBox.setSelectedIndex(solarPanel.getCellType());
                     panel.add(cellTypeComboBox);
-                    panel.add(new JLabel("Color:"));
-                    colorOptionComboBox = new JComboBox<String>(new String[]{"Blue", "Black", "Gray"});
+                    panel.add(new JLabel(I18n.get("label.color")));
+                    colorOptionComboBox = new JComboBox<String>(new String[]{I18n.get("color.blue"), I18n.get("color.black"), I18n.get("color.gray")});
                     colorOptionComboBox.setSelectedIndex(solarPanel.getColorOption());
                     panel.add(colorOptionComboBox);
-                    panel.add(new JLabel("Solar Cell Efficiency (%):"));
+                    panel.add(new JLabel(I18n.get("label.solar_cell_efficiency_percent")));
                     cellEfficiencyField = new JTextField(threeDecimalsFormat.format(solarPanel.getCellEfficiency() * 100));
                     panel.add(cellEfficiencyField);
-                    panel.add(new JLabel("<html>Nominal Operating Cell Temperature (&deg;C):"));
+                    panel.add(new JLabel("<html>" + I18n.get("label.nominal_operating_cell_temperature") + " (&deg;C):"));
                     noctField = new JTextField(threeDecimalsFormat.format(solarPanel.getNominalOperatingCellTemperature()));
                     panel.add(noctField);
-                    panel.add(new JLabel("<html>Temperature Coefficient of Pmax (%/&deg;C):"));
+                    panel.add(new JLabel("<html>" + I18n.get("label.temperature_coefficient_pmax") + " (%/&deg;C):"));
                     pmaxTcField = new JTextField(sixDecimalsFormat.format(solarPanel.getTemperatureCoefficientPmax() * 100));
                     panel.add(pmaxTcField);
-                    panel.add(new JLabel("Shade Tolerance:"));
-                    shadeToleranceComboBox = new JComboBox<String>(new String[]{"Partial", "High", "None"});
+                    panel.add(new JLabel(I18n.get("label.shade_tolerance")));
+                    shadeToleranceComboBox = new JComboBox<String>(new String[]{I18n.get("shade_tolerance.partial"), I18n.get("shade_tolerance.high"), I18n.get("shade_tolerance.none")});
                     shadeToleranceComboBox.setSelectedIndex(solarPanel.getShadeTolerance());
                     panel.add(shadeToleranceComboBox);
 
@@ -977,18 +978,18 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
 
                     // the following properties are not related to the model
-                    panel.add(new JLabel("Orientation:"));
-                    orientationComboBox = new JComboBox<String>(new String[]{"Portrait", "Landscape"});
+                    panel.add(new JLabel(I18n.get("label.orientation")));
+                    orientationComboBox = new JComboBox<String>(new String[]{I18n.get("orientation.portrait"), I18n.get("orientation.landscape")});
                     orientationComboBox.setSelectedIndex(solarPanel.isRotated() ? 1 : 0);
                     panel.add(orientationComboBox);
-                    panel.add(new JLabel("Inverter Efficiency (%):"));
+                    panel.add(new JLabel(I18n.get("label.inverter_efficiency_percent")));
                     final JTextField inverterEfficiencyField = new JTextField(threeDecimalsFormat.format(solarPanel.getInverterEfficiency() * 100));
                     panel.add(inverterEfficiencyField);
                     SpringUtilities.makeCompactGrid(panel, 10, 2, 6, 6, 6, 6);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panels on this Rack");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panels_on_rack"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1004,18 +1005,18 @@ class PopupMenuForRack extends PopupMenuFactory {
                                     noct = Double.parseDouble(noctField.getText());
                                     inverterEfficiency = Double.parseDouble(inverterEfficiencyField.getText());
                                 } catch (final NumberFormatException ex) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                     ok = false;
                                 }
                                 if (ok) {
                                     if (cellEfficiency < SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE || cellEfficiency > SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE) {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Solar cell efficiency must be between " + SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE + "% and " + SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE + "%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_cell_efficiency_range", SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE, SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                     } else if (inverterEfficiency < SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE || inverterEfficiency >= SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE) {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Inverter efficiency must be greater than " + SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE + "% and less than " + SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE + "%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.inverter_efficiency_range", SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE, SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                     } else if (pmax < -1 || pmax > 0) {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Temperature coefficient of Pmax must be between -1% and 0% per Celsius degree.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.temperature_coefficient_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                     } else if (noct < 33 || noct > 58) {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Nominal Cell Operating Temperature must be between 33 and 58 Celsius degrees.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.noct_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                     } else {
                                         setCustomSolarPanels();
                                         if (choice == options[0]) {
@@ -1027,12 +1028,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                                 try {
                                     inverterEfficiency = Double.parseDouble(inverterEfficiencyField.getText());
                                 } catch (final NumberFormatException ex) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                     ok = false;
                                 }
                                 if (ok) {
                                     if (inverterEfficiency < SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE || inverterEfficiency >= SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE) {
-                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), "Inverter efficiency must be greater than " + SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE + "% and less than " + SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE + "%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.inverter_efficiency_range", SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE, SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                     } else {
                                         setBrandSolarPanels((String) modelComboBox.getSelectedItem());
                                         if (choice == options[0]) {
@@ -1067,7 +1068,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 private void setCustomSolarPanels() {
                     final SolarPanel s = rack.getSolarPanel();
                     final int i = sizeComboBox.getSelectedIndex();
-                    boolean changed = !"Custom".equals(s.getModelName());
+                    boolean changed = !I18n.get("model.custom").equals(s.getModelName());
                     if (s.getPanelWidth() != solarPanelNominalSize.getNominalWidths()[i]) {
                         changed = true;
                     } else if (s.getPanelHeight() != solarPanelNominalSize.getNominalHeights()[i]) {
@@ -1094,8 +1095,8 @@ class PopupMenuForRack extends PopupMenuFactory {
                         changed = true;
                     }
                     if (changed) {
-                        s.setModelName("Custom");
-                        s.setBrandName("Custom");
+                        s.setModelName(I18n.get("model.custom"));
+                        s.setBrandName(I18n.get("model.custom"));
                         final SetSolarPanelArrayOnRackCustomCommand command = rack.isMonolithic() ? new SetSolarPanelArrayOnRackCustomCommand(rack) : null;
                         s.setPanelWidth(solarPanelNominalSize.getNominalWidths()[i]);
                         s.setPanelHeight(solarPanelNominalSize.getNominalHeights()[i]);
@@ -1122,9 +1123,9 @@ class PopupMenuForRack extends PopupMenuFactory {
 
             });
 
-            final JMenu solarPanelMenu = new JMenu("Change Solar Panel Properties");
+            final JMenu solarPanelMenu = new JMenu(I18n.get("menu.change_solar_panel_properties"));
 
-            final JMenuItem miSolarPanelModel = new JMenuItem("Model...");
+            final JMenuItem miSolarPanelModel = new JMenuItem(I18n.get("menu.model") + "...");
             solarPanelMenu.add(miSolarPanelModel);
             miSolarPanelModel.addActionListener(new ActionListener() {
 
@@ -1144,13 +1145,13 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Map<String, PvModuleSpecs> modules = PvModulesData.getInstance().getModules();
                     final String[] models = new String[modules.size() + 1];
                     int i = 0;
-                    models[i] = "Custom";
+                    models[i] = I18n.get("label.custom");
                     for (final String key : modules.keySet()) {
                         models[++i] = key;
                     }
                     final PvModuleSpecs specs = s.getPvModuleSpecs();
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    gui.setBorder(BorderFactory.createTitledBorder("Solar Panel Model for " + partInfo));
+                    gui.setBorder(BorderFactory.createTitledBorder(I18n.get("title.solar_panel_model_for", partInfo)));
                     final JComboBox<String> typeComboBox = new JComboBox<String>(models);
                     typeComboBox.setSelectedItem(specs.getModel());
                     modelName = specs.getModel();
@@ -1162,10 +1163,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     gui.add(typeComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1186,9 +1187,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(gui, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Model");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_model"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1260,7 +1261,7 @@ class PopupMenuForRack extends PopupMenuFactory {
 
             solarPanelMenu.addSeparator();
 
-            final JMenuItem miSolarPanelSize = new JMenuItem("Size...");
+            final JMenuItem miSolarPanelSize = new JMenuItem(I18n.get("menu.size") + "...");
             solarPanelMenu.add(miSolarPanelSize);
             miSolarPanelSize.addActionListener(new ActionListener() {
 
@@ -1277,10 +1278,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final SolarPanel s = r.getSolarPanel();
                     final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    gui.setBorder(BorderFactory.createTitledBorder("Solar Panel Size for " + partInfo));
+                    gui.setBorder(BorderFactory.createTitledBorder(I18n.get("title.solar_panel_size_for", partInfo)));
                     final JComboBox<String> sizeComboBox = new JComboBox<String>(solarPanelNominalSize.getStrings());
                     final PvModuleSpecs specs = s.getPvModuleSpecs();
-                    final boolean isCustom = "Custom".equals(specs.getModel());
+                    final boolean isCustom = I18n.get("model.custom").equals(specs.getModel());
                     final double width = isCustom ? s.getPanelWidth() : specs.getNominalWidth();
                     final double height = isCustom ? s.getPanelHeight() : specs.getNominalLength();
                     final int nItems = sizeComboBox.getItemCount();
@@ -1292,10 +1293,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     gui.add(sizeComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1316,9 +1317,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(gui, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Size");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_size"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1409,7 +1410,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelCellType = new JMenuItem("Cell Type...");
+            final JMenuItem miSolarPanelCellType = new JMenuItem(I18n.get("menu.cell_type") + "...");
             solarPanelMenu.add(miSolarPanelCellType);
             miSolarPanelCellType.addActionListener(new ActionListener() {
 
@@ -1426,16 +1427,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final SolarPanel s = r.getSolarPanel();
                     final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    gui.setBorder(BorderFactory.createTitledBorder("Choose Cell Type for " + partInfo));
-                    final JComboBox<String> cellTypeComboBox = new JComboBox<String>(new String[]{"Polycrystalline", "Monocrystalline", "Thin Film"});
+                    gui.setBorder(BorderFactory.createTitledBorder(I18n.get("title.choose_cell_type_for", partInfo)));
+                    final JComboBox<String> cellTypeComboBox = new JComboBox<String>(new String[]{I18n.get("cell_type.polycrystalline"), I18n.get("cell_type.monocrystalline"), I18n.get("cell_type.thin_film")});
                     cellTypeComboBox.setSelectedIndex(s.getCellType());
                     gui.add(cellTypeComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1456,9 +1457,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(gui, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Cell Type");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_cell_type"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1528,7 +1529,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelColor = new JMenuItem("Color...");
+            final JMenuItem miSolarPanelColor = new JMenuItem(I18n.get("menu.color") + "...");
             solarPanelMenu.add(miSolarPanelColor);
             miSolarPanelColor.addActionListener(new ActionListener() {
 
@@ -1545,16 +1546,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final SolarPanel s = r.getSolarPanel();
                     final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    gui.setBorder(BorderFactory.createTitledBorder("Choose Color for " + partInfo));
-                    final JComboBox<String> colorComboBox = new JComboBox<String>(new String[]{"Blue", "Black", "Gray"});
+                    gui.setBorder(BorderFactory.createTitledBorder(I18n.get("title.choose_color_for", partInfo)));
+                    final JComboBox<String> colorComboBox = new JComboBox<String>(new String[]{I18n.get("color.blue"), I18n.get("color.black"), I18n.get("color.gray")});
                     colorComboBox.setSelectedIndex(s.getColorOption());
                     gui.add(colorComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1575,9 +1576,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(gui, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Color");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_color"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -1647,7 +1648,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelCellEfficiency = new JMenuItem("Solar Cell Efficiency...");
+            final JMenuItem miSolarPanelCellEfficiency = new JMenuItem(I18n.get("menu.solar_cell_efficiency") + "...");
             solarPanelMenu.add(miSolarPanelCellEfficiency);
             miSolarPanelCellEfficiency.addActionListener(new ActionListener() {
 
@@ -1662,17 +1663,18 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Rack r = (Rack) selectedPart;
                     final Foundation foundation = r.getTopContainer();
                     final SolarPanel s = r.getSolarPanel();
-                    final String title = "Set Solar Cell Efficiency (%) for " + r.toString().substring(0, r.toString().indexOf(')') + 1);
-                    final String footnote = "<html><hr><font size=2>How efficient can a solar panel be for converting light into electricity?<br>The Shockley-Queisser limit is 34%.<br>The theoretical limit for multilayer cells is 86%.<br>As of 2017, the best solar panel in the market has an efficiency of 24%.<br>The highest efficiency you can choose is limited to " + SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE + "%.<hr></html>";
+                    final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
+                    final String title = I18n.get("title.set_solar_cell_efficiency_for", partInfo);
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.solar_cell_efficiency", Integer.toString(SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE)) + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(s.getCellEfficiency() * 100));
                     gui.add(inputField, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1693,9 +1695,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Cell Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_cell_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1709,12 +1711,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 solarCellEfficiencyPercentage = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (solarCellEfficiencyPercentage < SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE || solarCellEfficiencyPercentage > SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Solar cell efficiency must be between " + SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE + "% and " + SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE + "%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.solar_cell_efficiency_range", Integer.toString(SolarPanel.MIN_SOLAR_CELL_EFFICIENCY_PERCENTAGE), Integer.toString(SolarPanel.MAX_SOLAR_CELL_EFFICIENCY_PERCENTAGE)), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(solarCellEfficiencyPercentage * 0.01 - s.getCellEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1768,7 +1770,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelNoct = new JMenuItem("Nominal Operating Cell Temperature...");
+            final JMenuItem miSolarPanelNoct = new JMenuItem(I18n.get("menu.nominal_operating_cell_temperature") + "...");
             solarPanelMenu.add(miSolarPanelNoct);
             miSolarPanelNoct.addActionListener(new ActionListener() {
 
@@ -1783,17 +1785,17 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Rack r = (Rack) selectedPart;
                     final Foundation foundation = r.getTopContainer();
                     final SolarPanel s = r.getSolarPanel();
-                    final String title = "<html>Nominal Operating Cell Temperature (&deg;C) for " + r.toString().substring(0, r.toString().indexOf(')') + 1);
-                    final String footnote = "<html><hr><font size=2>Increased temperature reduces solar cell efficiency.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.nominal_operating_cell_temperature") + " (&deg;C) " + I18n.get("common.for_lowercase") + " " + r.toString().substring(0, r.toString().indexOf(')') + 1);
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("msg.increased_temperature_reduces_efficiency") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(s.getNominalOperatingCellTemperature()));
                     gui.add(inputField, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1814,9 +1816,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Nominal Operating Cell Temperature");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.nominal_operating_cell_temperature"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1830,12 +1832,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 solarPanelNominalOperatingCellTemperature = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (solarPanelNominalOperatingCellTemperature < 33 || solarPanelNominalOperatingCellTemperature > 58) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Nominal Operating Cell Temperature must be between 33 and 58 degrees.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.noct_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(solarPanelNominalOperatingCellTemperature - s.getNominalOperatingCellTemperature()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -1889,7 +1891,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelPmaxTc = new JMenuItem("Temperature Coefficient of Pmax...");
+            final JMenuItem miSolarPanelPmaxTc = new JMenuItem(I18n.get("menu.temperature_coefficient_pmax") + "...");
             solarPanelMenu.add(miSolarPanelPmaxTc);
             miSolarPanelPmaxTc.addActionListener(new ActionListener() {
 
@@ -1904,17 +1906,18 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Rack r = (Rack) selectedPart;
                     final Foundation foundation = r.getTopContainer();
                     final SolarPanel s = r.getSolarPanel();
-                    final String title = "<html>Temperature Coefficienct of Pmax (%/&deg;C) for " + r.toString().substring(0, r.toString().indexOf(')') + 1);
-                    final String footnote = "<html><hr><font size=2>Increased temperature reduces solar cell efficiency.<hr></html>";
+                    final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
+                    final String title = "<html>" + I18n.get("title.temperature_coefficient_pmax_for", partInfo) + " (%/&deg;C)</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.temperature_coefficient_pmax") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(s.getTemperatureCoefficientPmax() * 100));
                     gui.add(inputField, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -1935,9 +1938,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Temperature Coefficient of Pmax");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.temperature_coefficient_pmax"));
 
                     while (true) {
                         inputField.selectAll();
@@ -1951,12 +1954,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 solarPanelTemperatureCoefficientPmaxPercentage = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (solarPanelTemperatureCoefficientPmaxPercentage < -1 || solarPanelTemperatureCoefficientPmaxPercentage > 0) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Temperature coefficient of Pmax must be between -1 and 0", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.temperature_coefficient_range"), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(solarPanelTemperatureCoefficientPmaxPercentage * 0.01 - s.getTemperatureCoefficientPmax()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -2010,7 +2013,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miSolarPanelShadeTolerance = new JMenuItem("Shade Tolerance...");
+            final JMenuItem miSolarPanelShadeTolerance = new JMenuItem(I18n.get("menu.shade_tolerance") + "...");
             solarPanelMenu.add(miSolarPanelShadeTolerance);
             miSolarPanelShadeTolerance.addActionListener(new ActionListener() {
 
@@ -2025,18 +2028,19 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Rack r = (Rack) selectedPart;
                     final Foundation foundation = r.getTopContainer();
                     final SolarPanel s = r.getSolarPanel();
-                    final String title = "Set Solar Panel Shade Tolerance for " + r.toString().substring(0, r.toString().indexOf(')') + 1);
-                    final String footnote = "<html><hr><font size=2>Use bypass diodes to direct current under shading conditions.<hr></html>";
+                    final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
+                    final String title = I18n.get("title.set_solar_panel_shade_tolerance_for", partInfo);
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.shade_tolerance") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    final JComboBox<String> toleranceComboBox = new JComboBox<String>(new String[]{"Partial", "High", "None"});
+                    final JComboBox<String> toleranceComboBox = new JComboBox<String>(new String[]{I18n.get("shade_tolerance.partial"), I18n.get("shade_tolerance.high"), I18n.get("label.none")});
                     toleranceComboBox.setSelectedIndex(s.getShadeTolerance());
                     gui.add(toleranceComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -2057,9 +2061,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Shade Tolerance");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_shade_tolerance"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -2120,7 +2124,7 @@ class PopupMenuForRack extends PopupMenuFactory {
 
             solarPanelMenu.addSeparator();
 
-            final JMenuItem miSolarPanelOrientation = new JMenuItem("Orientation...");
+            final JMenuItem miSolarPanelOrientation = new JMenuItem(I18n.get("menu.orientation") + "...");
             solarPanelMenu.add(miSolarPanelOrientation);
             miSolarPanelOrientation.addActionListener(new ActionListener() {
 
@@ -2137,16 +2141,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final SolarPanel s = r.getSolarPanel();
                     final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
-                    gui.setBorder(BorderFactory.createTitledBorder("Solar Panel Orientation for " + partInfo));
-                    final JComboBox<String> orientationComboBox = new JComboBox<String>(new String[]{"Portrait", "Landscape"});
+                    gui.setBorder(BorderFactory.createTitledBorder(I18n.get("title.solar_panel_orientation_for", partInfo)));
+                    final JComboBox<String> orientationComboBox = new JComboBox<String>(new String[]{I18n.get("orientation.portrait"), I18n.get("orientation.landscape")});
                     orientationComboBox.setSelectedIndex(s.isRotated() ? 1 : 0);
                     gui.add(orientationComboBox, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -2167,9 +2171,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(gui, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Solar Panel Orientation");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.solar_panel_orientation"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -2240,7 +2244,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JMenuItem miInverterEfficiency = new JMenuItem("Inverter Efficiency...");
+            final JMenuItem miInverterEfficiency = new JMenuItem(I18n.get("menu.inverter_efficiency") + "...");
             solarPanelMenu.add(miInverterEfficiency);
             miInverterEfficiency.addActionListener(new ActionListener() {
 
@@ -2255,17 +2259,18 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final Rack r = (Rack) selectedPart;
                     final Foundation foundation = r.getTopContainer();
                     final SolarPanel s = r.getSolarPanel();
-                    final String title = "Set Inverter Efficiency (%) for " + r.toString().substring(0, r.toString().indexOf(')') + 1);
-                    final String footnote = "<html><hr><font size=2>The efficiency of a micro inverter for converting electricity<br>from DC to AC is typically 95%.<hr></html>";
+                    final String partInfo = r.toString().substring(0, r.toString().indexOf(')') + 1);
+                    final String title = I18n.get("title.set_inverter_efficiency_for", partInfo);
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.inverter_efficiency") + "<hr></html>";
                     final JPanel gui = new JPanel(new BorderLayout(5, 5));
                     final JTextField inputField = new JTextField(threeDecimalsFormat.format(s.getInverterEfficiency() * 100));
                     gui.add(inputField, BorderLayout.NORTH);
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -2286,9 +2291,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.CENTER);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Inverter Efficiency");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.inverter_efficiency"));
 
                     while (true) {
                         inputField.selectAll();
@@ -2302,12 +2307,12 @@ class PopupMenuForRack extends PopupMenuFactory {
                             try {
                                 inverterEfficiencyPercentage = Double.parseDouble(inputField.getText());
                             } catch (final NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), inputField.getText() + " is an invalid value!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_value", inputField.getText()), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
                                 if (inverterEfficiencyPercentage < SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE || inverterEfficiencyPercentage > SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Inverter efficiency must be between " + SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE + "% and " + SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE + "%.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.inverter_efficiency_range", Integer.toString(SolarPanel.MIN_INVERTER_EFFICIENCY_PERCENTAGE), Integer.toString(SolarPanel.MAX_INVERTER_EFFICIENCY_PERCENTAGE)), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(inverterEfficiencyPercentage * 0.01 - s.getInverterEfficiency()) > 0.000001;
                                     if (rb1.isSelected()) {
@@ -2363,7 +2368,7 @@ class PopupMenuForRack extends PopupMenuFactory {
 
             final ButtonGroup trackerButtonGroup = new ButtonGroup();
 
-            final JRadioButtonMenuItem miNoTracker = new JRadioButtonMenuItem("No Tracker...", true);
+            final JRadioButtonMenuItem miNoTracker = new JRadioButtonMenuItem(I18n.get("menu.no_tracker"), true);
             trackerButtonGroup.add(miNoTracker);
             miNoTracker.addActionListener(new ActionListener() {
 
@@ -2379,10 +2384,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2401,16 +2406,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final String title = "<html>Remove tracker for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>No tracker will be used.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.remove_tracker_for", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.no_tracker") + "<hr></html>";
                     final Object[] params = {title, footnote, panel};
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, "Remove solar tracker", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, I18n.get("dialog.remove_solar_tracker"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     boolean changed = rack.getTracker() != Trackable.NO_TRACKER;
                     if (rb1.isSelected()) {
                         if (changed) {
-                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, "No Tracker");
+                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, I18n.get("tracker.no_tracker"));
                             SceneManager.getTaskManager().update(() -> {
                                 rack.setTracker(Trackable.NO_TRACKER);
                                 rack.draw();
@@ -2431,7 +2436,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack, "No Tracker for All Racks on Selected Foundation");
+                            final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack, I18n.get("tracker.no_tracker_all_racks_foundation"));
                             SceneManager.getTaskManager().update(() -> {
                                 foundation.setTrackerForRacks(Trackable.NO_TRACKER);
                                 return null;
@@ -2449,7 +2454,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, "No Tracker for All Racks");
+                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, I18n.get("tracker.no_tracker_all_racks"));
                             SceneManager.getTaskManager().update(() -> {
                                 Scene.getInstance().setTrackerForAllRacks(Trackable.NO_TRACKER);
                                 return null;
@@ -2464,7 +2469,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JRadioButtonMenuItem miHorizontalSingleAxisTracker = new JRadioButtonMenuItem("Horizontal Single-Axis Tracker...");
+            final JRadioButtonMenuItem miHorizontalSingleAxisTracker = new JRadioButtonMenuItem(I18n.get("menu.horizontal_single_axis_tracker"));
             trackerButtonGroup.add(miHorizontalSingleAxisTracker);
             miHorizontalSingleAxisTracker.addActionListener(new ActionListener() {
 
@@ -2480,10 +2485,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2502,16 +2507,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final String title = "<html>Set horizontal single-axis tracker for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>A horizontal single-axis tracker (HSAT) rotates about the north-south axis<br>to follow the sun from east to west during the day.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.set_horizontal_single_axis_tracker", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.horizontal_single_axis_tracker") + "<hr></html>";
                     final Object[] params = {title, footnote, panel};
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, "Set horizontal single-axis solar tracker", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, I18n.get("dialog.set_horizontal_single_axis_solar_tracker"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     boolean changed = rack.getTracker() != Trackable.HORIZONTAL_SINGLE_AXIS_TRACKER;
                     if (rb1.isSelected()) {
                         if (changed) {
-                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, "Horizontal Single-Axis Tracker");
+                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, I18n.get("tracker.horizontal_single_axis"));
                             SceneManager.getTaskManager().update(() -> {
                                 rack.setTracker(Trackable.HORIZONTAL_SINGLE_AXIS_TRACKER);
                                 rack.draw();
@@ -2533,7 +2538,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                         }
                         if (changed) {
                             final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack,
-                                    "Horizontal Single-Axis Tracker for All Racks on Selected Foundation");
+                                    I18n.get("tracker.horizontal_single_axis_for_all_on_foundation"));
                             SceneManager.getTaskManager().update(() -> {
                                 foundation.setTrackerForRacks(Trackable.HORIZONTAL_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2551,7 +2556,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, "Horizontal Single-Axis Tracker for All Racks");
+                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, I18n.get("tracker.horizontal_single_axis_for_all"));
                             SceneManager.getTaskManager().update(() -> {
                                 Scene.getInstance().setTrackerForAllRacks(Trackable.HORIZONTAL_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2566,7 +2571,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JRadioButtonMenuItem miVerticalSingleAxisTracker = new JRadioButtonMenuItem("Vertical Single-Axis Tracker...");
+            final JRadioButtonMenuItem miVerticalSingleAxisTracker = new JRadioButtonMenuItem(I18n.get("menu.vertical_single_axis_tracker"));
             trackerButtonGroup.add(miVerticalSingleAxisTracker);
             miVerticalSingleAxisTracker.addActionListener(new ActionListener() {
 
@@ -2582,10 +2587,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2604,16 +2609,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final String title = "<html>Set vertical single-axis tracker for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>A vertical single-axis tracker (VSAT) rotates about an axis perpendicular to the ground<br>and follow the sun from east to west during the day.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.set_vertical_single_axis_tracker", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.vertical_single_axis_tracker") + "<hr></html>";
                     final Object[] params = {title, footnote, panel};
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, "Set vertical single-axis solar tracker", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, I18n.get("dialog.set_vertical_single_axis_solar_tracker"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     boolean changed = rack.getTracker() != Trackable.VERTICAL_SINGLE_AXIS_TRACKER;
                     if (rb1.isSelected()) {
                         if (changed) {
-                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, "Vertical Single-Axis Tracker");
+                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, I18n.get("tracker.vertical_single_axis"));
                             SceneManager.getTaskManager().update(() -> {
                                 rack.setTracker(Trackable.VERTICAL_SINGLE_AXIS_TRACKER);
                                 rack.draw();
@@ -2635,7 +2640,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                         }
                         if (changed) {
                             final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack,
-                                    "Vertical Single-Axis Tracker for All Racks on Selected Foundation");
+                                    I18n.get("tracker.vertical_single_axis_for_all_racks_on_foundation"));
                             SceneManager.getTaskManager().update(() -> {
                                 foundation.setTrackerForRacks(Trackable.VERTICAL_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2653,7 +2658,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, "Vertical Single-Axis Tracker for All Racks");
+                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, I18n.get("tracker.vertical_single_axis_for_all_racks"));
                             SceneManager.getTaskManager().update(() -> {
                                 Scene.getInstance().setTrackerForAllRacks(Trackable.VERTICAL_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2668,7 +2673,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JRadioButtonMenuItem miTiltedSingleAxisTracker = new JRadioButtonMenuItem("Tilted Single-Axis Tracker...");
+            final JRadioButtonMenuItem miTiltedSingleAxisTracker = new JRadioButtonMenuItem(I18n.get("menu.tilted_single_axis_tracker"));
             miTiltedSingleAxisTracker.setEnabled(false);
             trackerButtonGroup.add(miTiltedSingleAxisTracker);
             miTiltedSingleAxisTracker.addActionListener(new ActionListener() {
@@ -2685,10 +2690,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2707,16 +2712,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final String title = "<html>Set tilted single-axis tracker for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>A tilted single-axis tracker (TSAT) rotates about an axis neither parallel nor perpendicular to the ground<br>and follow the sun from east to west during the day.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.set_tilted_single_axis_tracker", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.tilted_single_axis_tracker") + "<hr></html>";
                     final Object[] params = {title, footnote, panel};
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, "Set tilted single-axis solar tracker", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, I18n.get("dialog.set_tilted_single_axis_solar_tracker"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     boolean changed = rack.getTracker() != Trackable.TILTED_SINGLE_AXIS_TRACKER;
                     if (rb1.isSelected()) {
                         if (changed) {
-                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, "Tilted Single-Axis Tracker");
+                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, I18n.get("tracker.tilted_single_axis"));
                             SceneManager.getTaskManager().update(() -> {
                                 rack.setTracker(Trackable.TILTED_SINGLE_AXIS_TRACKER);
                                 rack.draw();
@@ -2738,7 +2743,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                         }
                         if (changed) {
                             final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack,
-                                    "Tilted Single-Axis Tracker for All Racks on Selected Foundation");
+                                    I18n.get("tracker.tilted_single_axis_for_all_on_foundation"));
                             SceneManager.getTaskManager().update(() -> {
                                 foundation.setTrackerForRacks(Trackable.TILTED_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2756,7 +2761,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, "Tilted Single-Axis Tracker for All Racks");
+                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, I18n.get("tracker.tilted_single_axis_for_all"));
                             SceneManager.getTaskManager().update(() -> {
                                 Scene.getInstance().setTrackerForAllRacks(Trackable.TILTED_SINGLE_AXIS_TRACKER);
                                 return null;
@@ -2771,7 +2776,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 }
             });
 
-            final JRadioButtonMenuItem miAltazimuthDualAxisTracker = new JRadioButtonMenuItem("Altazimuth Dual-Axis Tracker...");
+            final JRadioButtonMenuItem miAltazimuthDualAxisTracker = new JRadioButtonMenuItem(I18n.get("menu.altazimuth_dual_axis_tracker"));
             trackerButtonGroup.add(miAltazimuthDualAxisTracker);
             miAltazimuthDualAxisTracker.addActionListener(new ActionListener() {
 
@@ -2787,10 +2792,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final String partInfo = rack.toString().substring(0, rack.toString().indexOf(')') + 1);
                     final JPanel panel = new JPanel();
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2809,16 +2814,16 @@ class PopupMenuForRack extends PopupMenuFactory {
                             rb3.setSelected(true);
                             break;
                     }
-                    final String title = "<html>Set altitude-azimuth dual-axis tracker for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>The Alt/Az dual-axis solar tracker will rotate the solar panel to face the sun<br>all the time during the day.<hr></html>";
+                    final String title = "<html>" + I18n.get("title.set_altazimuth_dual_axis_tracker", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.altazimuth_dual_axis_tracker") + "<hr></html>";
                     final Object[] params = {title, footnote, panel};
-                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, "Set altitude-azimuth dual-axis solar tracker", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), params, I18n.get("dialog.set_altazimuth_dual_axis_solar_tracker"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                     boolean changed = rack.getTracker() != Trackable.ALTAZIMUTH_DUAL_AXIS_TRACKER;
                     if (rb1.isSelected()) {
                         if (changed) {
-                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, "Dual-Axis Tracker");
+                            final SetSolarTrackerCommand c = new SetSolarTrackerCommand(rack, I18n.get("tracker.dual_axis"));
                             SceneManager.getTaskManager().update(() -> {
                                 rack.setTracker(Trackable.ALTAZIMUTH_DUAL_AXIS_TRACKER);
                                 rack.draw();
@@ -2840,7 +2845,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                         }
                         if (changed) {
                             final SetSolarTrackersOnFoundationCommand c = new SetSolarTrackersOnFoundationCommand(foundation, rack,
-                                    "Dual-Axis Tracker for All Racks on Selected Foundation");
+                                    I18n.get("tracker.dual_axis_for_all_on_foundation"));
                             SceneManager.getTaskManager().update(() -> {
                                 foundation.setTrackerForRacks(Trackable.ALTAZIMUTH_DUAL_AXIS_TRACKER);
                                 return null;
@@ -2858,7 +2863,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                             }
                         }
                         if (changed) {
-                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, "Dual-Axis Tracker for All Racks");
+                            final SetSolarTrackersForAllCommand c = new SetSolarTrackersForAllCommand(rack, I18n.get("tracker.dual_axis_for_all"));
                             SceneManager.getTaskManager().update(() -> {
                                 Scene.getInstance().setTrackerForAllRacks(Trackable.ALTAZIMUTH_DUAL_AXIS_TRACKER);
                                 return null;
@@ -2879,7 +2884,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             trackerMenu.add(miTiltedSingleAxisTracker);
             trackerMenu.add(miAltazimuthDualAxisTracker);
 
-            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem("Disable Edit Points");
+            final JCheckBoxMenuItem cbmiDisableEditPoints = new JCheckBoxMenuItem(I18n.get("menu.disable_edit_points"));
             cbmiDisableEditPoints.addItemListener(new ItemListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -2897,10 +2902,10 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final JPanel panel = new JPanel();
                     gui.add(panel, BorderLayout.SOUTH);
                     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                    panel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Rack", true);
-                    final JRadioButton rb2 = new JRadioButton("All Racks on this Foundation");
-                    final JRadioButton rb3 = new JRadioButton("All Racks");
+                    panel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_rack"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_racks_on_foundation"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_racks"));
                     panel.add(rb1);
                     panel.add(rb2);
                     panel.add(rb3);
@@ -2920,11 +2925,11 @@ class PopupMenuForRack extends PopupMenuFactory {
                             break;
                     }
 
-                    final String title = "<html>" + (disabled ? "Disable" : "Enable") + " edit points for " + partInfo + "</html>";
-                    final String footnote = "<html><hr><font size=2>Disable the edit points of a solar panel rack prevents it<br>from being unintentionally moved.<hr></html>";
-                    final Object[] options = new Object[]{"OK", "Cancel"};
+                    final String title = "<html>" + I18n.get(disabled ? "title.disable_edit_points" : "title.enable_edit_points", partInfo) + "</html>";
+                    final String footnote = "<html><hr><font size=2>" + I18n.get("footnote.disable_edit_points_rack") + "<hr></html>";
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel")};
                     final JOptionPane optionPane = new JOptionPane(new Object[]{title, footnote, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), (disabled ? "Disable" : "Enable") + " Edit Points");
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get(disabled ? "dialog.disable_edit_points" : "dialog.enable_edit_points"));
                     dialog.setVisible(true);
                     if (optionPane.getValue() == options[0]) {
                         if (rb1.isSelected()) {
@@ -2960,7 +2965,7 @@ class PopupMenuForRack extends PopupMenuFactory {
 
             });
 
-            final JCheckBoxMenuItem cbmiDrawSunBeam = new JCheckBoxMenuItem("Draw Sun Beam");
+            final JCheckBoxMenuItem cbmiDrawSunBeam = new JCheckBoxMenuItem(I18n.get("menu.draw_sun_beam"));
             cbmiDrawSunBeam.addItemListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (!(selectedPart instanceof Rack)) {
@@ -2979,9 +2984,9 @@ class PopupMenuForRack extends PopupMenuFactory {
                 Scene.getInstance().setEdited(true);
             });
 
-            final JMenu labelMenu = new JMenu("Label");
+            final JMenu labelMenu = new JMenu(I18n.get("menu.label"));
 
-            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem("None", true);
+            final JCheckBoxMenuItem miLabelNone = new JCheckBoxMenuItem(I18n.get("label.none"), true);
             miLabelNone.addActionListener(e -> {
                 if (miLabelNone.isSelected()) {
                     final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
@@ -3001,7 +3006,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelNone);
 
-            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem("Custom");
+            final JCheckBoxMenuItem miLabelCustom = new JCheckBoxMenuItem(I18n.get("label.custom"));
             miLabelCustom.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3009,7 +3014,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                     final SetRackLabelCommand c = new SetRackLabelCommand(r);
                     r.setLabelCustom(miLabelCustom.isSelected());
                     if (r.getLabelCustom()) {
-                        r.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), "Custom Text", r.getLabelCustomText()));
+                        r.setLabelCustomText(JOptionPane.showInputDialog(MainFrame.getInstance(), I18n.get("dialog.custom_text"), r.getLabelCustomText()));
                     }
                     SceneManager.getTaskManager().update(() -> {
                         r.draw();
@@ -3022,7 +3027,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCustom);
 
-            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem("ID");
+            final JCheckBoxMenuItem miLabelId = new JCheckBoxMenuItem(I18n.get("label.id"));
             miLabelId.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3040,7 +3045,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelId);
 
-            final JCheckBoxMenuItem miLabelCellEfficiency = new JCheckBoxMenuItem("Cell Efficiency");
+            final JCheckBoxMenuItem miLabelCellEfficiency = new JCheckBoxMenuItem(I18n.get("label.cell_efficiency"));
             miLabelCellEfficiency.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3058,7 +3063,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelCellEfficiency);
 
-            final JCheckBoxMenuItem miLabelTiltAngle = new JCheckBoxMenuItem("Tilt Angle");
+            final JCheckBoxMenuItem miLabelTiltAngle = new JCheckBoxMenuItem(I18n.get("label.tilt_angle"));
             miLabelTiltAngle.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3076,7 +3081,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelTiltAngle);
 
-            final JCheckBoxMenuItem miLabelTracker = new JCheckBoxMenuItem("Tracker");
+            final JCheckBoxMenuItem miLabelTracker = new JCheckBoxMenuItem(I18n.get("label.tracker"));
             miLabelTracker.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3094,7 +3099,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             labelMenu.add(miLabelTracker);
 
-            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem("Energy Output");
+            final JCheckBoxMenuItem miLabelEnergyOutput = new JCheckBoxMenuItem(I18n.get("label.energy_output"));
             miLabelEnergyOutput.addActionListener(e -> {
                 final HousePart selectedPart = SceneManager.getInstance().getSelectedPart();
                 if (selectedPart instanceof Rack) {
@@ -3180,7 +3185,7 @@ class PopupMenuForRack extends PopupMenuFactory {
                 Util.selectSilently(miLabelTiltAngle, rack.getLabelTiltAngle());
                 Util.selectSilently(miLabelTracker, rack.getLabelTracker());
                 Util.selectSilently(miLabelEnergyOutput, rack.getLabelEnergyOutput());
-                final boolean isCustom = "Custom".equals(rack.getSolarPanel().getModelName());
+                final boolean isCustom = I18n.get("model.custom").equals(rack.getSolarPanel().getModelName());
                 miSolarPanelCellEfficiency.setEnabled(isCustom);
                 miSolarPanelCellType.setEnabled(isCustom);
                 miSolarPanelColor.setEnabled(isCustom);
@@ -3211,7 +3216,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             popupMenuForRack.add(labelMenu);
             popupMenuForRack.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Yield Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
@@ -3222,7 +3227,7 @@ class PopupMenuForRack extends PopupMenuFactory {
             });
             popupMenuForRack.add(mi);
 
-            mi = new JMenuItem("Annual Yield Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_yield_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;

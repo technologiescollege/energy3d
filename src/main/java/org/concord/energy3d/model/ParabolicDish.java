@@ -14,6 +14,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Atmosphere;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -138,7 +139,7 @@ public class ParabolicDish extends HousePart implements SolarReflector, Labelabl
         dishBack.setRenderState(cullState);
         root.attachChild(dishBack);
 
-        post = new MyCylinder("Post Cylinder", 2, detailed ? 10 : 2, 10, 0); // if there are many dishes, reduce the solution of post
+        post = new MyCylinder(I18n.get("node.post_cylinder"), 2, detailed ? 10 : 2, 10, 0); // if there are many dishes, reduce the solution of post
         post.setDefaultColor(ColorRGBA.WHITE);
         post.setRadius(0.6);
         post.setRenderState(offsetState);
@@ -184,7 +185,7 @@ public class ParabolicDish extends HousePart implements SolarReflector, Labelabl
             tripod[i].updateModelBound();
         }
 
-        lightBeams = new Line("Light Beams");
+        lightBeams = new Line(I18n.get("node.light_beams"));
         lightBeams.setLineWidth(1f);
         lightBeams.setStipplePattern((short) 0xffff);
         lightBeams.setModelBound(null);
@@ -443,7 +444,7 @@ public class ParabolicDish extends HousePart implements SolarReflector, Labelabl
             text += (text.equals("") ? "" : "\n") + "#" + id;
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -605,7 +606,7 @@ public class ParabolicDish extends HousePart implements SolarReflector, Labelabl
         }
         final double o = copy.checkCopyOverlap();
         if (o >= 0) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new parabolic dish is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.parabolic_dish_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.simulation.UtilityBill;
+import org.concord.energy3d.util.I18n;
 
 public class DeleteUtilityBillCommand extends MyAbstractUndoableEdit {
 
@@ -39,7 +40,7 @@ public class DeleteUtilityBillCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Delete Utility Bill";
+		return I18n.get("undo.delete_utility_bill");
 	}
 
 }

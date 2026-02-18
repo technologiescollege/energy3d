@@ -27,14 +27,27 @@ import org.concord.energy3d.model.Wall;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
  */
 class GroupSelector {
 
-    static final String[] types = {"Solar Panel", "Solar Panel Rack", "Mirror", "Parabolic Trough", "Parabolic Dish", "Fresnel Reflector", "Window", "Wall", "Roof", "Foundation", "Foundation (Mean)"};
-    private String currentGroupType = "Solar Panel";
+    static final String[] types = {
+            I18n.get("group.type.solar_panel"),
+            I18n.get("group.type.solar_panel_rack"),
+            I18n.get("group.type.mirror"),
+            I18n.get("group.type.parabolic_trough"),
+            I18n.get("group.type.parabolic_dish"),
+            I18n.get("group.type.fresnel_reflector"),
+            I18n.get("group.type.window"),
+            I18n.get("group.type.wall"),
+            I18n.get("group.type.roof"),
+            I18n.get("group.type.foundation"),
+            I18n.get("group.type.foundation_mean")
+    };
+    private String currentGroupType = I18n.get("group.type.solar_panel");
 
     private ArrayList<Long> getIdArray(final Class<?> c) {
         final ArrayList<Long> idArray = new ArrayList<>();
@@ -49,25 +62,25 @@ class GroupSelector {
 
     private Class<?> getCurrentGroupClass() {
         Class<?> c = null;
-        if ("Wall".equals(currentGroupType)) {
+        if (I18n.get("group.type.wall").equals(currentGroupType)) {
             c = Wall.class;
-        } else if ("Window".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.window").equals(currentGroupType)) {
             c = Window.class;
-        } else if ("Roof".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.roof").equals(currentGroupType)) {
             c = Roof.class;
-        } else if ("Solar Panel".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.solar_panel").equals(currentGroupType)) {
             c = SolarPanel.class;
-        } else if ("Solar Panel Rack".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.solar_panel_rack").equals(currentGroupType)) {
             c = Rack.class;
-        } else if ("Mirror".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.mirror").equals(currentGroupType)) {
             c = Mirror.class;
-        } else if ("Parabolic Trough".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.parabolic_trough").equals(currentGroupType)) {
             c = ParabolicTrough.class;
-        } else if ("Parabolic Dish".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.parabolic_dish").equals(currentGroupType)) {
             c = ParabolicDish.class;
-        } else if ("Fresnel Reflector".equals(currentGroupType)) {
+        } else if (I18n.get("group.type.fresnel_reflector").equals(currentGroupType)) {
             c = FresnelReflector.class;
-        } else if ("Foundation".equals(currentGroupType) || currentGroupType.startsWith("Foundation")) {
+        } else if (I18n.get("group.type.foundation").equals(currentGroupType) || currentGroupType.startsWith(I18n.get("group.type.foundation"))) {
             c = Foundation.class;
         }
         return c;
@@ -79,7 +92,7 @@ class GroupSelector {
 
     PartGroup select() {
         final JPanel gui = new JPanel(new BorderLayout(5, 5));
-        gui.setBorder(BorderFactory.createTitledBorder("Types and IDs"));
+        gui.setBorder(BorderFactory.createTitledBorder(I18n.get("dialog.types_and_ids")));
         final DefaultListModel<Long> idListModel = new DefaultListModel<>();
         final JComboBox<String> typeComboBox = new JComboBox<>(types);
         if (currentGroupType != null) {
@@ -115,12 +128,12 @@ class GroupSelector {
         });
         gui.add(typeComboBox, BorderLayout.NORTH);
         gui.add(new JScrollPane(idList), BorderLayout.CENTER);
-        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, "Select a Group", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
+        if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), gui, I18n.get("dialog.select_group"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.CANCEL_OPTION) {
             return null;
         }
         final List<Long> selectedIds = idList.getSelectedValuesList();
         if (selectedIds.isEmpty()) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "You must select a group of parts first.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.must_select_group"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
             return null;
         }
         return new PartGroup((String) typeComboBox.getSelectedItem(), selectedIds);

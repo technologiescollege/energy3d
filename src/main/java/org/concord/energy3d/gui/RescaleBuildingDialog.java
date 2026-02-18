@@ -17,6 +17,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.undo.RescaleBuildingCommand;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.SpringUtilities;
 
 /**
@@ -37,7 +38,7 @@ class RescaleBuildingDialog extends JDialog {
 
         super(MainFrame.getInstance(), true);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setTitle("Rescale Building #" + foundation.getId());
+        setTitle(I18n.get("dialog.rescale_building", String.valueOf(foundation.getId())));
 
         final JTextField oldXField = oldX > 0 ? new JTextField(EnergyPanel.FIVE_DECIMALS.format(oldX), 10) : new JTextField(10);
         final JTextField newXField = newX > 0 ? new JTextField(EnergyPanel.FIVE_DECIMALS.format(newX), 10) : new JTextField(10);
@@ -59,13 +60,13 @@ class RescaleBuildingDialog extends JDialog {
                     oldX = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for current length in X-direction: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_current_length_x", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (oldX <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Current length in X-direction must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.current_length_x_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -76,13 +77,13 @@ class RescaleBuildingDialog extends JDialog {
                     newX = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for new length in X-direction: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_new_length_x", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (newX <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "New length in X-direction must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.new_length_x_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -93,13 +94,13 @@ class RescaleBuildingDialog extends JDialog {
                     oldY = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for current length in Y-direction: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_current_length_y", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (oldY <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Current length in Y-direction must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.current_length_y_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -110,13 +111,13 @@ class RescaleBuildingDialog extends JDialog {
                     newY = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for new length in Y-direction: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_new_length_y", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (newY <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "New length in Y-direction must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.new_length_y_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -127,13 +128,13 @@ class RescaleBuildingDialog extends JDialog {
                     oldZ = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for current height: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_current_height", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (oldZ <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Current height must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.current_height_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -144,13 +145,13 @@ class RescaleBuildingDialog extends JDialog {
                     newZ = Double.parseDouble(t);
                 } catch (final NumberFormatException ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "Invalid input for new height: " + ex.getMessage(),
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.invalid_input_new_height", ex.getMessage()),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (newZ <= 0) {
-                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, "New height must be greater than zero!",
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RescaleBuildingDialog.this, I18n.get("msg.new_height_must_be_positive"),
+                            I18n.get("msg.invalid_input_title"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -181,19 +182,19 @@ class RescaleBuildingDialog extends JDialog {
             }
         };
 
-        panel.add(new JLabel("Current Length in X-Direction: "));
+        panel.add(new JLabel(I18n.get("label.current_length_x")));
         panel.add(oldXField);
-        panel.add(new JLabel("New Length in X-Direction: "));
+        panel.add(new JLabel(I18n.get("label.new_length_x")));
         panel.add(newXField);
 
-        panel.add(new JLabel("Current Length in Y-Direction: "));
+        panel.add(new JLabel(I18n.get("label.current_length_y")));
         panel.add(oldYField);
-        panel.add(new JLabel("New Length in Y-Direction: "));
+        panel.add(new JLabel(I18n.get("label.new_length_y")));
         panel.add(newYField);
 
-        panel.add(new JLabel("Current Height: "));
+        panel.add(new JLabel(I18n.get("label.current_height")));
         panel.add(oldZField);
-        panel.add(new JLabel("New Height: "));
+        panel.add(new JLabel(I18n.get("label.new_height")));
         panel.add(newZField);
 
         SpringUtilities.makeCompactGrid(panel, 6, 2, 6, 6, 6, 6);
@@ -202,7 +203,7 @@ class RescaleBuildingDialog extends JDialog {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton(I18n.get("dialog.ok"));
         okButton.addActionListener(e -> {
             action.run();
             dispose();
@@ -211,12 +212,12 @@ class RescaleBuildingDialog extends JDialog {
         buttonPanel.add(okButton);
         getRootPane().setDefaultButton(okButton);
 
-        final JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton(I18n.get("dialog.cancel"));
         cancelButton.addActionListener(e -> dispose());
         cancelButton.setActionCommand("Cancel");
         buttonPanel.add(cancelButton);
 
-        final JButton applyButton = new JButton("Apply");
+        final JButton applyButton = new JButton(I18n.get("common.apply"));
         applyButton.addActionListener(e -> action.run());
         applyButton.setActionCommand("Apply");
         buttonPanel.add(applyButton);

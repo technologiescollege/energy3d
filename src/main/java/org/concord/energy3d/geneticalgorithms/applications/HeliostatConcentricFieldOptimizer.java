@@ -45,27 +45,27 @@ public class HeliostatConcentricFieldOptimizer extends HeliostatFieldOptimizer {
         firstBorn.setGene(3, (radialSpacing - minimumRadialSpacing) / (maximumRadialSpacing - minimumRadialSpacing));
         firstBorn.setGene(4, (radialExpansion - minimumRadialExpansion) / (maximumRadialExpansion - minimumRadialExpansion));
 
-        setGeneName(0, "Aperture Width");
+        setGeneName(0, org.concord.energy3d.util.I18n.get("param.heliostat_aperture_width"));
         setInitialGene(0, heliostat.getApertureWidth());
         setGeneMinimum(0, minimumApertureWidth);
         setGeneMaximum(0, maximumApertureWidth);
 
-        setGeneName(1, "Aperture Height");
+        setGeneName(1, org.concord.energy3d.util.I18n.get("param.heliostat_aperture_height"));
         setInitialGene(1, heliostat.getApertureHeight());
         setGeneMinimum(1, minimumApertureHeight);
         setGeneMaximum(1, maximumApertureHeight);
 
-        setGeneName(2, "Azimuthal Spacing");
+        setGeneName(2, org.concord.energy3d.util.I18n.get("param.azimuthal_spacing"));
         setInitialGene(2, azimuthalSpacing);
         setGeneMinimum(2, minimumAzimuthalSpacing);
         setGeneMaximum(2, maximumAzimuthalSpacing);
 
-        setGeneName(3, "Radial Spacing");
+        setGeneName(3, org.concord.energy3d.util.I18n.get("param.radial_spacing"));
         setInitialGene(3, radialSpacing);
         setGeneMinimum(3, minimumRadialSpacing);
         setGeneMaximum(3, maximumRadialSpacing);
 
-        setGeneName(4, "Radial Expansion");
+        setGeneName(4, org.concord.energy3d.util.I18n.get("param.radial_expansion"));
         setInitialGene(4, radialExpansion);
         setGeneMinimum(4, minimumRadialExpansion);
         setGeneMaximum(4, maximumRadialExpansion);

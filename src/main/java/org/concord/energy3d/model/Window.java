@@ -12,6 +12,7 @@ import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Annotation;
 import org.concord.energy3d.shapes.SizeAnnotation;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.MeshLib;
 import org.concord.energy3d.util.Util;
 
@@ -129,7 +130,7 @@ public class Window extends HousePart implements Thermal {
         label1.setAlign(Align.SouthWest);
         root.attachChild(label1);
 
-        bars = new Line("Window (bars)");
+        bars = new Line(I18n.get("node.window_bars"));
         bars.setLineWidth(3);
         bars.setDefaultColor(muntinColor);
         bars.setModelBound(new BoundingBox());
@@ -686,13 +687,13 @@ public class Window extends HousePart implements Thermal {
                     c.points.get(i).setX(points.get(i).getX() + shift);
                 }
                 if (c.overlap()) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new window is too close to an existing one.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.window_too_close"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             } else if (container instanceof Roof) {
                 if (normal == null) {
                     // don't remove this error message just in case this happens again
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Normal of window [" + c + "] is null. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.window_normal_null", String.valueOf(c)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 final Vector3 d = normal.cross(Vector3.UNIT_Z, null);
@@ -722,11 +723,11 @@ public class Window extends HousePart implements Thermal {
                     }
                 }
                 if (outsideWalls) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, you are not allowed to paste a window outside a roof.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.window_paste_outside_roof"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
                 if (c.overlap()) {
-                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new window is too close to an existing one.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.window_too_close"), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
                     return null;
                 }
             }

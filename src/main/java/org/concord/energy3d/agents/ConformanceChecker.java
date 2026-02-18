@@ -10,6 +10,7 @@ import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.undo.ChangeDateCommand;
 import org.concord.energy3d.undo.ChangePartUValueCommand;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -51,20 +52,20 @@ public class ConformanceChecker implements Agent {
 		final int countQ = Util.countMatch(Pattern.compile("Q+?").matcher(eventString));
 		final int countW = Util.countMatch(Pattern.compile("W+?").matcher(eventString));
 		if (countQ < 2) {
-			msg += "Did you forget to answer the pre/post-test questions?";
+			msg += I18n.get("msg.did_you_forget_pre_post_test_questions");
 		} else if (countA == 0) {
-			msg += "You have never run a daily energy analysis.";
+			msg += I18n.get("msg.never_run_daily_energy_analysis");
 		} else if (countW == 0) {
-			msg += "You have never changed the U-value of a wall.";
+			msg += I18n.get("msg.never_changed_u_value_wall");
 		} else if (countI == 0) {
-			msg += "You have never collected any data.";
+			msg += I18n.get("msg.never_collected_data");
 		} else if (countD == 0) {
-			msg += "Did you forget to investigate the effect of the U-value in a different season?";
+			msg += I18n.get("msg.forget_investigate_u_value_different_season");
 		} else {
-			msg += "Thank you for completing this task!";
+			msg += I18n.get("msg.thank_you_completing_task");
 			EnergyPanel.getInstance().showInstructionTabHeaders(true);
 		}
-		JOptionPane.showMessageDialog(MainFrame.getInstance(), msg + "</html>", "Advice", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(MainFrame.getInstance(), msg + "</html>", I18n.get("title.advice"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override

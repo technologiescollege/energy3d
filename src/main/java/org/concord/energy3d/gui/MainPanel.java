@@ -11,6 +11,7 @@ import org.concord.energy3d.scene.SceneManager.Operation;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.undo.*;
 import org.concord.energy3d.util.Config;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -105,17 +106,17 @@ public class MainPanel extends JPanel {
         initialize();
 
         // create base menu
-        final JCheckBoxMenuItem miFoundation = new JCheckBoxMenuItem("Foundation", new ImageIcon(getClass().getResource("icons/foundation.png")), true);
-        final JCheckBoxMenuItem miBox = new JCheckBoxMenuItem("Box", new ImageIcon(getClass().getResource("icons/box.png")), true);
+        final JCheckBoxMenuItem miFoundation = new JCheckBoxMenuItem(I18n.get("part.foundation"), new ImageIcon(getClass().getResource("icons/foundation.png")), true);
+        final JCheckBoxMenuItem miBox = new JCheckBoxMenuItem(I18n.get("part.box"), new ImageIcon(getClass().getResource("icons/box.png")), true);
         final ActionListener baseAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             baseButton.setIcon(selected.getIcon());
             if (selected == miFoundation) {
                 baseCommand = Operation.DRAW_FOUNDATION;
-                baseButton.setToolTipText("Draw a foundation");
+                baseButton.setToolTipText(I18n.get("tooltip.draw_foundation"));
             } else if (selected == miBox) {
                 baseCommand = Operation.ADD_BOX;
-                baseButton.setToolTipText("Add a box");
+                baseButton.setToolTipText(I18n.get("tooltip.add_box"));
             }
             SceneManager.getInstance().setOperation(baseCommand);
             baseButton.setSelected(true);
@@ -131,18 +132,18 @@ public class MainPanel extends JPanel {
         bg.add(miBox);
 
         // create wall menu
-        final JCheckBoxMenuItem miExteriorWall = new JCheckBoxMenuItem("Exterior Wall", new ImageIcon(getClass().getResource("icons/exterior_wall.png")), true);
-        final JCheckBoxMenuItem miInteriorWall = new JCheckBoxMenuItem("Interior Wall", new ImageIcon(getClass().getResource("icons/interior_wall.png")), true);
+        final JCheckBoxMenuItem miExteriorWall = new JCheckBoxMenuItem(I18n.get("part.exterior_wall"), new ImageIcon(getClass().getResource("icons/exterior_wall.png")), true);
+        final JCheckBoxMenuItem miInteriorWall = new JCheckBoxMenuItem(I18n.get("part.interior_wall"), new ImageIcon(getClass().getResource("icons/interior_wall.png")), true);
         miInteriorWall.setEnabled(false);
         final ActionListener wallAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             wallButton.setIcon(selected.getIcon());
             if (selected == miExteriorWall) {
                 wallCommand = Operation.DRAW_EXTERIOR_WALL;
-                wallButton.setToolTipText("Draw an exterior wall");
+                wallButton.setToolTipText(I18n.get("tooltip.draw_exterior_wall"));
             } else if (selected == miInteriorWall) {
                 wallCommand = Operation.DRAW_INTERIOR_WALL;
-                wallButton.setToolTipText("Draw an interior wall");
+                wallButton.setToolTipText(I18n.get("tooltip.draw_interior_wall"));
             }
             SceneManager.getInstance().setOperation(wallCommand);
             wallButton.setSelected(true);
@@ -158,33 +159,33 @@ public class MainPanel extends JPanel {
         bg.add(miInteriorWall);
 
         // create roof menu
-        final JCheckBoxMenuItem miPyramidRoof = new JCheckBoxMenuItem("Pyramid Roof", new ImageIcon(getClass().getResource("icons/pyramid_roof.png")), true);
-        final JCheckBoxMenuItem miHipRoof = new JCheckBoxMenuItem("Hip Roof", new ImageIcon(getClass().getResource("icons/hip_roof.png")));
-        final JCheckBoxMenuItem miShedRoof = new JCheckBoxMenuItem("Shed Roof", new ImageIcon(getClass().getResource("icons/shed_roof.png")));
-        final JCheckBoxMenuItem miGambrelRoof = new JCheckBoxMenuItem("Gambrel Roof", new ImageIcon(getClass().getResource("icons/gambler_roof.png")));
-        final JCheckBoxMenuItem miCustomRoof = new JCheckBoxMenuItem("Custom Roof", new ImageIcon(getClass().getResource("icons/custom_roof.png")));
-        final JCheckBoxMenuItem miGableRoof = new JCheckBoxMenuItem("Gable Conversion", new ImageIcon(getClass().getResource("icons/gable.png")));
+        final JCheckBoxMenuItem miPyramidRoof = new JCheckBoxMenuItem(I18n.get("part.pyramid_roof"), new ImageIcon(getClass().getResource("icons/pyramid_roof.png")), true);
+        final JCheckBoxMenuItem miHipRoof = new JCheckBoxMenuItem(I18n.get("part.hip_roof"), new ImageIcon(getClass().getResource("icons/hip_roof.png")));
+        final JCheckBoxMenuItem miShedRoof = new JCheckBoxMenuItem(I18n.get("part.shed_roof"), new ImageIcon(getClass().getResource("icons/shed_roof.png")));
+        final JCheckBoxMenuItem miGambrelRoof = new JCheckBoxMenuItem(I18n.get("part.gambrel_roof"), new ImageIcon(getClass().getResource("icons/gambler_roof.png")));
+        final JCheckBoxMenuItem miCustomRoof = new JCheckBoxMenuItem(I18n.get("part.custom_roof"), new ImageIcon(getClass().getResource("icons/custom_roof.png")));
+        final JCheckBoxMenuItem miGableRoof = new JCheckBoxMenuItem(I18n.get("part.gable_conversion"), new ImageIcon(getClass().getResource("icons/gable.png")));
         final ActionListener roofAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             roofButton.setIcon(selected.getIcon());
             if (selected == miPyramidRoof) {
                 roofCommand = Operation.ADD_ROOF_PYRAMID;
-                roofButton.setToolTipText("Add a pyramid roof");
+                roofButton.setToolTipText(I18n.get("tooltip.add_pyramid_roof"));
             } else if (selected == miHipRoof) {
                 roofCommand = Operation.ADD_ROOF_HIP;
-                roofButton.setToolTipText("Add a hip roof");
+                roofButton.setToolTipText(I18n.get("tooltip.add_hip_roof"));
             } else if (selected == miShedRoof) {
                 roofCommand = Operation.ADD_ROOF_SHED;
-                roofButton.setToolTipText("Add a shed roof");
+                roofButton.setToolTipText(I18n.get("tooltip.add_shed_roof"));
             } else if (selected == miGambrelRoof) {
                 roofCommand = Operation.ADD_ROOF_GAMBREL;
-                roofButton.setToolTipText("Add a gambrel roof");
+                roofButton.setToolTipText(I18n.get("tooltip.add_gambrel_roof"));
             } else if (selected == miCustomRoof) {
                 roofCommand = Operation.ADD_ROOF_CUSTOM;
-                roofButton.setToolTipText("Add a custom roof");
+                roofButton.setToolTipText(I18n.get("tooltip.add_custom_roof"));
             } else {
                 roofCommand = Operation.GABLE_ROOF;
-                roofButton.setToolTipText("Convert to a gable roof");
+                roofButton.setToolTipText(I18n.get("tooltip.convert_gable_roof"));
             }
             SceneManager.getInstance().setOperation(roofCommand);
             roofButton.setSelected(true);
@@ -213,38 +214,38 @@ public class MainPanel extends JPanel {
         bg.add(miGableRoof);
 
         // create misc menu
-        final JCheckBoxMenuItem miWindow = new JCheckBoxMenuItem("Window", new ImageIcon(getClass().getResource("icons/window.png")), true);
-        final JCheckBoxMenuItem miDoor = new JCheckBoxMenuItem("Door", new ImageIcon(getClass().getResource("icons/door.png")), true);
-        final JCheckBoxMenuItem miFloor = new JCheckBoxMenuItem("Floor", new ImageIcon(getClass().getResource("icons/floor.png")));
-        final JCheckBoxMenuItem miPlant = new JCheckBoxMenuItem("Plant", new ImageIcon(getClass().getResource("icons/plant.png")), true);
-        final JCheckBoxMenuItem miHuman = new JCheckBoxMenuItem("Human", new ImageIcon(getClass().getResource("icons/human.png")));
-        final JCheckBoxMenuItem miSensor = new JCheckBoxMenuItem("Sensor Module", new ImageIcon(getClass().getResource("icons/sensor.png")));
-        final JCheckBoxMenuItem miTapeMeasure = new JCheckBoxMenuItem("Tape Measure", new ImageIcon(getClass().getResource("icons/tape_measure.png")));
+        final JCheckBoxMenuItem miWindow = new JCheckBoxMenuItem(I18n.get("part.window"), new ImageIcon(getClass().getResource("icons/window.png")), true);
+        final JCheckBoxMenuItem miDoor = new JCheckBoxMenuItem(I18n.get("part.door"), new ImageIcon(getClass().getResource("icons/door.png")), true);
+        final JCheckBoxMenuItem miFloor = new JCheckBoxMenuItem(I18n.get("part.floor"), new ImageIcon(getClass().getResource("icons/floor.png")));
+        final JCheckBoxMenuItem miPlant = new JCheckBoxMenuItem(I18n.get("part.plant"), new ImageIcon(getClass().getResource("icons/plant.png")), true);
+        final JCheckBoxMenuItem miHuman = new JCheckBoxMenuItem(I18n.get("part.human"), new ImageIcon(getClass().getResource("icons/human.png")));
+        final JCheckBoxMenuItem miSensor = new JCheckBoxMenuItem(I18n.get("part.sensor_module"), new ImageIcon(getClass().getResource("icons/sensor.png")));
+        final JCheckBoxMenuItem miTapeMeasure = new JCheckBoxMenuItem(I18n.get("part.tape_measure"), new ImageIcon(getClass().getResource("icons/tape_measure.png")));
         miTapeMeasure.setEnabled(false);
         final ActionListener miscAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             miscButton.setIcon(selected.getIcon());
             if (selected == miWindow) {
                 miscCommand = SceneManager.Operation.DRAW_WINDOW;
-                miscButton.setToolTipText("Draw a window");
+                miscButton.setToolTipText(I18n.get("tooltip.draw_window"));
             } else if (selected == miDoor) {
                 miscCommand = SceneManager.Operation.DRAW_DOOR;
-                miscButton.setToolTipText("Draw a door");
+                miscButton.setToolTipText(I18n.get("tooltip.draw_door"));
             } else if (selected == miFloor) {
                 miscCommand = SceneManager.Operation.ADD_FLOOR;
-                miscButton.setToolTipText("Add a floor");
+                miscButton.setToolTipText(I18n.get("tooltip.add_floor"));
             } else if (selected == miPlant) {
                 miscCommand = SceneManager.Operation.ADD_PLANT;
-                miscButton.setToolTipText("Add a plant");
+                miscButton.setToolTipText(I18n.get("tooltip.add_plant"));
             } else if (selected == miHuman) {
                 miscCommand = SceneManager.Operation.ADD_HUMAN;
-                miscButton.setToolTipText("Add a human");
+                miscButton.setToolTipText(I18n.get("tooltip.add_human"));
             } else if (selected == miSensor) {
                 miscCommand = SceneManager.Operation.ADD_SENSOR;
-                miscButton.setToolTipText("Add a sensor module");
+                miscButton.setToolTipText(I18n.get("tooltip.add_sensor_module"));
             } else if (selected == miTapeMeasure) {
                 miscCommand = SceneManager.Operation.ADD_TAPE_MEASURE;
-                miscButton.setToolTipText("Add a tape measure");
+                miscButton.setToolTipText(I18n.get("tooltip.add_tape_measure"));
             }
             SceneManager.getInstance().setOperation(miscCommand);
             miscButton.setSelected(true);
@@ -277,38 +278,38 @@ public class MainPanel extends JPanel {
         bg.add(miTapeMeasure);
 
         // create solar menu
-        final JCheckBoxMenuItem miRack = new JCheckBoxMenuItem("Solar Panel Rack", new ImageIcon(getClass().getResource("icons/rack.png")), true);
-        final JCheckBoxMenuItem miSolarPanel = new JCheckBoxMenuItem("Single Solar Panel", new ImageIcon(getClass().getResource("icons/solar_panel.png")));
-        final JCheckBoxMenuItem miHeliostat = new JCheckBoxMenuItem("Heliostat", new ImageIcon(getClass().getResource("icons/mirror.png")));
-        final JCheckBoxMenuItem miParabolicTrough = new JCheckBoxMenuItem("Parabolic Trough", new ImageIcon(getClass().getResource("icons/parabolic_trough.png")));
-        final JCheckBoxMenuItem miParabolicDish = new JCheckBoxMenuItem("Parabolic Dish", new ImageIcon(getClass().getResource("icons/parabolic_dish.png")));
-        final JCheckBoxMenuItem miFresnelReflector = new JCheckBoxMenuItem("Linear Fresnel Reflector", new ImageIcon(getClass().getResource("icons/fresnel_reflector.png")));
-        final JCheckBoxMenuItem miSolarWaterHeater = new JCheckBoxMenuItem("Solar Water Heater", new ImageIcon(getClass().getResource("icons/solar_water_heater.png")));
+        final JCheckBoxMenuItem miRack = new JCheckBoxMenuItem(I18n.get("part.solar_panel_rack"), new ImageIcon(getClass().getResource("icons/rack.png")), true);
+        final JCheckBoxMenuItem miSolarPanel = new JCheckBoxMenuItem(I18n.get("part.single_solar_panel"), new ImageIcon(getClass().getResource("icons/solar_panel.png")));
+        final JCheckBoxMenuItem miHeliostat = new JCheckBoxMenuItem(I18n.get("part.heliostat"), new ImageIcon(getClass().getResource("icons/mirror.png")));
+        final JCheckBoxMenuItem miParabolicTrough = new JCheckBoxMenuItem(I18n.get("part.parabolic_trough"), new ImageIcon(getClass().getResource("icons/parabolic_trough.png")));
+        final JCheckBoxMenuItem miParabolicDish = new JCheckBoxMenuItem(I18n.get("part.parabolic_dish"), new ImageIcon(getClass().getResource("icons/parabolic_dish.png")));
+        final JCheckBoxMenuItem miFresnelReflector = new JCheckBoxMenuItem(I18n.get("part.linear_fresnel_reflector"), new ImageIcon(getClass().getResource("icons/fresnel_reflector.png")));
+        final JCheckBoxMenuItem miSolarWaterHeater = new JCheckBoxMenuItem(I18n.get("part.solar_water_heater"), new ImageIcon(getClass().getResource("icons/solar_water_heater.png")));
         miSolarWaterHeater.setEnabled(false);
         final ActionListener solarAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             solarButton.setIcon(selected.getIcon());
             if (selected == miSolarPanel) {
                 solaCommand = Operation.ADD_SOLAR_PANEL;
-                solarButton.setToolTipText("Add a single solar panel");
+                solarButton.setToolTipText(I18n.get("tooltip.add_solar_panel"));
             } else if (selected == miRack) {
                 solaCommand = Operation.ADD_RACK;
-                solarButton.setToolTipText("Add a rack of solar panels");
+                solarButton.setToolTipText(I18n.get("tooltip.add_rack"));
             } else if (selected == miHeliostat) {
                 solaCommand = Operation.ADD_HELIOSTAT;
-                solarButton.setToolTipText("Add a heliostat");
+                solarButton.setToolTipText(I18n.get("tooltip.add_heliostat"));
             } else if (selected == miParabolicTrough) {
                 solaCommand = Operation.ADD_PARABOLIC_TROUGH;
-                solarButton.setToolTipText("Add a parabolic trough");
+                solarButton.setToolTipText(I18n.get("tooltip.add_parabolic_trough"));
             } else if (selected == miParabolicDish) {
                 solaCommand = Operation.ADD_PARABOLIC_DISH;
-                solarButton.setToolTipText("Add a parabolic dish");
+                solarButton.setToolTipText(I18n.get("tooltip.add_parabolic_dish"));
             } else if (selected == miFresnelReflector) {
                 solaCommand = Operation.ADD_FRESNEL_REFLECTOR;
-                solarButton.setToolTipText("Add a linear Fresnel reflector");
+                solarButton.setToolTipText(I18n.get("tooltip.add_fresnel_reflector"));
             } else if (selected == miSolarWaterHeater) {
                 solaCommand = Operation.ADD_SOLAR_WATER_HEATER;
-                solarButton.setToolTipText("Add a solar water heater");
+                solarButton.setToolTipText(I18n.get("tooltip.add_solar_water_heater"));
             }
             SceneManager.getInstance().setOperation(solaCommand);
             solarButton.setSelected(true);
@@ -416,7 +417,7 @@ public class MainPanel extends JPanel {
             selectButton = new JToggleButton();
             selectButton.addMouseListener(refreshUponMouseExit);
             selectButton.setSelected(true);
-            selectButton.setToolTipText("Select");
+            selectButton.setToolTipText(I18n.get("tooltip.select"));
             selectButton.setIcon(new ImageIcon(MainPanel.class.getResource("icons/select.png")));
             selectButton.setFocusable(false);
             selectButton.addActionListener(e -> defaultTool());
@@ -429,7 +430,7 @@ public class MainPanel extends JPanel {
         if (wallButton == null) {
             wallButton = new JToggleButton();
             wallButton.setIcon(new ImageIcon(getClass().getResource("icons/exterior_wall.png")));
-            wallButton.setToolTipText("Draw an exterior wall");
+            wallButton.setToolTipText(I18n.get("tooltip.draw_exterior_wall"));
             wallButton.setFocusable(false);
             wallButton.addActionListener(e -> {
                 SceneManager.getInstance().setOperation(Operation.DRAW_EXTERIOR_WALL);
@@ -459,7 +460,7 @@ public class MainPanel extends JPanel {
         if (miscButton == null) {
             miscButton = new JToggleButton();
             miscButton.setText("");
-            miscButton.setToolTipText("Draw a window");
+            miscButton.setToolTipText(I18n.get("tooltip.draw_window"));
             miscButton.setIcon(new ImageIcon(getClass().getResource("icons/window.png")));
             miscButton.setFocusable(false);
             miscButton.addActionListener(e -> {
@@ -490,7 +491,7 @@ public class MainPanel extends JPanel {
         if (baseButton == null) {
             baseButton = new JToggleButton();
             baseButton.setIcon(new ImageIcon(getClass().getResource("icons/foundation.png")));
-            baseButton.setToolTipText("Draw a foundation");
+            baseButton.setToolTipText(I18n.get("tooltip.draw_foundation"));
             baseButton.setFocusable(false);
             baseButton.addActionListener(e -> {
                 SceneManager.getInstance().setOperation(baseCommand);
@@ -521,7 +522,7 @@ public class MainPanel extends JPanel {
             shadowButton = new JToggleButton();
             shadowButton.addMouseListener(refreshUponMouseExit);
             shadowButton.setIcon(new ImageIcon(getClass().getResource("icons/shadow.png")));
-            shadowButton.setToolTipText("Show shadows");
+            shadowButton.setToolTipText(I18n.get("tooltip.show_shadows"));
             shadowButton.setFocusable(false);
             shadowButton.addItemListener(e -> {
                 final ShowShadowCommand c = new ShowShadowCommand();
@@ -546,7 +547,7 @@ public class MainPanel extends JPanel {
             spinViewButton = new JToggleButton();
             spinViewButton.addMouseListener(refreshUponMouseExit);
             spinViewButton.setIcon(new ImageIcon(getClass().getResource("icons/spin.png")));
-            spinViewButton.setToolTipText("Spin view");
+            spinViewButton.setToolTipText(I18n.get("tooltip.spin_view"));
             spinViewButton.setFocusable(false);
             spinViewButton.addItemListener(e -> {
                 SceneManager.getInstance().getUndoManager().addEdit(new SpinViewCommand());
@@ -563,7 +564,7 @@ public class MainPanel extends JPanel {
             heliodonButton = new JToggleButton();
             heliodonButton.addMouseListener(refreshUponMouseExit);
             heliodonButton.setIcon(new ImageIcon(getClass().getResource("icons/heliodon.png")));
-            heliodonButton.setToolTipText("Show heliodon");
+            heliodonButton.setToolTipText(I18n.get("tooltip.show_heliodon"));
             heliodonButton.setFocusable(false);
             heliodonButton.addItemListener(e -> {
                 final ShowHeliodonCommand c = new ShowHeliodonCommand();
@@ -596,7 +597,7 @@ public class MainPanel extends JPanel {
             sunAnimButton.addMouseListener(refreshUponMouseExit);
             sunAnimButton.setIcon(new ImageIcon(getClass().getResource("icons/sun_anim.png")));
             sunAnimButton.setEnabled(false);
-            sunAnimButton.setToolTipText("Animate sun path");
+            sunAnimButton.setToolTipText(I18n.get("tooltip.animate_sun_path"));
             sunAnimButton.setFocusable(false);
             sunAnimButton.addItemListener(e -> {
                 energyButton.setSelected(false);
@@ -618,7 +619,7 @@ public class MainPanel extends JPanel {
             previewButton = new JToggleButton();
             previewButton.addMouseListener(refreshUponMouseExit);
             previewButton.setIcon(new ImageIcon(getClass().getResource("icons/print_preview.png")));
-            previewButton.setToolTipText("Preview printable parts");
+            previewButton.setToolTipText(I18n.get("tooltip.preview_printable_parts"));
             previewButton.setFocusable(false);
             // must be ItemListner to be triggered when selection is changed by code
             previewButton.addItemListener(e -> {
@@ -651,7 +652,7 @@ public class MainPanel extends JPanel {
             // annotationButton.setSelected(true);
             annotationButton.addMouseListener(refreshUponMouseExit);
             annotationButton.setIcon(new ImageIcon(getClass().getResource("icons/annotation.png")));
-            annotationButton.setToolTipText("Show annotations");
+            annotationButton.setToolTipText(I18n.get("tooltip.show_annotations"));
             annotationButton.setFocusable(false);
             annotationButton.addItemListener(e -> {
                 final ShowAnnotationCommand c = new ShowAnnotationCommand();
@@ -673,7 +674,7 @@ public class MainPanel extends JPanel {
             zoomButton = new JToggleButton();
             zoomButton.addMouseListener(refreshUponMouseExit);
             zoomButton.setIcon(new ImageIcon(getClass().getResource("icons/zoom.png")));
-            zoomButton.setToolTipText("Zoom");
+            zoomButton.setToolTipText(I18n.get("tooltip.zoom"));
             zoomButton.setFocusable(false);
             zoomButton.addActionListener(e -> {
                 if (SceneManager.getInstance().isZoomLock()) {
@@ -746,7 +747,7 @@ public class MainPanel extends JPanel {
     public JToggleButton getEnergyButton() {
         if (energyButton == null) {
             energyButton = new JToggleButton("");
-            energyButton.setToolTipText("Calculate energy of the day");
+            energyButton.setToolTipText(I18n.get("tooltip.calculate_energy_of_day"));
             energyButton.setIcon(new ImageIcon(getClass().getResource("icons/calculate.png")));
             energyButton.addMouseListener(refreshUponMouseExit);
             energyButton.setFocusable(false);
@@ -873,7 +874,7 @@ public class MainPanel extends JPanel {
     private JToggleButton getSolarButton() {
         if (solarButton == null) {
             solarButton = new JToggleButton("");
-            solarButton.setToolTipText("Add a solar panel rack");
+            solarButton.setToolTipText(I18n.get("tooltip.add_rack"));
             solarButton.setIcon(new ImageIcon(getClass().getResource("icons/rack.png")));
             solarButton.setFocusable(false);
             solarButton.addActionListener(e -> {
@@ -904,7 +905,7 @@ public class MainPanel extends JPanel {
         if (roofButton == null) {
             roofButton = new JToggleButton();
             roofButton.setIcon(new ImageIcon(getClass().getResource("icons/pyramid_roof.png")));
-            roofButton.setToolTipText("Add a pyramid roof");
+            roofButton.setToolTipText(I18n.get("tooltip.add_pyramid_roof"));
             roofButton.setFocusable(false);
             roofButton.addActionListener(e -> {
                 SceneManager.getInstance().setOperation(roofCommand);
@@ -935,7 +936,7 @@ public class MainPanel extends JPanel {
             resizeButton = new JToggleButton();
             resizeButton.addMouseListener(refreshUponMouseExit);
             resizeButton.setIcon(new ImageIcon(getClass().getResource("icons/resize.png")));
-            resizeButton.setToolTipText("Resize or move a building");
+            resizeButton.setToolTipText(I18n.get("tooltip.resize_or_move_building"));
             resizeButton.setFocusable(false);
             resizeButton.addActionListener(e -> {
                 if (SceneManager.getInstance().getOperation() == Operation.RESIZE) {
@@ -958,7 +959,7 @@ public class MainPanel extends JPanel {
             }
             rotateButton.addMouseListener(refreshUponMouseExit);
             rotateButton.setIcon(new ImageIcon(getClass().getResource("icons/rotate_cw.png")));
-            rotateButton.setToolTipText("<html>Rotate in the clockwise direction (change azimuth).<br>Hold down the Ctrl key and press this button for counter-clockwise rotation.<br>Hold down the Shift key while pressing this button to rotate more slowly.<br>If a component is selected, rotate around its center. Otherwise rotate everything around the origin.</html>");
+            rotateButton.setToolTipText(I18n.get("tooltip.rotate"));
             rotateButton.setFocusable(false);
             addMouseOverEffect(rotateButton);
             rotateButton.addMouseListener(new MouseAdapter() {
@@ -1059,7 +1060,7 @@ public class MainPanel extends JPanel {
     JToggleButton getNoteButton() {
         if (noteButton == null) {
             noteButton = new JToggleButton();
-            noteButton.setToolTipText("Show note");
+            noteButton.setToolTipText(I18n.get("tooltip.show_note"));
             noteButton.setIcon(new ImageIcon(MainPanel.class.getResource("icons/note.png")));
             noteButton.setFocusable(false);
             noteButton.addActionListener(e -> {

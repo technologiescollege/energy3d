@@ -23,6 +23,7 @@ import javax.swing.JPopupMenu;
 
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 /**
@@ -48,7 +49,7 @@ public abstract class AbstractGraph extends JComponent {
         setPreferredSize(new Dimension(600, 400));
         setBackground(Color.DARK_GRAY);
 
-        final JMenuItem miCopyImage = new JMenuItem("Copy Image");
+        final JMenuItem miCopyImage = new JMenuItem(I18n.get("menu.copy_image"));
         popupMenu = new JPopupMenu();
         popupMenu.setInvoker(this);
 
@@ -83,10 +84,10 @@ public abstract class AbstractGraph extends JComponent {
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
 
-        final JMenu menu = new JMenu("Export");
+        final JMenu menu = new JMenu(I18n.get("menu.export"));
         menuBar.add(menu);
 
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(AbstractGraph.this));
         menu.add(mi);
 
@@ -99,7 +100,7 @@ public abstract class AbstractGraph extends JComponent {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

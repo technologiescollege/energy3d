@@ -37,6 +37,7 @@ import org.concord.energy3d.undo.SetPartSizeCommand;
 import org.concord.energy3d.undo.SetSizeForDoorsOnFoundationCommand;
 import org.concord.energy3d.undo.SetTextureForDoorsOnFoundationCommand;
 import org.concord.energy3d.util.Util;
+import org.concord.energy3d.util.I18n;
 
 class PopupMenuForDoor extends PopupMenuFactory {
 
@@ -46,7 +47,7 @@ class PopupMenuForDoor extends PopupMenuFactory {
 
         if (popupMenuForDoor == null) {
 
-            final JMenuItem miSize = new JMenuItem("Size...");
+            final JMenuItem miSize = new JMenuItem(I18n.get("menu.size"));
             miSize.addActionListener(new ActionListener() {
 
                 private int selectedScopeIndex = 0; // remember the scope selection as the next action will likely be applied to the same scope
@@ -64,19 +65,19 @@ class PopupMenuForDoor extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
                     gui.add(inputPanel, BorderLayout.CENTER);
-                    inputPanel.add(new JLabel("Width (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.width_m")));
                     final JTextField widthField = new JTextField(threeDecimalsFormat.format(door.getDoorWidth()));
                     inputPanel.add(widthField);
-                    inputPanel.add(new JLabel("Height (m): "));
+                    inputPanel.add(new JLabel(I18n.get("label.height_m")));
                     final JTextField heightField = new JTextField(threeDecimalsFormat.format(door.getDoorHeight()));
                     inputPanel.add(heightField);
                     inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Door", true);
-                    final JRadioButton rb2 = new JRadioButton("All Doors on this Wall");
-                    final JRadioButton rb3 = new JRadioButton("All Doors of this Building");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_door"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_doors_on_wall"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_doors_of_building"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -97,9 +98,9 @@ class PopupMenuForDoor extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set Size for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Door Size");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_size_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.door_size"));
 
                     while (true) {
                         dialog.setVisible(true);
@@ -113,7 +114,7 @@ class PopupMenuForDoor extends PopupMenuFactory {
                                 w = Double.parseDouble(widthField.getText());
                                 h = Double.parseDouble(heightField.getText());
                             } catch (final NumberFormatException x) {
-                                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.invalid_input"), I18n.get("msg.error"), JOptionPane.ERROR_MESSAGE);
                                 ok = false;
                             }
                             if (ok) {
@@ -126,9 +127,9 @@ class PopupMenuForDoor extends PopupMenuFactory {
                                     hmax = ((Wall) container).getWallHeight() * 0.99;
                                 }
                                 if (w < 0.1 || w > wmax) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Width must be between 0.1 and " + (int) wmax + " m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.width_range_door", (int) wmax), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else if (h < 0.1 || h > hmax) {
-                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), "Height must be between 0.1 and " + (int) hmax + " m.", "Range Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.height_range_door", (int) hmax), I18n.get("msg.range_error"), JOptionPane.ERROR_MESSAGE);
                                 } else {
                                     boolean changed = Math.abs(w - door.getDoorWidth()) > 0.000001 || Math.abs(h - door.getDoorHeight()) > 0.000001;
                                     final double w2 = w;
@@ -209,7 +210,7 @@ class PopupMenuForDoor extends PopupMenuFactory {
                 }
             });
 
-            final JMenu textureMenu = new JMenu("Texture");
+            final JMenu textureMenu = new JMenu(I18n.get("menu.texture"));
             final ButtonGroup textureGroup = new ButtonGroup();
             final JRadioButtonMenuItem rbmiTextureNone = createTextureMenuItem(Door.TEXTURE_NONE, null);
             final JRadioButtonMenuItem rbmiTextureEdge = createTextureMenuItem(Door.TEXTURE_EDGE, null);
@@ -330,24 +331,24 @@ class PopupMenuForDoor extends PopupMenuFactory {
             popupMenuForDoor.add(createVolumetricHeatCapacityMenuItem());
             popupMenuForDoor.addSeparator();
 
-            JMenuItem mi = new JMenuItem("Daily Energy Analysis...");
+            JMenuItem mi = new JMenuItem(I18n.get("menu.daily_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Door) {
-                    new EnergyDailyAnalysis().show("Daily Energy for Door");
+                    new EnergyDailyAnalysis().show(I18n.get("title.daily_energy_for_door"));
                 }
             });
             popupMenuForDoor.add(mi);
 
-            mi = new JMenuItem("Annual Energy Analysis...");
+            mi = new JMenuItem(I18n.get("menu.annual_energy_analysis"));
             mi.addActionListener(e -> {
                 if (EnergyPanel.getInstance().adjustCellSize()) {
                     return;
                 }
                 if (SceneManager.getInstance().getSelectedPart() instanceof Door) {
-                    new EnergyAnnualAnalysis().show("Annual Energy for Door");
+                    new EnergyAnnualAnalysis().show(I18n.get("title.annual_energy_for_door"));
                 }
             });
             popupMenuForDoor.add(mi);
@@ -362,12 +363,12 @@ class PopupMenuForDoor extends PopupMenuFactory {
 
         final JRadioButtonMenuItem m;
         if (type == HousePart.TEXTURE_NONE) {
-            m = new JRadioButtonMenuItem("No Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.none"));
         } else if (type == HousePart.TEXTURE_EDGE) {
-            m = new JRadioButtonMenuItem("Edge Texture");
+            m = new JRadioButtonMenuItem(I18n.get("texture.edge"));
         } else {
             m = new JRadioButtonMenuItem(new ImageIcon(MainPanel.class.getResource(imageFile)));
-            m.setText("Texture #" + type);
+            m.setText(I18n.get("texture.number", type));
         }
 
         m.addItemListener(new ItemListener() {
@@ -388,10 +389,10 @@ class PopupMenuForDoor extends PopupMenuFactory {
                     final JPanel gui = new JPanel(new BorderLayout());
                     final JPanel scopePanel = new JPanel();
                     scopePanel.setLayout(new BoxLayout(scopePanel, BoxLayout.Y_AXIS));
-                    scopePanel.setBorder(BorderFactory.createTitledBorder("Apply to:"));
-                    final JRadioButton rb1 = new JRadioButton("Only this Door", true);
-                    final JRadioButton rb2 = new JRadioButton("All Doors on this Wall");
-                    final JRadioButton rb3 = new JRadioButton("All Doors on this Foundation");
+                    scopePanel.setBorder(BorderFactory.createTitledBorder(I18n.get("scope.apply_to")));
+                    final JRadioButton rb1 = new JRadioButton(I18n.get("scope.only_this_door"), true);
+                    final JRadioButton rb2 = new JRadioButton(I18n.get("scope.all_doors_on_wall"));
+                    final JRadioButton rb3 = new JRadioButton(I18n.get("scope.all_doors_on_foundation"));
                     scopePanel.add(rb1);
                     scopePanel.add(rb2);
                     scopePanel.add(rb3);
@@ -412,9 +413,9 @@ class PopupMenuForDoor extends PopupMenuFactory {
                     }
                     gui.add(scopePanel, BorderLayout.NORTH);
 
-                    final Object[] options = new Object[]{"OK", "Cancel", "Apply"};
-                    final JOptionPane optionPane = new JOptionPane(new Object[]{"Set Texture for " + partInfo, gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
-                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), "Door Texture");
+                    final Object[] options = new Object[]{I18n.get("dialog.ok"), I18n.get("dialog.cancel"), I18n.get("common.apply")};
+                    final JOptionPane optionPane = new JOptionPane(new Object[]{I18n.get("title.set_texture_for", partInfo), gui}, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[2]);
+                    final JDialog dialog = optionPane.createDialog(MainFrame.getInstance(), I18n.get("dialog.door_texture"));
 
                     while (true) {
                         dialog.setVisible(true);

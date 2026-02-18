@@ -11,6 +11,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -83,21 +84,21 @@ public abstract class HeliostatFieldOptimizer extends SolarOutputOptimizer {
             switch (objectiveFunction.getType()) {
                 case ObjectiveFunction.DAILY:
                     if (netProfit) {
-                        s = "Daily Profit";
+                        s = I18n.get("label.daily_profit");
                     } else if (outputPerApertureSquareMeter) {
-                        s = "Daily Output per Aperture Square Meter";
+                        s = I18n.get("label.daily_output_per_aperture_square_meter");
                     } else {
-                        s = "Total Daily Output";
+                        s = I18n.get("label.total_daily_output");
                     }
                     s += ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                     break;
                 case ObjectiveFunction.ANNUAL:
                     if (netProfit) {
-                        s = "Annual Profit";
+                        s = I18n.get("label.annual_profit");
                     } else if (outputPerApertureSquareMeter) {
-                        s = "Annual Output per Aperture Square Meter";
+                        s = I18n.get("label.annual_output_per_aperture_square_meter");
                     } else {
-                        s = "Total Annual Output";
+                        s = I18n.get("label.total_annual_output");
                     }
                     s += ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                     break;
@@ -118,23 +119,23 @@ public abstract class HeliostatFieldOptimizer extends SolarOutputOptimizer {
             switch (objectiveFunction.getType()) {
                 case ObjectiveFunction.DAILY:
                     if (netProfit) {
-                        s = "Daily Profit";
+                        s = I18n.get("label.daily_profit");
                     } else if (outputPerApertureSquareMeter) {
-                        s = "Daily Output per Aperture Square Meter";
+                        s = I18n.get("label.daily_output_per_aperture_square_meter");
                     } else {
-                        s = "Total Daily Output";
+                        s = I18n.get("label.total_daily_output");
                     }
-                    s += "\nCurrent: " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", Top: " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
+                    s += "\n" + I18n.get("label.current") + ": " + EnergyPanel.TWO_DECIMALS.format(individual.getFitness()) + ", " + I18n.get("label.top") + ": " + EnergyPanel.TWO_DECIMALS.format(best.getFitness());
                     break;
                 case ObjectiveFunction.ANNUAL:
                     if (netProfit) {
-                        s = "Annual Profit";
+                        s = I18n.get("label.annual_profit");
                     } else if (outputPerApertureSquareMeter) {
-                        s = "Annual Output per Aperture Square Meter";
+                        s = I18n.get("label.annual_output_per_aperture_square_meter");
                     } else {
-                        s = "Total Annual Output";
+                        s = I18n.get("label.total_annual_output");
                     }
-                    s += "\nCurrent: " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0) + ", Top: " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
+                    s += "\n" + I18n.get("label.current") + ": " + EnergyPanel.ONE_DECIMAL.format(individual.getFitness() * 365.0 / 12.0) + ", " + I18n.get("label.top") + ": " + EnergyPanel.ONE_DECIMAL.format(best.getFitness() * 365.0 / 12.0);
                     break;
             }
             receiver.setLabelCustomText(s);

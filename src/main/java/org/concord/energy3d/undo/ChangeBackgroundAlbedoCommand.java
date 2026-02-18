@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeBackgroundAlbedoCommand extends MyAbstractUndoableEdit {
 
@@ -34,7 +35,7 @@ public class ChangeBackgroundAlbedoCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Ground Albedo";
+		return I18n.get("undo.change_ground_albedo");
 	}
 
 }

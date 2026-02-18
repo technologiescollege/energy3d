@@ -8,6 +8,7 @@ import org.concord.energy3d.logger.TimeSeriesLogger;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import javax.swing.*;
@@ -46,8 +47,8 @@ public class AnnualEnvironmentalTemperature extends JPanel {
     private final double xToday;
     private final int symbolSize = 8;
     private final int numberOfTicks = 12;
-    private final String xAxisLabel = "Month";
-    private final String yAxisLabel = "Temperature (\u00b0C)";
+    private final String xAxisLabel = I18n.get("axis.month");
+    private final String yAxisLabel = I18n.get("axis.temperature");
     private final BasicStroke dashed = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[]{2f}, 0.0f);
     private final BasicStroke thin = new BasicStroke(1);
     private final BasicStroke thick = new BasicStroke(2);
@@ -153,7 +154,7 @@ public class AnnualEnvironmentalTemperature extends JPanel {
         final float tickWidth = (float) (width - left - right) / (float) (numberOfTicks - 1);
         float xTick;
         for (int i = 0; i < numberOfTicks; i++) {
-            final String s = AnnualGraph.THREE_LETTER_MONTH[i];
+            final String s = AnnualGraph.getThreeLetterMonth()[i];
             final int sWidth = g2.getFontMetrics().stringWidth(s);
             xTick = left + tickWidth * i;
             g2.drawString(s, xTick - sWidth / 2f, height - bottom / 2 + 16);
@@ -379,7 +380,7 @@ public class AnnualEnvironmentalTemperature extends JPanel {
 
     public void showDialog() {
 
-        final JDialog dialog = new JDialog(MainFrame.getInstance(), "Annual Environmental Temperature", true);
+        final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.annual_environmental_temperature"), true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         final JPanel contentPane = new JPanel(new BorderLayout());
@@ -388,17 +389,17 @@ public class AnnualEnvironmentalTemperature extends JPanel {
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
 
-        final JCheckBoxMenuItem cbmiAirTemperature = new JCheckBoxMenuItem("Air Temperature");
+        final JCheckBoxMenuItem cbmiAirTemperature = new JCheckBoxMenuItem(I18n.get("menu.air_temperature"));
         Util.selectSilently(cbmiAirTemperature, !hideData.get(lowestAirTemperature));
         final JCheckBoxMenuItem[] cbmiGroundTemperature = new JCheckBoxMenuItem[depth.length];
         for (int i = 0; i < depth.length; i++) {
-            cbmiGroundTemperature[i] = new JCheckBoxMenuItem("Ground Temperature (" + depth[i] + "m)");
+            cbmiGroundTemperature[i] = new JCheckBoxMenuItem(I18n.get("menu.ground_temperature", String.valueOf(depth[i])));
             Util.selectSilently(cbmiGroundTemperature[i], !hideData.get(lowestGroundTemperature[i]));
         }
-        final JCheckBoxMenuItem cbmiShowAverage = new JCheckBoxMenuItem("Show Average");
+        final JCheckBoxMenuItem cbmiShowAverage = new JCheckBoxMenuItem(I18n.get("menu.show_average"));
         Util.selectSilently(cbmiShowAverage, showAverage);
 
-        final JMenu menuView = new JMenu("View");
+        final JMenu menuView = new JMenu(I18n.get("menu.view"));
         menuBar.add(menuView);
         menuView.addMenuListener(new MenuListener() {
             @Override
@@ -445,10 +446,10 @@ public class AnnualEnvironmentalTemperature extends JPanel {
         });
         menuView.add(cbmiShowAverage);
 
-        final JMenu menuExport = new JMenu("Export");
+        final JMenu menuExport = new JMenu(I18n.get("menu.export"));
         menuBar.add(menuExport);
 
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(AnnualEnvironmentalTemperature.this));
         menuExport.add(mi);
 
@@ -461,7 +462,7 @@ public class AnnualEnvironmentalTemperature extends JPanel {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        final JButton button = new JButton("Close");
+        final JButton button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

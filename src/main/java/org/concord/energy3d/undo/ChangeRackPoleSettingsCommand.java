@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeRackPoleSettingsCommand extends MyAbstractUndoableEdit {
 
@@ -62,7 +63,7 @@ public class ChangeRackPoleSettingsCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Pole Settings for Rack";
+		return I18n.get("undo.change_pole_settings_rack");
 	}
 
 }

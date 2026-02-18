@@ -28,6 +28,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import org.concord.energy3d.gui.MainFrame;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.ClipImage;
 
 /**
@@ -120,7 +121,7 @@ public class EventTimeSeries extends JComponent {
 
 		g2.setColor(Color.WHITE);
 		g2.setFont(new Font("Arial", Font.BOLD, 12));
-		final String xLabel = "Time (seconds), bin size " + format1.format(binSize);
+		final String xLabel = I18n.get("axis.time_seconds", format1.format(binSize));
 		g2.drawString(xLabel, width / 2 - g2.getFontMetrics().stringWidth(xLabel) / 2, xAxisY + 30);
 
 		// draw y axis
@@ -137,7 +138,7 @@ public class EventTimeSeries extends JComponent {
 			tickmark = "" + i;
 			g2.drawString(tickmark, x0 - 10 - g2.getFontMetrics().stringWidth(tickmark), (int) (yTick + 4));
 		}
-		final String yLabel = "Event Count";
+		final String yLabel = I18n.get("axis.event_count");
 		g2.setFont(new Font("Arial", Font.BOLD, 12));
 		final int yLabelX = x0 - 30;
 		final int yLabelY = height / 2 + g2.getFontMetrics().stringWidth(yLabel) / 2 - 8;
@@ -171,7 +172,7 @@ public class EventTimeSeries extends JComponent {
 
 	public void showGui() {
 
-		final JDialog dialog = new JDialog(MainFrame.getInstance(), "Time Series of Events", true);
+		final JDialog dialog = new JDialog(MainFrame.getInstance(), I18n.get("dialog.time_series_of_events"), true);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		final JPanel contentPane = new JPanel(new BorderLayout());
@@ -180,10 +181,10 @@ public class EventTimeSeries extends JComponent {
 		final JMenuBar menuBar = new JMenuBar();
 		dialog.setJMenuBar(menuBar);
 
-		final JMenu menu = new JMenu("Export");
+		final JMenu menu = new JMenu(I18n.get("menu.export"));
 		menuBar.add(menu);
 
-		final JMenuItem mi = new JMenuItem("Copy Image");
+		final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
 		mi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -201,7 +202,7 @@ public class EventTimeSeries extends JComponent {
 		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-		final JButton button = new JButton("Close");
+		final JButton button = new JButton(I18n.get("common.close"));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {

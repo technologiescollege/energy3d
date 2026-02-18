@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -42,7 +43,7 @@ class InstructionSheetDialog extends JDialog {
             textArea.setBorder(new EmptyBorder(10, 10, 10, 10));
             scroller = new JScrollPane(textArea);
 
-            final JCheckBox htmlCheckBox = new JCheckBox("Use HTML");
+            final JCheckBox htmlCheckBox = new JCheckBox(I18n.get("label.use_html"));
 
             final ActionListener okListener = e -> {
                 final String type = htmlCheckBox.isSelected() ? "text/html" : "text/plain";
@@ -77,7 +78,7 @@ class InstructionSheetDialog extends JDialog {
             });
             buttonPanel.add(htmlCheckBox);
 
-            final JButton formatButton = new JButton("Format");
+            final JButton formatButton = new JButton(I18n.get("button.format"));
             formatButton.addActionListener(e -> {
                 final int caretPostion = textArea.getCaretPosition();
                 sheet.setText(textArea.getText());
@@ -86,7 +87,7 @@ class InstructionSheetDialog extends JDialog {
             });
             buttonPanel.add(formatButton);
 
-            final JButton okButton = new JButton("OK");
+            final JButton okButton = new JButton(I18n.get("dialog.ok"));
             okButton.addActionListener(okListener);
             okButton.setActionCommand("OK");
             buttonPanel.add(okButton);
@@ -101,10 +102,10 @@ class InstructionSheetDialog extends JDialog {
             myEditor.getEditorPane().setBorder(new EmptyBorder(10, 10, 10, 10));
             scroller = new JScrollPane(myEditor.getEditorPane());
 
-            final JButton editButton = new JButton("Edit");
+            final JButton editButton = new JButton(I18n.get("button.edit"));
             editButton.addActionListener(e -> {
                 dispose();
-                new InstructionSheetDialog(sheet, "Sheet " + (i + 1), i, true).setVisible(true);
+                new InstructionSheetDialog(sheet, I18n.get("label.sheet") + " " + (i + 1), i, true).setVisible(true);
             });
             editButton.setActionCommand(editButton.getText());
             buttonPanel.add(editButton);
@@ -115,7 +116,7 @@ class InstructionSheetDialog extends JDialog {
         scroller.setPreferredSize(new Dimension(800, 400));
         getContentPane().add(scroller, BorderLayout.CENTER);
 
-        final JButton cancelOrCloseButton = new JButton(editMode ? "Cancel" : "Close");
+        final JButton cancelOrCloseButton = new JButton(editMode ? I18n.get("dialog.cancel") : I18n.get("dialog.close"));
         cancelOrCloseButton.addActionListener(e -> dispose());
         cancelOrCloseButton.setActionCommand(cancelOrCloseButton.getText());
         buttonPanel.add(cancelOrCloseButton);

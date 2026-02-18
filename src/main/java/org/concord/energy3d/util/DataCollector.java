@@ -19,6 +19,7 @@ import org.concord.energy3d.MainApplication;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.logger.SnapshotLogger;
 import org.concord.energy3d.scene.Scene;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -39,8 +40,8 @@ public class DataCollector {
             final JScrollPane scrollPane = new JScrollPane(new JTextArea(info));
             scrollPane.setPreferredSize(new Dimension(400, 400));
             panel.add(scrollPane, BorderLayout.CENTER);
-            panel.add(new JLabel("<html><b>Submit your data to the researchers now?</b></html>"), BorderLayout.SOUTH);
-            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, "Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
+            panel.add(new JLabel("<html><b>" + I18n.get("msg.submit_data_to_researchers") + "</b></html>"), BorderLayout.SOUTH);
+            if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, I18n.get("dialog.error"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
                 new Uploader(info, currentFile).execute();
             }
         });
@@ -65,11 +66,11 @@ public class DataCollector {
         @Override
         protected void done() {
             try {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), "Notice", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), I18n.get("title.notice"), JOptionPane.INFORMATION_MESSAGE);
             } catch (final Exception e) { // backup solution
                 e.printStackTrace();
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html><h1>Data copied</h1>Please paste it in your email and send it to qxie@concord.org.</html>", "Noficiation", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "<html><h1>" + I18n.get("msg.data_copied") + "</h1>" + I18n.get("msg.paste_in_email") + "</html>", I18n.get("title.notification"), JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }

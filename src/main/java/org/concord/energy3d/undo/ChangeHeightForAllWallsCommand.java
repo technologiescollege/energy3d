@@ -10,6 +10,7 @@ import org.concord.energy3d.gui.EnergyPanel;
 import org.concord.energy3d.model.*;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeHeightForAllWallsCommand extends MyAbstractUndoableEdit {
 
@@ -96,7 +97,7 @@ public class ChangeHeightForAllWallsCommand extends MyAbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        return "Change Height for All Walls";
+        return I18n.get("undo.change_height_all_walls");
     }
 
 }

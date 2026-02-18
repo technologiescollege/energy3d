@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Wall;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeWallThicknessCommand extends MyAbstractUndoableEdit {
 
@@ -42,7 +43,7 @@ public class ChangeWallThicknessCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Change Thickness for Selected Wall";
+		return I18n.get("undo.change_thickness_selected_wall");
 	}
 
 }

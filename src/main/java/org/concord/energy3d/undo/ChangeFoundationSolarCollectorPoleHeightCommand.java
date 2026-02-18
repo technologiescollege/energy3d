@@ -9,6 +9,7 @@ import org.concord.energy3d.model.Foundation;
 import org.concord.energy3d.model.HousePart;
 import org.concord.energy3d.model.SolarCollector;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 public class ChangeFoundationSolarCollectorPoleHeightCommand extends MyAbstractUndoableEdit {
 
@@ -68,7 +69,7 @@ public class ChangeFoundationSolarCollectorPoleHeightCommand extends MyAbstractU
 
 	@Override
 	public String getPresentationName() {
-		return "Change Base Height for All " + getFirstSolarCollector().getClass().getSimpleName() + "s on Selected Foundation";
+		return I18n.get("undo.change_base_height_all") + " " + MyAbstractUndoableEdit.getPartDisplayName(getFirstSolarCollector().getClass()) + "s " + I18n.get("undo.on_selected_foundation");
 	}
 
 }

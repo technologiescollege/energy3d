@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import org.concord.energy3d.geneticalgorithms.Individual;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.util.ClipImage;
+import org.concord.energy3d.util.I18n;
 
 /**
  * @author Charles Xie
@@ -71,10 +72,10 @@ class ResultGraphPanel extends JPanel {
         final JMenuBar menuBar = new JMenuBar();
         dialog.setJMenuBar(menuBar);
 
-        final JMenu menu = new JMenu("Export");
+        final JMenu menu = new JMenu(I18n.get("menu.export"));
         menuBar.add(menu);
 
-        final JMenuItem mi = new JMenuItem("Copy Image");
+        final JMenuItem mi = new JMenuItem(I18n.get("menu.copy_image"));
         mi.addActionListener(e -> new ClipImage().copyImageToClipboard(ResultGraphPanel.this));
         menu.add(mi);
 
@@ -87,19 +88,19 @@ class ResultGraphPanel extends JPanel {
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        JButton button = new JButton("Objective");
+        JButton button = new JButton(I18n.get("common.objective"));
         button.addActionListener(e -> {
             if (op != null) {
                 if (op.getFittestOfGenerations() != null) {
-                    new ObjectiveTemporalGraph(op.getFittestOfGenerations()).display("Objective Trend");
+                    new ObjectiveTemporalGraph(op.getFittestOfGenerations()).display(I18n.get("dialog.objective_trend"));
                 }
             } else {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "No result is available.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.no_result_available"), I18n.get("title.information"), JOptionPane.INFORMATION_MESSAGE);
             }
         });
         buttonPanel.add(button);
 
-        button = new JButton("Close");
+        button = new JButton(I18n.get("common.close"));
         button.addActionListener(e -> dialog.dispose());
         buttonPanel.add(button);
 

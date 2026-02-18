@@ -21,6 +21,7 @@ import javax.swing.SwingWorker;
 import org.concord.energy3d.MainApplication;
 import org.concord.energy3d.gui.MainFrame;
 import org.concord.energy3d.logger.SnapshotLogger;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
 
@@ -44,7 +45,7 @@ public class BugReporter {
         if (msg.contains("java.lang.OutOfMemoryError")) { // in this case, we may not have enough resource to send error report. just advise user to restart
             EventQueue.invokeLater(() -> {
                 JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                        "<html>Energy3D has temporarily run out of memory. If this message<br>persists, please restart the software.</html>", "Out of Memory", JOptionPane.ERROR_MESSAGE);
+                        "<html>" + I18n.get("msg.out_of_memory") + "</html>", I18n.get("title.out_of_memory"), JOptionPane.ERROR_MESSAGE);
                 System.gc();
             });
         } else {
@@ -63,9 +64,9 @@ public class BugReporter {
                 scrollPane.setPreferredSize(new Dimension(400, 400));
                 panel.add(scrollPane, BorderLayout.CENTER);
                 final boolean corrupted = msg.contains("java.io.EOFException");
-                panel.add(new JLabel("<html><b>" + (corrupted ? "Your file is corrupted. Please use <i>Recover from Log</i> under the File Menu to restore it.<br>" : "")
-                        + "Report the above error message to the developers?</b></html>"), BorderLayout.SOUTH);
-                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, "Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
+                panel.add(new JLabel("<html><b>" + (corrupted ? I18n.get("msg.file_corrupted") : "")
+                        + I18n.get("msg.report_error_to_developers") + "</b></html>"), BorderLayout.SOUTH);
+                if (JOptionPane.showConfirmDialog(MainFrame.getInstance(), panel, I18n.get("msg.error"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
                     new Uploader(text, currentFile).execute();
                 }
             });
@@ -91,13 +92,13 @@ public class BugReporter {
         @Override
         protected void done() {
             try {
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), "Notice", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), get(), I18n.get("title.notice"), JOptionPane.INFORMATION_MESSAGE);
             } catch (final Exception e) { // backup solution
                 e.printStackTrace();
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
                 JOptionPane.showMessageDialog(MainFrame.getInstance(),
-                        "<html><h1>Error message copied</h1>Please paste it in your email and send it to qxie@concord.org.<br>Thanks for your help for this open-source project!</html>",
-                        "Noficiation", JOptionPane.INFORMATION_MESSAGE);
+                        "<html><h1>" + I18n.get("msg.error_message_copied") + "</h1>" + I18n.get("msg.paste_error_in_email") + "</html>",
+                        I18n.get("title.notification"), JOptionPane.INFORMATION_MESSAGE);
             }
             // attempt to fix problems
             SceneManager.getTaskManager().update(() -> {

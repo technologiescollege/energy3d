@@ -4,6 +4,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.concord.energy3d.model.Rack;
+import org.concord.energy3d.util.I18n;
 
 public class SetSolarPanelColorForRackCommand extends MyAbstractUndoableEdit {
 
@@ -42,7 +43,7 @@ public class SetSolarPanelColorForRackCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Set Color of Solar Panels on Selected Rack";
+		return I18n.get("undo.set_color_solar_panels_selected_rack");
 	}
 
 }

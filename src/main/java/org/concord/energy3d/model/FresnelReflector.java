@@ -13,6 +13,7 @@ import org.concord.energy3d.scene.SceneManager;
 import org.concord.energy3d.shapes.Heliodon;
 import org.concord.energy3d.simulation.Atmosphere;
 import org.concord.energy3d.util.FontManager;
+import org.concord.energy3d.util.I18n;
 import org.concord.energy3d.util.Util;
 
 import com.ardor3d.bounding.BoundingBox;
@@ -113,7 +114,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
             absorber = (Foundation) Scene.getInstance().getPart(absorber.getId());
         }
 
-        mesh = new Mesh("Fresnel Reflector Face");
+        mesh = new Mesh(I18n.get("node.fresnel_reflector_face"));
         mesh.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(6));
         mesh.getMeshData().setTextureBuffer(BufferUtils.createVector2Buffer(6), 0);
         mesh.setDefaultColor(SKY_BLUE);
@@ -121,7 +122,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
         mesh.setUserData(new UserData(this));
         root.attachChild(mesh);
 
-        reflector = new Box("Fresnel Reflector Box");
+        reflector = new Box(I18n.get("node.fresnel_reflector_box"));
         reflector.setModelBound(new OrientedBoundingBox());
         final OffsetState offset = new OffsetState();
         offset.setFactor(1);
@@ -130,7 +131,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
         root.attachChild(reflector);
 
         final int nModules = Math.max(1, getNumberOfModules());
-        outlines = new Line("Fresnel Reflector (Outline)");
+        outlines = new Line(I18n.get("node.fresnel_reflector_outline"));
         outlines.getMeshData().setVertexBuffer(BufferUtils.createVector3Buffer(8 + (nModules - 1) * 2));
         outlines.setDefaultColor(ColorRGBA.BLACK);
         outlines.setModelBound(new OrientedBoundingBox());
@@ -139,7 +140,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
         Util.disablePickShadowLight(outlines);
         root.attachChild(outlines);
 
-        lightBeams = new Line("Light Beams");
+        lightBeams = new Line(I18n.get("node.light_beams"));
         lightBeams.setLineWidth(1f);
         lightBeams.setStipplePattern((short) 0xffff);
         lightBeams.setModelBound(null);
@@ -154,7 +155,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
         label.setVisible(false);
         root.attachChild(label);
 
-        modulesRoot = new Node("Modules Root");
+        modulesRoot = new Node(I18n.get("node.modules_root"));
         root.attachChild(modulesRoot);
         updateTextureAndColor();
 
@@ -465,7 +466,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
             text += (text.equals("") ? "" : "\n") + "#" + id;
         }
         if (labelEnergyOutput) {
-            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? "Output" : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
+            text += (text.equals("") ? "" : "\n") + (Util.isZero(solarPotentialToday) ? org.concord.energy3d.util.I18n.get("label.output") : EnergyPanel.ONE_DECIMAL.format(solarPotentialToday * getSystemEfficiency()) + " kWh");
         }
         if (!text.equals("")) {
             label.setText(text);
@@ -478,7 +479,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
     }
 
     private void addPole(final Vector3 position, final double poleHeight, final double baseZ) {
-        final MyCylinder pole = new MyCylinder("Pole Cylinder", 2, detailed ? 10 : 2, 10, 0);
+        final MyCylinder pole = new MyCylinder(I18n.get("node.pole_cylinder"), 2, detailed ? 10 : 2, 10, 0);
         pole.setRadius(0.6);
         pole.setRenderState(offsetState);
         pole.setHeight(poleHeight - 0.5 * pole.getRadius()); // slightly shorter so that the pole won't penetrate the surface of the reflector
@@ -629,7 +630,7 @@ public class FresnelReflector extends HousePart implements SolarReflector, Label
         reflector.points.get(0).setY(newY);
         final double o = reflector.checkCopyOverlap(inWidth);
         if (o >= 0) {
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Sorry, your new reflector is too close to an existing one (" + o + ").", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), I18n.get("msg.reflector_too_close", String.valueOf(o)), I18n.get("dialog.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

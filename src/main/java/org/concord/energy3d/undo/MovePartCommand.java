@@ -21,6 +21,7 @@ import org.concord.energy3d.model.SolarPanel;
 import org.concord.energy3d.model.Window;
 import org.concord.energy3d.scene.Scene;
 import org.concord.energy3d.scene.SceneManager;
+import org.concord.energy3d.util.I18n;
 
 import com.ardor3d.math.Vector3;
 
@@ -137,7 +138,7 @@ public class MovePartCommand extends MyAbstractUndoableEdit {
 
 	@Override
 	public String getPresentationName() {
-		return "Move";
+		return I18n.get("undo.move");
 	}
 
 }
