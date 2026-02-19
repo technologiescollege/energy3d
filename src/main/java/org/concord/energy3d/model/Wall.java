@@ -1,6 +1,7 @@
 package org.concord.energy3d.model;
 
 import java.awt.geom.Path2D;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,8 @@ public class Wall extends HousePart implements Thermal {
     private double railRadius = 0.1;
     private boolean hideOutline;
     private transient Floor floor;
+    /** Mur intérieur : ne se connecte qu'aux autres murs intérieurs, exclu de la boucle visitNeighbors pour le toit. */
+    private boolean interior;
 
     public static void resetDefaultWallHeight() {
         userDefaultWallHeight = DEFAULT_WALL_HEIGHT;
@@ -1522,6 +1525,20 @@ public class Wall extends HousePart implements Thermal {
         return roof;
     }
 
+    /**
+     * Restaure la référence transient roof après désérialisation : le toit est sérialisé comme enfant du mur,
+     * on la rétablit pour que l'UI et le rendu affichent le toit à l'ouverture d'un .ng3 exporté par le plugin.
+     */
+    private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        for (final HousePart ch : getChildren()) {
+            if (ch instanceof Roof) {
+                this.roof = (Roof) ch;
+                break;
+            }
+        }
+    }
+
     @Override
     public void drawGrids(final double gridSize) {
         final ReadOnlyVector3 p0 = getAbsPoint(0);
@@ -1603,6 +1620,10 @@ public class Wall extends HousePart implements Thermal {
         for (final HousePart part : foundation.children) {
             if (part instanceof Wall && part != this && part.isDrawCompleted()) {
                 final Wall otherWall = (Wall) part;
+                // Ne connecter que murs de même type (exterior–exterior ou interior–interior) pour que le toit ne suive que le périmètre extérieur
+                if (this.interior != otherWall.interior) {
+                    continue;
+                }
                 for (int index = 0; index < 2; index++) {
                     if (neighbors[index] == null) {
                         for (int otherIndex = 0; otherIndex < 2; otherIndex++) {
@@ -1616,6 +1637,14 @@ public class Wall extends HousePart implements Thermal {
                 }
             }
         }
+    }
+
+    public boolean isInterior() {
+        return interior;
+    }
+
+    public void setInterior(final boolean interior) {
+        this.interior = interior;
     }
 
     boolean windowsFit() {

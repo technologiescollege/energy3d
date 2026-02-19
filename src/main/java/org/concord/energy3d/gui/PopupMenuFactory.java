@@ -89,7 +89,7 @@ public abstract class PopupMenuFactory {
     static double inverterEfficiencyPercentage = 95;
     static double solarPanelTemperatureCoefficientPmaxPercentage = -0.5;
     static double solarPanelNominalOperatingCellTemperature = 48;
-    static Action colorAction = new AbstractAction("Color...") {
+    static Action colorAction = new AbstractAction(I18n.get("menu.color")) {
         private static final long serialVersionUID = 1L;
 
         @Override

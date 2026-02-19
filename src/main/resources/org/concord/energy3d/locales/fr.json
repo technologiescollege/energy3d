@@ -2733,5 +2733,15 @@
   "msg.update_available": "Une nouvelle mise à jour est disponible. Souhaitez-vous installer les mises à jour et redémarrer maintenant ?",
   "title.update": "Mise à jour",
   "msg.end_of_replay": "C'est la fin de la relecture. Appuyez sur la flèche gauche pour revenir en arrière ou sur la barre d'espace pour quitter.",
-  "title.end_of_replay": "Fin de la relecture de conception"
+  "title.end_of_replay": "Fin de la relecture de conception",
+  "label.undefined": "Non défini",
+  "menu.cut_node": "Couper le nœud",
+  "menu.copy_node": "Copier le nœud",
+  "menu.align_node_bottom_ground": "Aligner le bas du nœud sur le sol",
+  "menu.align_node_center_foundation": "Centrer le nœud sur la fondation",
+  "menu.node_properties": "Propriétés du nœud",
+  "menu.delete_mesh": "Supprimer le maillage",
+  "menu.reverse_mesh_normal_vector": "Inverser la normale du maillage",
+  "menu.restore_deleted_meshes": "Restaurer les maillages supprimés",
+  "menu.mesh_properties": "Propriétés du maillage"
 }

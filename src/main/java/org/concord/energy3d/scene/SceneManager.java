@@ -1321,6 +1321,10 @@ public class SceneManager implements com.ardor3d.framework.Scene, Runnable, Upda
         if (operation == Operation.DRAW_EXTERIOR_WALL) {
             drawn = new Wall();
             drawn.setColor(Scene.getInstance().getDefaultWallColor());
+        } else if (operation == Operation.DRAW_INTERIOR_WALL) {
+            drawn = new Wall();
+            ((Wall) drawn).setInterior(true);
+            drawn.setColor(Scene.getInstance().getDefaultWallColor());
         } else if (operation == Operation.DRAW_DOOR) {
             drawn = new Door();
             drawn.setColor(Scene.getInstance().getDefaultDoorColor());

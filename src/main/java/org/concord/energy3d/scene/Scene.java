@@ -748,12 +748,16 @@ public class Scene implements Serializable {
             }
         }
 
-        // remove all the children that are not in parts
+        // remove all the children that are not in parts (ne pas retirer Roof/Door/Window qui ont un container : toits exportés par plugin)
         toBeRemoved.clear();
         for (final HousePart p : parts) {
             for (final HousePart child : p.getChildren()) {
                 if (!parts.contains(child) && !toBeRemoved.contains(child)) {
-                    toBeRemoved.add(child);
+                    if (child instanceof Roof || child instanceof Door || child instanceof Window) {
+                        parts.add(child);
+                    } else {
+                        toBeRemoved.add(child);
+                    }
                 }
             }
         }
@@ -4291,6 +4295,19 @@ public class Scene implements Serializable {
     // Classes that require special handling during the deserialization process must implement a special method with this exact signature
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
+        // S'assurer que tous les descendants sont dans parts (sinon cleanup() supprime les toits/portes/fenêtres des .ng3 exportés par le plugin)
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (int i = 0; i < parts.size(); i++) {
+                for (final HousePart child : parts.get(i).getChildren()) {
+                    if (!parts.contains(child)) {
+                        parts.add(child);
+                        changed = true;
+                    }
+                }
+            }
+        }
         // Ground image is optional (e.g. .ng3 exported by SweetEnergy plugin does not append one)
         try {
             groundImage = ImageIO.read(in);

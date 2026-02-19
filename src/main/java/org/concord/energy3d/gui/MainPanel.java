@@ -134,7 +134,6 @@ public class MainPanel extends JPanel {
         // create wall menu
         final JCheckBoxMenuItem miExteriorWall = new JCheckBoxMenuItem(I18n.get("part.exterior_wall"), new ImageIcon(getClass().getResource("icons/exterior_wall.png")), true);
         final JCheckBoxMenuItem miInteriorWall = new JCheckBoxMenuItem(I18n.get("part.interior_wall"), new ImageIcon(getClass().getResource("icons/interior_wall.png")), true);
-        miInteriorWall.setEnabled(false);
         final ActionListener wallAction = e -> {
             final JCheckBoxMenuItem selected = (JCheckBoxMenuItem) e.getSource();
             wallButton.setIcon(selected.getIcon());

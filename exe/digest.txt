@@ -1,5 +1,5 @@
 getdown.txt = 950c6f3a1b031576091d8f8455283364
-energy3d.jar = 7df3dd84b20ec20396eb4cb368fbe7c2
+energy3d.jar = bad831e32c745925fef610215532ca11
 lib/getdown.jar = 195e5c60fcccd53f5352ecfd038a67ed
 lib/samskivert.jar = a3d63656031a4babc42561cf4b67b41d
 lib/ardor3d/ardor3d-animation.jar = 58c564e849a30f11d179742163ca1335
@@ -32,4 +32,4 @@ lib/jogl/native/mac-universal/libgluegen-rt.jnilib = 3f77fbdc30ae9d536b7e697e83a
 lib/jogl/native/mac-universal/libjogl_desktop.jnilib = 4f42ff05a0cebbf1b4478fb79874d48d
 lib/jogl/native/mac-universal/libnativewindow_awt.jnilib = 921c381a11a9b44eb7f16c10bd4a55fc
 lib/jogl/native/mac-universal/libnativewindow_macosx.jnilib = 52960d9e8e4e1f752a52b9f62e72fc60
-digest.txt = 052f41e9582559cfc7a7e71a13196331
+digest.txt = 525f96a9a3b243ca071be42db71131c5

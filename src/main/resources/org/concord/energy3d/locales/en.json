@@ -2733,5 +2733,15 @@
   "msg.update_available": "A new update is available. Would you like to install updates and restart now?",
   "title.update": "Update",
   "msg.end_of_replay": "This is the end of the replay. Press the left arrow key to go back or the space key to exit.",
-  "title.end_of_replay": "End of Design Replay"
+  "title.end_of_replay": "End of Design Replay",
+  "label.undefined": "Undefined",
+  "menu.cut_node": "Cut Node",
+  "menu.copy_node": "Copy Node",
+  "menu.align_node_bottom_ground": "Align Node Bottom to Ground",
+  "menu.align_node_center_foundation": "Center Node on Foundation",
+  "menu.node_properties": "Node Properties",
+  "menu.delete_mesh": "Delete Mesh",
+  "menu.reverse_mesh_normal_vector": "Reverse Mesh Normal Vector",
+  "menu.restore_deleted_meshes": "Restore Deleted Meshes",
+  "menu.mesh_properties": "Mesh Properties"
 }
